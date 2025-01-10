@@ -3,39 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda de Veículos</title>
+    <title>Agenda dos Veículos</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="icone.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://bloodking1904.github.io/testnoe/icone.ico" type="image/x-icon">
 </head>
+    
 <body>
     <div class="header">
-        <h1>Agenda de Veículos</h1>
-        <button onclick="logout()" class="sair-button">Sair</button>
-    </div>
-<div id="formulario-veiculo">
-    <input type="text" id="colaborador" placeholder="Colaborador" required>
-    <input type="text" id="setor" placeholder="Setor" required>
-    <input type="text" id="veiculo" placeholder="Veículo" required>
-    <input type="text" id="placa" placeholder="Placa" required>
-    <input type="datetime-local" id="horario" required>
-    <button onclick="adicionarVeiculo()">Adicionar Veículo</button>
+    <h1>Agenda dos Veículos</h1>
+    <button id="seta-esquerda" class="sair-button">←</button> <!-- Seta esquerda -->
+    <button id="seta-direita" class="sair-button">→</button> <!-- Seta direita -->
+    <button onclick="logout()" class="sair-button">Sair</button>
+    <button id="resetar-status" onclick="confirmarResetarStatus()" style="display: none;" class="resetar-status-button">Resetar Status</button>
 </div>
-
-    <div class="tabela" id="tabela-veiculos">
+    
+    <div class="tabela" id="tabela-motoristas">
         <div class="linha cabecalho">
-            <div class="celula">Data</div>
-            <div class="celula">Colaborador</div>
-            <div class="celula">Setor</div>
-            <div class="celula">Veículo</div>
-            <div class="celula">Placa</div>
-            <div class="celula">Horário</div>
+            <div class="celula">DOMINGO</div>
+            <div class="celula">SEGUNDA</div>
+            <div class="celula">TERÇA</div>
+            <div class="celula">QUARTA</div>
+            <div class="celula">QUINTA</div>
+            <div class="celula">SEXTA</div>
+            <div class="celula">SÁBADO</div>
         </div>
-        <!-- As informações serão preenchidas aqui -->
+    </div>
+
+    <div class="motoristas-container">
+        <!-- Os motoristas serão preenchidos aqui dinamicamente através do JavaScript -->
     </div>
 
     <div id="overlay" class="overlay" style="display:none;"></div>
-    <div id="status-selecao" class="selecao-status" style="display:none;"></div>
+    <div id="status-selecao" class="selecao-status" style="display:none;">
+        <div id="status-selecao-opcoes"></div>
+        <button onclick="fecharSelecaoStatus()" class="entrar-button">Fechar</button>
+    </div>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-analytics.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyCpBy8mhpq5xnzQXDqu6ro3CoXFKA7p5-E",
+          authDomain: "bd-painel-veiculos.firebaseapp.com",
+          projectId: "bd-painel-veiculos",
+          storageBucket: "bd-painel-veiculos.firebasestorage.app",
+          messagingSenderId: "680174257270",
+          appId: "1:680174257270:web:c7dbfae38124e978ab4b57"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+    </script>
+
+    
+    <script>
+        // Função para verificar se o usuário logado é admin e exibir o botão "Limpar Cache"
+        document.addEventListener('DOMContentLoaded', function() {
+            const loggedInUser = localStorage.getItem('loggedInUser');
+            if (loggedInUser === 'admin') {
+                document.getElementById('resetar-status').style.display = 'inline-block';
+            }
+        });
+    </script>
     <script type="module" src="veiculos.js"></script>
 </body>
 </html>
