@@ -1,14 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-app.js";
-import { getFirestore, collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, collection, getDocs, getDoc, writeBatch, onSnapshot} from "https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore.js";
 
 // Configuração do Firebase
 const firebaseConfig = {
-    apiKey: "SUA_API_KEY",
-    authDomain: "SEU_DOMINIO.firebaseapp.com",
-    projectId: "SEU_PROJETO",
-    storageBucket: "SEU_BUCKET.appspot.com",
-    messagingSenderId: "SEU_MESSAGING_SENDER_ID",
-    appId: "SEU_APP_ID"
+  apiKey: "AIzaSyCpBy8mhpq5xnzQXDqu6ro3CoXFKA7p5-E",
+  authDomain: "bd-painel-veiculos.firebaseapp.com",
+  projectId: "bd-painel-veiculos",
+  storageBucket: "bd-painel-veiculos.firebasestorage.app",
+  messagingSenderId: "680174257270",
+  appId: "1:680174257270:web:c7dbfae38124e978ab4b57"
 };
 
 const app = initializeApp(firebaseConfig);
