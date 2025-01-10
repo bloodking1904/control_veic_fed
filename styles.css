@@ -5,7 +5,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-image: url('https://raw.githubusercontent.com/bloodking1904/testnoe/master/fundo_login.png');
+    background-image: url('https://raw.githubusercontent.com/bloodking1904/control_veic_fed/master/fundo_login.png');
     background-size: cover; /* Cobre toda a tela */
     background-position: center; /* Centraliza a imagem */
     background-attachment: fixed; /* Se você quiser que a imagem fique fixa ao rolar */
