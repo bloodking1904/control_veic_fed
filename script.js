@@ -24,10 +24,10 @@ console.log("Usuário logado:", loggedInUser);
 
 // Redireciona acessos não autorizados
 const urlsProtegidas = [
-    'https://bloodking1904.github.io/testnoe/index.html',
-    'https://bloodking1904.github.io/testnoe/login.js',
-    'https://bloodking1904.github.io/testnoe/script.js',
-    'https://bloodking1904.github.io/testnoe/styles.css',
+    'https://bloodking1904.github.io/control_veic_fed/index.html',
+    'https://bloodking1904.github.io/control_veic_fed/login.js',
+    'https://bloodking1904.github.io/control_veic_fed/script.js',
+    'https://bloodking1904.github.io/control_veic_fed/styles.css',
 ];
 
 // Verifica se a URL atual está nas URLs protegidas e se o usuário não está logado
@@ -71,11 +71,11 @@ function verificarAutenticacao() {
 }
 
 
-// Função para carregar motoristas
+// Função para carregar veiculos
 async function carregarMotoristas() {
-    console.log("Chamando carregarMotoristas()...");
+    console.log("Chamando carregarVeiculos()...");
     const tabela = document.getElementById('tabela-motoristas');
-    tabela.innerHTML = ''; // Limpa a tabela antes de adicionar motoristas
+    tabela.innerHTML = ''; // Limpa a tabela antes de adicionar veiculos
 
     // Criar o cabeçalho da tabela
     const cabecalho = document.createElement('div');
@@ -117,12 +117,12 @@ async function carregarMotoristas() {
     await escutarMotoristas();
 
 
-    // Se o usuário logado for admin, exibe todos os motoristas
+    // Se o usuário logado for admin, exibe todos os veiculos
     if (loggedInUser === 'ADMIN') {
-        const motoristasSnapshot = await getDocs(collection(db, 'motoristas'));
-        console.log("Motoristas obtidos do Firestore:", motoristasSnapshot.docs.length); // Log para depuração
+        const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
+        console.log("Veiculos obtidos do Firestore:", veiculosSnapshot.docs.length); // Log para depuração
 
-        motoristasSnapshot.docs.forEach(doc => {
+        veiculosSnapshot.docs.forEach(doc => {
             const motorista = doc.id; 
             const dados = doc.data();
             console.log("Motorista:", motorista, "Dados:", dados); // Log para depuração
@@ -130,7 +130,7 @@ async function carregarMotoristas() {
         });
     } else {
         // Para motoristas, exibe os dados apenas do motorista logado
-        const motoristaRef = doc(db, 'motoristas', loggedInUser);
+        const motoristaRef = doc(db, 'veiculos', loggedInUser);
         const motoristaSnapshot = await getDoc(motoristaRef);
         if (motoristaSnapshot.exists()) {
             const dados = motoristaSnapshot.data();
