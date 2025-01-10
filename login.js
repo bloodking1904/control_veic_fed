@@ -26,7 +26,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     // Verifica as credenciais do usuário
     if (users[username] && users[username] === password) {
         localStorage.setItem('loggedInUser', username);
-        window.location.href = 'veiculos.html';
+        window.location.href = 'agenda_veiculos.html';
     } else {
         alert('Usuário ou senha incorretos.');
     }
