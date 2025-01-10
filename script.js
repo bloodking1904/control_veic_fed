@@ -4,13 +4,12 @@ import { getFirestore, doc, setDoc, collection, getDocs, getDoc, writeBatch, onS
 
 // Configuração do Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyAUId3pGxpNtb_MK8zwZoxnAu-3RLhjwxk",
-    authDomain: "bd-painel-motoristas.firebaseapp.com",
-    projectId: "bd-painel-motoristas",
-    storageBucket: "bd-painel-motoristas.appspot.com",
-    messagingSenderId: "773975140156",
-    appId: "1:773975140156:web:85ffefe92d32ab79e76039",
-    measurementId: "G-G6LKNW06JL"
+  apiKey: "AIzaSyCpBy8mhpq5xnzQXDqu6ro3CoXFKA7p5-E",
+  authDomain: "bd-painel-veiculos.firebaseapp.com",
+  projectId: "bd-painel-veiculos",
+  storageBucket: "bd-painel-veiculos.firebasestorage.app",
+  messagingSenderId: "680174257270",
+  appId: "1:680174257270:web:c7dbfae38124e978ab4b57"
 };
 
 // Inicializando Firebase e Firestore
