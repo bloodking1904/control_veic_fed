@@ -1,0 +1,309 @@
+    
+
+/* Estilos Gerais */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-image: url('https://raw.githubusercontent.com/bloodking1904/testnoe/master/fundo_login.png');
+    background-size: cover; /* Cobre toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-attachment: fixed; /* Se você quiser que a imagem fique fixa ao rolar */
+    background-repeat: no-repeat; /* Não repete a imagem */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Mudado para flex-start para garantir que o cabeçalho fique visível no topo */
+    height: 100vh; /* Altura da tela inteira */
+    width: 100vw; /* Largura total da viewport */
+}
+
+/* Estilos do Cabeçalho */
+.header {
+    position: fixed; /* Fixa o cabeçalho na parte superior */
+    top: 0;
+    left: 0;
+    width: 100%; /* Garante que o cabeçalho ocupe toda a largura */
+    text-align: center;
+    margin-bottom: 20px;
+   /* box-sizing: border-box; /* Inclui padding e border na largura total */
+    background-color: rgba(255, 255, 255, 0.8); /* Fundo levemente transparente para o cabeçalho */
+    z-index: 1000; /* Garante que o cabeçalho fique acima de outros elementos */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: #333;
+}
+
+.header button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s;
+}
+
+.header .sair-button {
+    background-color: red; /* Botão Sair */
+}
+
+.header .limpar-cache-button {
+    background-color: blue; /* Botão Limpar Cache */
+}
+
+.header .limpar-cache-button:hover,
+.header .sair-button:hover {
+    background-color: darkred; /* Cor do hover para Sair */
+    background-color: darkblue; /* Cor do hover para Limpar Cache */
+}
+
+
+.sair-button {
+    background-color: blue; /* Cor das setas */
+    color: white; /* Cor do texto das setas */
+    border: none; /* Remove a borda padrão */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de pointer */
+    padding: 10px; /* Padding interno */
+    font-size: 16px; /* Tamanho da fonte */
+    transition: background 0.3s; /* Transição suave para mudança de cor */
+}
+
+/* Estilos do Container de Login */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza os elementos no eixo horizontal */
+    justify-content: center; /* Centraliza os elementos no eixo vertical */
+    width: 100%; /* Garante que o contêiner ocupe toda a largura */
+    max-width: 300px; /* Limita a largura máxima do contêiner */
+    margin: 0 auto; /* Centraliza o contêiner horizontalmente */
+    padding: 30px; /* Adiciona um padding interno ao contêiner */
+    background-color: white; /* Fundo branco para o contêiner */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra para dar destaque ao contêiner */
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+    text-align: center; /* Centraliza o texto dentro do contêiner */
+}
+
+.login-container label {
+    width: 100%; /* Garante que os rótulos ocupem toda a largura */
+    text-align: left; /* Alinha o texto dos rótulos à esquerda */
+    margin-bottom: 10px; /* Espaço abaixo dos rótulos */
+}
+
+/* Estilos para os Campos de Entrada e Botão */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+    width: calc(100% - 20px); /* Reduz a largura em 20px para adicionar padding */
+    padding: 10px;
+    margin: 10px 0; /* Margem entre os campos */
+    border: 1px solid #ccc; /* Borda leve */
+    border-radius: 5px; /* Bordas arredondadas */
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+}
+
+.login-container button.entrar-button {
+    background-color: blue; /* Cor do botão */
+    color: white; /* Cor do texto do botão */
+    border: none; /* Remove a borda padrão */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de pointer para indicar interatividade */
+    padding: 10px 20px; /* Padding interno do botão */
+    font-size: 16px; /* Tamanho do texto */
+    transition: background 0.3s; /* Transição suave para mudança de cor */
+    width: 100%; /* Ocupa toda a largura do contêiner */
+}
+
+button.entrar-button:hover {
+    background-color: darkblue; /* Cor do botão ao passar o mouse */
+}
+
+
+/* Estilos para a Tabela */
+.tabela {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 colunas para os dias da semana */
+    gap: 10px;
+    width: 100%; /* Garante que a tabela ocupe toda a largura */
+    max-width: 100vw; /* Limita a largura máxima para viewport */
+    margin-top: 80px; /* Espaço para o cabeçalho fixo */
+    box-sizing: border-box; /* Inclui padding e border na largura total */
+    overflow-x: auto; /* Permite rolagem horizontal se necessário */
+}
+
+.cabecalho {
+    position: sticky; /* Torna os dias da semana fixos na parte superior */
+    top: 0; /* Fixa no topo */
+    background: white; /* Fundo branco para melhor legibilidade */
+    z-index: 500; /* Fica acima das células da tabela */
+   /* display: contents; /* Permite que a linha se comporte como um único elemento */
+    font-size: 1.5em; /* Aumenta o tamanho da fonte */
+    font-weight: bold; /* Aplica negrito */
+}
+
+.celula {
+    background: #e0e0e0;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* min-width: 80px; /* Define uma largura mínima para as células */
+    word-wrap: break-word; /* Quebra palavras longas */
+    overflow-wrap: break-word; /* Para compatibilidade com navegadores */
+    white-space: normal; /* Permite que o texto quebre em várias linhas */
+}
+
+.celula:hover {
+    background: #ccc; /* Cor de fundo ao passar o mouse */
+}
+
+.linha {
+    display: contents; /* Permite que as linhas sejam tratadas como um único elemento */
+}
+
+/* Estilos para Motoristas */
+.motoristas-container {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 colunas para motoristas */
+    width: 100%; /* Ocupa toda a largura */
+    margin-top: 10px; /* Espaço entre a tabela e a seção de motoristas */
+}
+
+/* Estilos para Motoristas */
+.motorista {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.adicionar {
+    background: green;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 0.8em;
+    margin-bottom: 5px;
+}
+
+.status {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 5px; /* Bordas arredondadas */
+    border: 1px solid #ccc;
+    margin: 5px 0; /* Adiciona uma margem vertical entre os botões */
+    text-align: center;
+    width: 100%;
+    word-wrap: break-word; /* Quebra palavras longas */
+    overflow-wrap: break-word; /* Para compatibilidade com navegadores */
+    white-space: normal; /* Permite que o texto quebre em várias linhas */
+}
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex; /* Alterado para flex para permitir centralização */
+  justify-content: center;
+  align-items: flex-start; /* Alinha os itens ao topo */
+  z-index: 999;
+}
+
+.selecao-status {
+  position: relative; 
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000; /* Aumentado para garantir que fique acima do overlay */
+  margin-bottom: 50vh; /* Adiciona uma margem inferior de 50% da altura da viewport */
+}
+
+
+.resetar-status-button {
+    background-color: orange; /* Cor do botão */
+    color: white; /* Cor do texto */
+    border: none; /* Sem borda */
+    border-radius: 5px; /* Bordas arredondadas */
+    cursor: pointer; /* Cursor de pointer */
+    padding: 10px 20px; /* Padding interno */
+    font-size: 16px; /* Tamanho da fonte */
+    transition: background 0.3s; /* Transição suave */
+}
+
+.resetar-status-button:hover {
+    background-color: darkorange; /* Cor do botão ao passar o mouse */
+}
+
+.veiculo-grid {
+    display: flex;
+    flex-wrap: wrap; /* Permite que os itens se movam para uma nova linha */
+    gap: 10px; /* Espaçamento entre os botões */
+}
+
+
+/* Media Queries para Responsividade */
+
+@media (max-width: 768px) {
+    .tabela,
+    .motoristas-container {
+        grid-template-columns: repeat(7, 1fr); /* Mantém 7 colunas em telas menores */
+        overflow-x: auto; /* Permite rolagem horizontal se necessário */
+        /*  font-size: 1.2em; /* Aumenta o tamanho da fonte dos motoristas ************************/
+    }
+
+    .celula {
+        padding: 10px; /* Ajusta padding em telas menores */
+    }
+    .header button {
+        font-size: 18px; /* Aumenta o tamanho da fonte dos botões no cabeçalho */
+    }
+    body {
+        background-size: cover; /* Garante que a imagem cubra a tela em dispositivos menores */
+        transform: scale(1.0); /* Aumenta o tamanho da tela em dispositivos móveis */
+        transform-origin: top left; /* Define a origem do aumento */
+    }
+    .header h1 {
+        font-size: 24px; /* Aumenta o tamanho da fonte do cabeçalho */
+    }
+    
+}
+
+
+@media (max-width: 480px) {
+    .tabela,
+    .motoristas-container {
+        grid-template-columns: repeat(7, 1fr); /* Mantém 7 colunas em telas pequenas */
+    }
+
+    .linha.cabecalho {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr); /* Garante que o cabeçalho seja exibido corretamente */
+    }
+
+    .linha:not(.cabecalho) {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr); /* Mantém 7 colunas para motoristas também */
+    }
+
+    .celula {
+        padding: 5px; /* Ajusta padding em telas muito pequenas */
+    }
+}

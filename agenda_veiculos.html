@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda de Veículos</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="icone.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="header">
+        <h1>Agenda de Veículos</h1>
+        <button onclick="logout()" class="sair-button">Sair</button>
+    </div>
+<div id="formulario-veiculo">
+    <input type="text" id="colaborador" placeholder="Colaborador" required>
+    <input type="text" id="setor" placeholder="Setor" required>
+    <input type="text" id="veiculo" placeholder="Veículo" required>
+    <input type="text" id="placa" placeholder="Placa" required>
+    <input type="datetime-local" id="horario" required>
+    <button onclick="adicionarVeiculo()">Adicionar Veículo</button>
+</div>
+
+    <div class="tabela" id="tabela-veiculos">
+        <div class="linha cabecalho">
+            <div class="celula">Data</div>
+            <div class="celula">Colaborador</div>
+            <div class="celula">Setor</div>
+            <div class="celula">Veículo</div>
+            <div class="celula">Placa</div>
+            <div class="celula">Horário</div>
+        </div>
+        <!-- As informações serão preenchidas aqui -->
+    </div>
+
+    <div id="overlay" class="overlay" style="display:none;"></div>
+    <div id="status-selecao" class="selecao-status" style="display:none;"></div>
+
+    <script type="module" src="veiculos.js"></script>
+</body>
+</html>
