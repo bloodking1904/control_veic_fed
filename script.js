@@ -478,13 +478,13 @@ function mostrarSelecaoStatus(element) {
         // Criação das opções de status
         let statusOptions = ` 
             <div class="status" style="background-color: lightgreen; color: black; font-weight: bold;" 
-                onclick="adicionarStatus('${idVeiculo}', 'Disponível', 'green', ${dia}, '${linha}', '${data}')">Disponível</div>
+                onclick="adicionarStatus('${idVeiculo}', 'Disponível', 'green', ${dia}, '${linha}', null)">Disponível</div>
             <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" 
-                onclick="mostrarSelecaoAtendimento('${idVeiculo}', ${dia}, '${linha}', '${data}')">Em Atendimento</div>
-			<div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
-                onclick="mostrarSelecaoViagem('${idVeiculo}', ${dia}, '${linha}', '${data}')">Viagem</div>
+                onclick="mostrarSelecaoAtendimento('${idVeiculo}', ${dia}, '${linha}', null)">Em Atendimento</div>
+            <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
+                onclick="mostrarSelecaoViagem('${idVeiculo}', ${dia}, '${linha}', null)">Viagem</div>
             <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" 
-                onclick="adicionarStatus('${idVeiculo}', 'Compensando', 'red', ${dia}, '${linha}', '${data}')">Compensando</div>
+                onclick="adicionarStatus('${idVeiculo}', 'Compensando', 'red', ${dia}, '${linha}', null)">Compensando</div>
         `;
 
         // Adiciona o botão "OBS. VIAGEM" se o status for "Em Viagem"
