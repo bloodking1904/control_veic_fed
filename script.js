@@ -325,7 +325,6 @@ function atualizarTabela(veiculo, dados) {
                 </div>
                 ${statusAtual.data ? `
                     <div style="white-space: nowrap;"><strong>Cidade:</strong> ${statusAtual.data.cidade || 'N/A'}</div>
-                    <div style="white-space: break-word;"><strong>Veículo:</strong> ${statusAtual.data.veiculo || 'N/A'}</div>
                     <div><strong>Colaborador:</strong> ${statusAtual.data.cliente || 'N/A'}</div>
                 ` : ''}
             </div>
