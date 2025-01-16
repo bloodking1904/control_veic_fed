@@ -663,7 +663,7 @@ function adicionarVeiculo(nome, dia, linha, cliente, veiculo) {
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                onclick="finalizarViagem('${nome}', '${cliente}', '${veiculo}', ${dia}, '${linha}')" disabled>CONFIRMAR<br>VIAGEM</button>
+                onclick="finalizarViagem('${nome}', '${cliente}', '${veiculo}', '${dia}', '${linha}')" disabled>CONFIRMAR<br>VIAGEM</button>
         </div>
     `;
 
