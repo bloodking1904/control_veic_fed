@@ -567,7 +567,7 @@ async function finalizarViagem(nome, cliente, dia, linha) {
     };
 
     // Atualiza o status no Firestore
-    await adicionarStatus(nome, 'Em Viagem', 'yellow', dia, linha, data); // Passa o objeto data
+    await adicionarStatus(nome, 'Em Atendimento', 'red', dia, linha, data); // Passa o objeto data
 
     // Atualiza visualmente o veiculo
     const veiculoDiv = document.querySelector(`.linha[data-linha="${linha}"] .celula[data-dia="${dia}"] .veiculo`);
@@ -577,7 +577,7 @@ async function finalizarViagem(nome, cliente, dia, linha) {
             <button class="adicionar" data-id-veiculo="${nome}" data-dia="${dia}" data-linha="${linha}" 
                 onclick="mostrarSelecaoStatus(this)" style="font-size: 1.5em; padding: 10px; background-color: green; color: white; border: none; border-radius: 5px; width: 40px; height: 40px;">+</button>
             <span style="font-weight: bold;">${nome}</span>
-            <div class="status" style="color: yellow; border: 1px solid black; font-weight: bold;">Em Viagem</div>
+            <div class="status" style="color: red; border: 1px solid black; font-weight: bold;">Em Atendimento</div>
             <div><strong>Colaborador:</strong> ${cliente}</div>
             <div><strong>Cidade:</strong> ${cidade}</div> <!-- Exibe cidade -->
         `;
