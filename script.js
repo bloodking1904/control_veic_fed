@@ -483,7 +483,7 @@ function mostrarSelecaoStatus(element) {
             <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
                 onclick="mostrarSelecaoViagem('${idVeiculo}', ${dia}, '${linha}', null)">Viagem</div>
             <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" 
-                onclick="adicionarStatus('${idVeiculo}', 'Compensando', 'red', ${dia}, '${linha}', null)">Compensando</div>
+                onclick="adicionarStatus('${idVeiculo}', 'Bloqueado', 'red', ${dia}, '${linha}', null)">Bloqueado</div>
         `;
 
         // Adiciona o botão "OBS. VIAGEM" se o status for "Em Viagem"
