@@ -510,7 +510,7 @@ function mostrarSelecaoStatus(element) {
 window.mostrarSelecaoStatus = mostrarSelecaoStatus;
 
 // Função para mostrar a seleção de atendimento
-function mostrarSelecaoAtendimento(nome, data, dia, linha) {
+function mostrarSelecaoAtendimento(nome, dia, linha) {
     const statusSelecao = document.getElementById('status-selecao');
 
     const atendimentoOptions = ` 
