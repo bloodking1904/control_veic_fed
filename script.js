@@ -515,14 +515,14 @@ function mostrarSelecaoAtendimento(nome, dia, linha) {
 
     const atendimentoOptions = ` 
         <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarSelecaoEducacao('${nome}', ${dia}, '${linha}')">Educação</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Sonia Akamine', ${dia}, '${linha}')">Sonia Akamine</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Maicon Marega', ${dia}, '${linha}')">Maicon Marega</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Saiuri', ${dia}, '${linha}')">Saiuri</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Pedro ESG', ${dia}, '${linha}')">Pedro ESG</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Glaucia CEMPE', ${dia}, '${linha}')">Glaucia CEMPE</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Vitoria ENG', ${dia}, '${linha}')">Vitoria ENG</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'DICOM', ${dia}, '${linha}')">DICOM</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'CPL', ${dia}, '${linha}')">CPL</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Sonia Akamine', ${dia}, '${linha}')">Sonia Akamine</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Maicon Marega', ${dia}, '${linha}')">Maicon Marega</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Saiuri', ${dia}, '${linha}')">Saiuri</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Pedro ESG', ${dia}, '${linha}')">Pedro ESG</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Glaucia CEMPE', ${dia}, '${linha}')">Glaucia CEMPE</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Vitoria ENG', ${dia}, '${linha}')">Vitoria ENG</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'DICOM', ${dia}, '${linha}')">DICOM</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'CPL', ${dia}, '${linha}')">CPL</div>
     `;
 
     statusSelecao.innerHTML = atendimentoOptions;
@@ -538,11 +538,11 @@ function mostrarSelecaoEducacao(nome, dia, linha) {
     const statusSelecao = document.getElementById('status-selecao');
 
     const secretariasOptions = ` 
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Evelyn', ${dia}, '${linha}')">Evelyn</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Washington', ${dia}, '${linha}')">Washington</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Rose', ${dia}, '${linha}')">Rose</div>
-        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Ana Maria', ${dia}, '${linha}')">Ana Maria</div>
-		<div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarVeiculosParaAtendimento('${nome}', 'Emanuelly', ${dia}, '${linha}')">Emanuelly</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Evelyn', ${dia}, '${linha}')">Evelyn</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Washington', ${dia}, '${linha}')">Washington</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Rose', ${dia}, '${linha}')">Rose</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Ana Maria', ${dia}, '${linha}')">Ana Maria</div>
+		<div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Emanuelly', ${dia}, '${linha}')">Emanuelly</div>
     `;
 
     statusSelecao.innerHTML = secretariasOptions;
@@ -553,52 +553,6 @@ function mostrarSelecaoEducacao(nome, dia, linha) {
 // Adiciona a função ao objeto global window
 window.mostrarSelecaoEducacao = mostrarSelecaoEducacao;
 
-// Função para mostrar a seleção de veículos para atendimento
-function mostrarVeiculosParaAtendimento(nome, cliente, dia, linha) {
-    const statusSelecao = document.getElementById('status-selecao');
-    const veiculos = [
-        'Corolla QAD9618',
-        'Corolla RWC4D25',
-        'Corolla REW2E59',
-        'Corolla REW0H84',
-        'Corolla OON5341',
-        'Hilux QAE8744',
-        'Hilux C.Mad. QAE9273',
-        'SW4 ROBSON SMA7I11',
-        'Ranger RODOLPHO SLZ5G02',
-        'Ranger SERGIO SLZ5G06',
-        'Ranger 1° CROSARA SLZ5G03',
-        'Ranger 2° CROSARA SLZ5F99',
-        'Ranger REGIS SLZ5G10',
-        'Compass RWE3G73',
-        'Ranger Branca CROSARA RWB2G50',
-        'Ranger Branca GABINETE RWB2G51',
-        'Yaris CPL REZ0D67',
-        'Yaris CPL RWB9D26',
-        'Etios CPL QAP2028',
-        'Agrale QAH8438',
-        'Munk Iveco RWI5B17',
-        'AXOR QAO4215',
-        'Express DRC 4x2 SLX8B62',
-        'Expert Furgão RWB3D79',
-    ];
-
-    let veiculoOptions = '<div class="veiculo-grid">'; // Inicia a grid
-    veiculos.forEach(veiculo => {
-        veiculoOptions += ` 
-            <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
-                onclick="finalizarAtendimento('${nome}', '${cliente}', '${veiculo}', ${dia}, '${linha}')">${veiculo}</div>
-        `;
-    });
-    veiculoOptions += '</div>'; // Fecha a grid
-
-    statusSelecao.innerHTML = veiculoOptions;
-    document.getElementById('overlay').style.display = 'flex';
-    document.getElementById('status-selecao').style.display = 'flex';
-}
-
-// Adiciona a função ao objeto global window
-window.mostrarVeiculosParaAtendimento = mostrarVeiculosParaAtendimento;
 
 // Modificação da função para finalizar a viagem
 async function finalizarViagem(nome, cliente, veiculo, dia, linha) {
@@ -676,12 +630,16 @@ window.finalizarAtendimento = finalizarAtendimento;
 function mostrarSelecaoViagem(nome, dia, linha) {
     const statusSelecao = document.getElementById('status-selecao');
     const viagemOptions = ` 
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="mostrarVeiculosViagem('${nome}', ${dia}, '${linha}', 'SENAI')">SENAI</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="mostrarVeiculosViagem('${nome}', ${dia}, '${linha}', 'SESI')">SESI</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="mostrarVeiculosViagem('${nome}', ${dia}, '${linha}', 'Regis')">Regis</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="mostrarVeiculosViagem('${nome}', ${dia}, '${linha}', 'Rodolpho')">Rodolpho</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="mostrarVeiculosViagem('${nome}', ${dia}, '${linha}', 'Anatole')">Anatole</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="mostrarVeiculosViagem('${nome}', ${dia}, '${linha}', 'AREA MEIO')">AREA MEIO</div>
+	
+	    <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarSelecaoEducacao('${nome}', ${dia}, '${linha}')">Educação</div>
+        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Sonia Akamine', ${dia}, '${linha}')">Sonia Akamine</div>
+        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Maicon Marega', ${dia}, '${linha}')">Maicon Marega</div>
+        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Saiuri', ${dia}, '${linha}')">Saiuri</div>
+        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Pedro ESG', ${dia}, '${linha}')">Pedro ESG</div>
+        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Glaucia CEMPE', ${dia}, '${linha}')">Glaucia CEMPE</div>
+        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Vitoria ENG', ${dia}, '${linha}')">Vitoria ENG</div>
+        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'DICOM', ${dia}, '${linha}')">DICOM</div>
+        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'CPL', ${dia}, '${linha}')">CPL</div>
     `;
 
     statusSelecao.innerHTML = viagemOptions;
@@ -692,52 +650,6 @@ function mostrarSelecaoViagem(nome, dia, linha) {
 // Adiciona a função ao objeto global window
 window.mostrarSelecaoViagem = mostrarSelecaoViagem;
 
-// Função para mostrar a seleção de veículos para viagem
-function mostrarVeiculosViagem(nome, dia, linha, cliente) {
-    const statusSelecao = document.getElementById('status-selecao');
-    const veiculos = [
-        'Corolla QAD9618',
-        'Corolla RWC4D25',
-        'Corolla REW2E59',
-        'Corolla REW0H84',
-        'Corolla OON5341',
-        'Hilux QAE8744',
-        'Hilux C.Mad. QAE9273',
-        'SW4 ROBSON SMA7I11',
-        'Ranger RODOLPHO SLZ5G02',
-        'Ranger SERGIO SLZ5G06',
-        'Ranger 1° CROSARA SLZ5G03',
-        'Ranger 2° CROSARA SLZ5F99',
-        'Ranger REGIS SLZ5G10',
-        'Compass RWE3G73',
-        'Ranger Branca CROSARA RWB2G50',
-        'Ranger Branca GABINETE RWB2G51',
-        'Yaris CPL REZ0D67',
-        'Yaris CPL RWB9D26',
-        'Etios CPL QAP2028',
-        'Agrale QAH8438',
-        'Munk Iveco RWI5B17',
-        'AXOR QAO4215',
-        'Express DRC 4x2 SLX8B62',
-        'Expert Furgão RWB3D79',
-    ];
-
-    let veiculoOptions = '<div class="veiculo-grid">'; // Inicia a grid
-    veiculos.forEach(veiculo => {
-        veiculoOptions += ` 
-            <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
-                onclick="adicionarVeiculo('${nome}', ${dia}, '${linha}', '${cliente}', '${veiculo}')">${veiculo}</div>
-        `;
-    });
-    veiculoOptions += '</div>'; // Fecha a grid
-
-    statusSelecao.innerHTML = veiculoOptions;
-    document.getElementById('overlay').style.display = 'flex';
-    document.getElementById('status-selecao').style.display = 'flex';
-}
-
-// Adiciona a função ao objeto global window
-window.mostrarVeiculosViagem = mostrarVeiculosViagem;
 
 // Função para adicionar o veículo e cidade
 function adicionarVeiculo(nome, dia, linha, cliente, veiculo) {
