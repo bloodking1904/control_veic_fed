@@ -661,7 +661,7 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                onclick="finalizarViagem('${nome}', '${cliente}', ${dia}, '${linha}')" disabled>CONFIRMAR<br>VIAGEM</button>
+                onclick="finalizarViagem('${nome}', '${cliente}', '${dia}', '${linha}')" disabled>CONFIRMAR<br>VIAGEM</button>
         </div>
     `;
 
@@ -702,7 +702,7 @@ async function consultarObservacao(idVeiculo, dia) {
                 <label style="font-size: 2em; font-weight: bold;">Veículo:</label><br>
                 <input type="text" id="veiculo-editar" value="${veiculo}" placeholder="Veículo"><br><br>
                 <button id="editar-observacao" style="background-color: green; color: white; font-size: 2em; padding: 10px 20px;" 
-                    onclick="editarObservacao('${idVeiculo}', ${dia})">EDITAR</button>
+                    onclick="editarObservacao('${idVeiculo}', '${dia}')">EDITAR</button>
             </div>
         `;
         
