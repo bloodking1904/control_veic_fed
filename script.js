@@ -478,13 +478,13 @@ function mostrarSelecaoStatus(element) {
         // Criação das opções de status
         let statusOptions = ` 
             <div class="status" style="background-color: lightgreen; color: black; font-weight: bold;" 
-                onclick="adicionarStatus('${idVeiculo}', 'Disponível', 'green', ${dia}, '${linha}')">Disponível</div>
+                onclick="adicionarStatus('${idVeiculo}', 'Disponível', 'green', ${dia}, '${linha}', '${data}')">Disponível</div>
             <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" 
-                onclick="mostrarSelecaoAtendimento('${idVeiculo}', ${dia}, '${linha}')">Em Atendimento</div>
+                onclick="mostrarSelecaoAtendimento('${idVeiculo}', ${dia}, '${linha}', '${data}')">Em Atendimento</div>
 			<div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
-                onclick="mostrarSelecaoViagem('${idVeiculo}', ${dia}, '${linha}')">Viagem</div>
+                onclick="mostrarSelecaoViagem('${idVeiculo}', ${dia}, '${linha}', '${data}')">Viagem</div>
             <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" 
-                onclick="adicionarStatus('${idVeiculo}', 'Compensando', 'red', ${dia}, '${linha}')">Compensando</div>
+                onclick="adicionarStatus('${idVeiculo}', 'Compensando', 'red', ${dia}, '${linha}', '${data}')">Compensando</div>
         `;
 
         // Adiciona o botão "OBS. VIAGEM" se o status for "Em Viagem"
@@ -510,7 +510,7 @@ function mostrarSelecaoStatus(element) {
 window.mostrarSelecaoStatus = mostrarSelecaoStatus;
 
 // Função para mostrar a seleção de atendimento
-function mostrarSelecaoAtendimento(nome, dia, linha) {
+function mostrarSelecaoAtendimento(nome, data, dia, linha) {
     const statusSelecao = document.getElementById('status-selecao');
 
     const atendimentoOptions = ` 
@@ -555,14 +555,13 @@ window.mostrarSelecaoEducacao = mostrarSelecaoEducacao;
 
 
 // Modificação da função para finalizar a viagem
-async function finalizarViagem(nome, cliente, veiculo, dia, linha) {
+async function finalizarViagem(nome, cliente, dia, linha) {
     const cidade = document.getElementById('cidade-destino').value;
     const observacao = document.getElementById('observacao-texto').value; // Captura a observação
 
     // Prepara o dado para incluir todas as informações necessárias
     const data = {
         cliente: cliente,
-        veiculo: veiculo,
         cidade: cidade, // Agora inclui a cidade
         observacao: observacao // Adiciona a observação
     };
@@ -579,7 +578,6 @@ async function finalizarViagem(nome, cliente, veiculo, dia, linha) {
                 onclick="mostrarSelecaoStatus(this)" style="font-size: 1.5em; padding: 10px; background-color: green; color: white; border: none; border-radius: 5px; width: 40px; height: 40px;">+</button>
             <span style="font-weight: bold;">${nome}</span>
             <div class="status" style="color: yellow; border: 1px solid black; font-weight: bold;">Em Viagem</div>
-            <div><strong>Veículo:</strong> ${veiculo}</div>
             <div><strong>Colaborador:</strong> ${cliente}</div>
             <div><strong>Cidade:</strong> ${cidade}</div> <!-- Exibe cidade -->
         `;
@@ -594,7 +592,7 @@ async function finalizarViagem(nome, cliente, veiculo, dia, linha) {
 window.finalizarViagem = finalizarViagem;
 
 // Função para finalizar o atendimento
-function finalizarAtendimento(nome, cliente, veiculo, dia, linha) {
+function finalizarAtendimento(nome, cliente, dia, linha) {
     // Prepara o data para incluir apenas as informações necessárias
     const data = {
         cliente: cliente,
@@ -652,7 +650,7 @@ window.mostrarSelecaoViagem = mostrarSelecaoViagem;
 
 
 // Função para adicionar o veículo e cidade
-function adicionarVeiculo(nome, dia, linha, cliente, veiculo) {
+function adicionarVeiculo(nome, cliente, dia, linha) {
     const statusSelecao = document.getElementById('status-selecao');
 
     const cidadeInput = ` 
@@ -663,7 +661,7 @@ function adicionarVeiculo(nome, dia, linha, cliente, veiculo) {
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                onclick="finalizarViagem('${nome}', '${cliente}', '${veiculo}', '${dia}', '${linha}')" disabled>CONFIRMAR<br>VIAGEM</button>
+                onclick="finalizarViagem('${nome}', '${cliente}', ${dia}, '${linha}')" disabled>CONFIRMAR<br>VIAGEM</button>
         </div>
     `;
 
