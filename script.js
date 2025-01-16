@@ -326,7 +326,7 @@ function atualizarTabela(veiculo, dados) {
                 ${statusAtual.data ? `
                     <div style="white-space: nowrap;"><strong>Cidade:</strong> ${statusAtual.data.cidade || 'N/A'}</div>
                     <div style="white-space: break-word;"><strong>Veículo:</strong> ${statusAtual.data.veiculo || 'N/A'}</div>
-                    <div><strong>Cliente:</strong> ${statusAtual.data.cliente || 'N/A'}</div>
+                    <div><strong>Colaborador:</strong> ${statusAtual.data.cliente || 'N/A'}</div>
                 ` : ''}
             </div>
         `;
@@ -438,7 +438,7 @@ async function adicionarStatus(idVeiculo, status, cor, dia, linha, data) {
         <span style="font-weight: bold;">${idVeiculo}</span>
         <div class="status" style="color: ${cor}; font-weight: bold;">${status}</div>
         ${data && data.cliente && data.veiculo ? ` 
-            <div><strong>Cliente:</strong> ${data.cliente}</div>
+            <div><strong>Colaborador:</strong> ${data.cliente}</div>
             <div><strong>Veículo:</strong> ${data.veiculo}</div>
             <div><strong>Cidade:</strong> ${data.cidade}</div>
         ` : ''}
@@ -626,7 +626,7 @@ async function finalizarViagem(nome, cliente, veiculo, dia, linha) {
             <span style="font-weight: bold;">${nome}</span>
             <div class="status" style="color: yellow; border: 1px solid black; font-weight: bold;">Em Viagem</div>
             <div><strong>Veículo:</strong> ${veiculo}</div>
-            <div><strong>Cliente:</strong> ${cliente}</div>
+            <div><strong>Colaborador:</strong> ${cliente}</div>
             <div><strong>Cidade:</strong> ${cidade}</div> <!-- Exibe cidade -->
         `;
     } else {
@@ -660,7 +660,7 @@ function finalizarAtendimento(nome, cliente, veiculo, dia, linha) {
             <span style="font-weight: bold;">${nome}</span>
             <div class="status" style="color: orange; border: 1px solid black; font-weight: bold;">Em Atendimento</div>
             <div><strong>Veículo:</strong> ${veiculo}</div>
-            <div><strong>Cliente:</strong> ${cliente}</div>
+            <div><strong>Colaborador:</strong> ${cliente}</div>
         `;
     } else {
         console.error("Div do veiculo não encontrada ao atualizar visualmente.");
@@ -787,7 +787,7 @@ async function consultarObservacao(idVeiculo, dia) {
                 style="width: 523px; height: 218px; font-size: 14px;">${observacao}</textarea><br><br>
                 <label style="font-size: 2em; font-weight: bold;">Cidade:</label><br>
                 <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade"><br><br>
-                <label style="font-size: 2em; font-weight: bold;">Cliente:</label><br>
+                <label style="font-size: 2em; font-weight: bold;">Colaborador:</label><br>
                 <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente"><br><br>
                 <label style="font-size: 2em; font-weight: bold;">Veículo:</label><br>
                 <input type="text" id="veiculo-editar" value="${veiculo}" placeholder="Veículo"><br><br>
@@ -872,7 +872,7 @@ function atualizarLinhaVeiculo(veiculo, dados) {
                     <div class="status" style="color: ${statusAtual.status === 'Em Viagem' ? 'yellow' : (statusAtual.status === 'Disponível' ? 'green' : 'red')}; border: 1px solid black; font-weight: bold;">
                         ${statusAtual.status}
                     </div>
-                    ${statusAtual.data ? `<div style="white-space: nowrap;"><strong>Cidade:</strong> ${statusAtual.data.cidade}</div><div style="white-space: break-word;"><strong>Veículo:</strong> ${statusAtual.data.veiculo}</div><div><strong>Cliente:</strong> ${statusAtual.data.cliente}</div>` : ''}
+                    ${statusAtual.data ? `<div style="white-space: nowrap;"><strong>Cidade:</strong> ${statusAtual.data.cidade}</div><div style="white-space: break-word;"><strong>Veículo:</strong> ${statusAtual.data.veiculo}</div><div><strong>Colaborador:</strong> ${statusAtual.data.cliente}</div>` : ''}
                 </div>
             `;
         } else {
