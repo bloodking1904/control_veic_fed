@@ -730,7 +730,7 @@ async function consultarObservacao(idVeiculo, dia) {
         const observacao = statusData.observacao || ""; // Captura a observação ou vazio se não existir
         const cidade = statusData.cidade || ""; // Captura a cidade ou vazio se não existir
         const cliente = statusData.cliente || ""; // Captura o cliente ou vazio se não existir
-        const veiculo = statusData.veiculo || ""; // Captura o veículo ou vazio se não existir
+        //const veiculo = statusData.veiculo || ""; // Captura o veículo ou vazio se não existir
 
         const detalhesDiv = document.createElement('div');
         detalhesDiv.innerHTML = ` 
@@ -742,8 +742,6 @@ async function consultarObservacao(idVeiculo, dia) {
                 <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade"><br><br>
                 <label style="font-size: 2em; font-weight: bold;">Colaborador:</label><br>
                 <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente"><br><br>
-                <label style="font-size: 2em; font-weight: bold;">Veículo:</label><br>
-                <input type="text" id="veiculo-editar" value="${veiculo}" placeholder="Veículo"><br><br>
                 <button id="editar-observacao" style="background-color: green; color: white; font-size: 2em; padding: 10px 20px;" 
                     onclick="editarObservacao('${idVeiculo}', '${dia}')">EDITAR</button>
             </div>
