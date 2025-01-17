@@ -502,7 +502,7 @@ function mostrarSelecaoStatus(element) {
         if (statusAtual === 'Em Atendimento') {
             statusOptions += ` 
                 <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
-                    onclick="consultarObservacao('${idVeiculo}', ${dia})">OBS. VIAGEM</div>
+                    onclick="consultarObservacao('${idVeiculo}', ${dia})">Obs. Atendimento</div>
             `;
         }
 
