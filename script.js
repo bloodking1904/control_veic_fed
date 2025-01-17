@@ -761,7 +761,7 @@ async function editarObservacao(idVeiculo, dia) {
     const novaObservacao = document.getElementById('observacao-editar').value;
     const novaCidade = document.getElementById('cidade-editar').value;
     const novoCliente = document.getElementById('cliente-editar').value;
-    const novoVeiculo = document.getElementById('veiculo-editar').value;
+    //const novoVeiculo = document.getElementById('veiculo-editar').value;
 
     const veiculoRef = doc(db, 'veiculos', idVeiculo);
     
@@ -774,7 +774,7 @@ async function editarObservacao(idVeiculo, dia) {
                     observacao: novaObservacao, // Atualiza a observação
                     cidade: novaCidade, // Atualiza a cidade
                     cliente: novoCliente, // Atualiza o cliente
-                    veiculo: novoVeiculo // Atualiza o veículo
+                    //veiculo: novoVeiculo // Atualiza o veículo
                 }
             }
         }
