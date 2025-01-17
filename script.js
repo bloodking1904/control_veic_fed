@@ -669,28 +669,23 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
     const cidadeInput = ` 
         <div class="cidade-input">
             <label style="font-size: 2em; font-weight: bold;">Digite a cidade destino:</label><br>
-
             <div>
                 <input type="checkbox" id="cidade-padrao" checked onchange="toggleCidadeInput(this)">
                 <label for="cidade-padrao" style="font-size: 1.5em;">Campo Grande</label>
             </div>
-
             <div>
-	    	<label for="cidade-destino" style="font-size: 1.5em;">Outra cidade</label>
+                <label for="cidade-destino" style="font-size: 1.5em;">Outra cidade</label>
                 <input type="text" id="cidade-destino" placeholder="Digite outra cidade" disabled>
             </div><br>
-
             <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
-
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                onclick="finalizarViagem('${nome}', '${cliente}', '${dia}', '${linha}')">CONFIRMAR<br>VIAGEM</button>
+                onclick="finalizarViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
         </div>
     `;
 
     statusSelecao.innerHTML = cidadeInput;
-
     document.getElementById('overlay').style.display = 'flex';
     document.getElementById('status-selecao').style.display = 'flex';
 }
@@ -703,6 +698,19 @@ function toggleCidadeInput(checkbox) {
         cidadeInput.value = ''; // Limpa o campo se a caixa estiver marcada
     }
 }
+
+// Função para obter a cidade com base na seleção
+function getCidade() {
+    const cidadePadraoCheckbox = document.getElementById('cidade-padrao');
+    if (cidadePadraoCheckbox.checked) {
+        return 'Campo Grande'; // Retorna a cidade padrão se a caixa estiver marcada
+    } else {
+        return document.getElementById('cidade-destino').value; // Retorna o valor digitado se a caixa não estiver marcada
+    }
+}
+
+// Adiciona a função ao objeto global window
+window.getCidade = getCidade;
 
 // Adiciona a função ao objeto global window
 window.adicionarVeiculo = adicionarVeiculo;
