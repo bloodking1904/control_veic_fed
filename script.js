@@ -315,10 +315,18 @@ function atualizarTabela(veiculo, dados) {
 
         const statusAtual = semanaAtual[dia] || { status: 'Disponível', data: null };
 
-        celula.innerHTML = `
-            <div class="veiculo">
+        // Aqui adicionamos a lógica para mostrar o botão apenas se o usuário for admin
+        let botaoAdicionar = '';
+        if (loggedInUser === 'ADMIN') {
+            botaoAdicionar = `
                 <button class="adicionar" data-id-veiculo="${veiculo}" data-dia="${dia}" data-linha="${veiculo}"
                     onclick="mostrarSelecaoStatus(this)">+</button>
+            `;
+        }
+
+        celula.innerHTML = `
+            <div class="veiculo">
+                ${botaoAdicionar} <!-- O botão só será adicionado se o usuário for admin -->
                 <span style="font-weight: bold;">${veiculo}</span>
                 <div class="status" style="color: ${statusAtual.status === 'Em Viagem' ? 'yellow' : (statusAtual.status === 'Disponível' ? 'green' : 'red')}; border: 1px solid black; font-weight: bold;">
                     ${statusAtual.status}
@@ -333,7 +341,6 @@ function atualizarTabela(veiculo, dados) {
         linha.appendChild(celula);
     }
 }
-
 
 // Função para atualizar o status no Firestore
 async function atualizarStatusFirestore(idVeiculo, dia, statusData) {
@@ -431,9 +438,17 @@ async function adicionarStatus(idVeiculo, status, cor, dia, linha, data) {
 
     const veiculoDiv = celula.querySelector('.veiculo');
 
+    // Verificação para mostrar o botão + apenas se for admin
+    let botaoAdicionar = '';
+    if (loggedInUser === 'ADMIN') {
+        botaoAdicionar = `
+            <button class="adicionar" data-id-veiculo="${idVeiculo}" data-dia="${dia}" data-linha="${linha}"
+                onclick="mostrarSelecaoStatus(this)">+</button>
+        `;
+    }
+
     veiculoDiv.innerHTML = `
-        <button class="adicionar" data-id-veiculo="${idVeiculo}" data-dia="${dia}" data-linha="${linha}"
-            onclick="mostrarSelecaoStatus(this)">+</button>
+        ${botaoAdicionar}
         <span style="font-weight: bold;">${idVeiculo}</span>
         <div class="status" style="color: ${cor}; font-weight: bold;">${status}</div>
         ${data && data.cliente && data.veiculo ? ` 
@@ -446,7 +461,6 @@ async function adicionarStatus(idVeiculo, status, cor, dia, linha, data) {
     await atualizarStatusFirestore(idVeiculo, dia, statusData); // Passa o objeto statusData
     console.log("Status adicionado com sucesso.");
 }
-
 window.adicionarStatus = adicionarStatus;
 
 // Função para mostrar a seleção de status
