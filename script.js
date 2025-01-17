@@ -36,7 +36,7 @@ if (urlsProtegidas.includes(window.location.href) && !loggedInUser) {
 }
 
 // Definição das variáveis globais
-let currentWeekIndex = 4; // Índice da semana atual (0-6)
+let currentWeekIndex = 1; // Índice da semana atual (0-6)
 const totalWeeks = 6; // Total de semanas
 
 // Função para verificar se o usuário está autenticado
