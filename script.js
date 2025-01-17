@@ -671,8 +671,8 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             <label style="font-size: 2em; font-weight: bold;">Digite a cidade destino:</label><br>
 
             <div>
-                <input type="checkbox" id="cidade-padrao" checked onchange="toggleCidadeInput(this)">
-                <label for="cidade-padrao" style="font-size: 1.5em;">Campo Grande</label>
+                <input type="checkbox" id="cidade-destino" checked onchange="toggleCidadeInput(this)">
+                <label for="cidade-destino" style="font-size: 1.5em;">Campo Grande</label>
             </div>
 
             <div>
