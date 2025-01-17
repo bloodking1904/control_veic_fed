@@ -669,10 +669,21 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
     const cidadeInput = ` 
         <div class="cidade-input">
             <label style="font-size: 2em; font-weight: bold;">Digite a cidade destino:</label><br>
-            <input type="text" id="cidade-destino" placeholder="Cidade destino" oninput="toggleConfirmButton()"><br><br>
+
+            <div>
+                <input type="checkbox" id="cidade-padrao" checked onchange="toggleCidadeInput(this)">
+                <label for="cidade-padrao" style="font-size: 1.5em;">Campo Grande</label>
+            </div>
+
+            <div>
+                <input type="text" id="cidade-destino" placeholder="Digite outra cidade" disabled>
+                <label for="cidade-destino" style="font-size: 1.5em;">Outra cidade</label>
+            </div><br>
+
             <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
+
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
                 onclick="finalizarViagem('${nome}', '${cliente}', '${dia}', '${linha}')" disabled>CONFIRMAR<br>VIAGEM</button>
         </div>
@@ -684,8 +695,20 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
     document.getElementById('status-selecao').style.display = 'flex';
 }
 
+// Função para habilitar o campo de texto para outra cidade
+function toggleCidadeInput(checkbox) {
+    const cidadeInput = document.getElementById('cidade-destino');
+    cidadeInput.disabled = checkbox.checked; // Habilita o campo se a caixa não estiver marcada
+    if (checkbox.checked) {
+        cidadeInput.value = ''; // Limpa o campo se a caixa estiver marcada
+    }
+}
+
 // Adiciona a função ao objeto global window
 window.adicionarVeiculo = adicionarVeiculo;
+
+// Adiciona a função ao objeto global window
+window.toggleCidadeInput = toggleCidadeInput;
 
 // Função para consultar a observação e permitir a edição de cidade, cliente e veículo
 async function consultarObservacao(idVeiculo, dia) {
