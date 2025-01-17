@@ -494,8 +494,6 @@ function mostrarSelecaoStatus(element) {
                 onclick="adicionarStatus('${idVeiculo}', 'Disponível', 'green', ${dia}, '${linha}', null)">Disponível</div>
             <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" 
                 onclick="mostrarSelecaoAtendimento('${idVeiculo}', ${dia}, '${linha}', null)">Em Atendimento</div>
-            <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
-                onclick="mostrarSelecaoViagem('${idVeiculo}', ${dia}, '${linha}', null)">Viagem</div>
             <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" 
                 onclick="adicionarStatus('${idVeiculo}', 'Bloqueado', 'red', ${dia}, '${linha}', null)">Bloqueado</div>
         `;
@@ -635,30 +633,6 @@ function finalizarAtendimento(nome, cliente, dia, linha) {
 
 // Adiciona a função finalizar atendimento ao objeto global window
 window.finalizarAtendimento = finalizarAtendimento;
-
-// Função para mostrar a seleção de viagem
-function mostrarSelecaoViagem(nome, dia, linha) {
-    const statusSelecao = document.getElementById('status-selecao');
-    const viagemOptions = ` 
-	
-	    <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarSelecaoEducacao('${nome}', ${dia}, '${linha}')">Educação</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Sonia Akamine', ${dia}, '${linha}')">Sonia Akamine</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Maicon Marega', ${dia}, '${linha}')">Maicon Marega</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Saiuri', ${dia}, '${linha}')">Saiuri</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Pedro ESG', ${dia}, '${linha}')">Pedro ESG</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Glaucia CEMPE', ${dia}, '${linha}')">Glaucia CEMPE</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Vitoria ENG', ${dia}, '${linha}')">Vitoria ENG</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'DICOM', ${dia}, '${linha}')">DICOM</div>
-        <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'CPL', ${dia}, '${linha}')">CPL</div>
-    `;
-
-    statusSelecao.innerHTML = viagemOptions;
-    document.getElementById('overlay').style.display = 'flex';
-    document.getElementById('status-selecao').style.display = 'flex';
-}
-
-// Adiciona a função ao objeto global window
-window.mostrarSelecaoViagem = mostrarSelecaoViagem;
 
 
 // Função para adicionar o veículo e cidade
