@@ -568,8 +568,7 @@ window.mostrarSelecaoEducacao = mostrarSelecaoEducacao;
 
 
 // Modificação da função para finalizar a viagem
-async function finalizarViagem(nome, cliente, dia, linha) {
-    const cidade = document.getElementById('cidade-destino').value;
+async function finalizarViagem(nome, cliente, dia, linha, cidade) {
     const observacao = document.getElementById('observacao-texto').value; // Captura a observação
 
     // Prepara o dado para incluir todas as informações necessárias
