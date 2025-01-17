@@ -501,7 +501,7 @@ function mostrarSelecaoStatus(element) {
         `;
 
         // Adiciona o botão "OBS. VIAGEM" se o status for "Em Viagem"
-        if (statusAtual === 'Em Viagem') {
+        if (statusAtual === 'Em Atendimento') {
             statusOptions += ` 
                 <div class="status" style="background-color: lightyellow; color: black; font-weight: bold;" 
                     onclick="consultarObservacao('${idVeiculo}', ${dia})">OBS. VIAGEM</div>
