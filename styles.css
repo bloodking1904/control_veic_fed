@@ -232,7 +232,7 @@ button.entrar-button:hover {
   display: none;
   flex-direction: column;
   align-items: center;
-  z-index: 1000; /* Aumentado para garantir que fique acima do overlay */
+  z-index: 999; /* Aumentado para garantir que fique acima do overlay */
   margin-bottom: 50vh; /* Adiciona uma margem inferior de 50% da altura da viewport */
 }
 
