@@ -71,11 +71,11 @@ function verificarAutenticacao() {
 }
 
 
-// Função para carregar veiculos
+// Função para carregar veículos
 async function carregarVeiculos() {
     console.log("Chamando carregarVeiculos()...");
     const tabela = document.getElementById('tabela-veiculos');
-    tabela.innerHTML = ''; // Limpa a tabela antes de adicionar veiculos
+    tabela.innerHTML = ''; // Limpa a tabela antes de adicionar veículos
 
     // Criar o cabeçalho da tabela
     const cabecalho = document.createElement('div');
@@ -93,9 +93,22 @@ async function carregarVeiculos() {
     const segundaAtual = new Date(dataAtual);
     segundaAtual.setDate(dataAtual.getDate() + offset); // Ajusta para a segunda-feira da semana atual
 
+    // Criar um array para armazenar as semanas
+    const semanas = []; 
+
     // Calcular a data de início da semana com base no currentWeekIndex
-    const dataInicioSemana = new Date(segundaAtual);
-    dataInicioSemana.setDate(segundaAtual.getDate() + (currentWeekIndex - 1) * 7); // Ajusta para a semana correta
+    for (let i = 0; i < totalWeeks; i++) {
+        const dataInicioSemana = new Date(segundaAtual);
+        dataInicioSemana.setDate(segundaAtual.getDate() + (i * 7)); // Ajusta para a semana correta
+        const dataFimSemana = new Date(dataInicioSemana);
+        dataFimSemana.setDate(dataInicioSemana.getDate() + 6); // Adiciona 6 dias para obter o domingo
+
+        // Armazenar as datas de início e fim da semana
+        semanas.push({
+            inicio: dataInicioSemana,
+            fim: dataFimSemana
+        });
+    }
 
     // Adicionar cabeçalho com as datas
     diasDaSemana.forEach((dia, index) => {
@@ -103,8 +116,8 @@ async function carregarVeiculos() {
         celula.classList.add('celula');
 
         // Calcular a data para o dia correto da semana
-        const dataFormatada = new Date(dataInicioSemana);
-        dataFormatada.setDate(dataInicioSemana.getDate() + index); // Adiciona o índice para cada dia
+        const dataFormatada = new Date(segundaAtual);
+        dataFormatada.setDate(segundaAtual.getDate() + (currentWeekIndex * 7) + index); // Adiciona o índice para cada dia
         const diaFormatado = (`0${dataFormatada.getDate()}`).slice(-2) + '/' + (`0${dataFormatada.getMonth() + 1}`).slice(-2) + '/' + dataFormatada.getFullYear(); // Formato DD/MM/AAAA
 
         celula.innerHTML = `${dia}<br>${diaFormatado}`; // Adiciona o nome do dia e a data
@@ -113,20 +126,23 @@ async function carregarVeiculos() {
 
     tabela.appendChild(cabecalho); // Adiciona o cabeçalho à tabela
 
-    // Escutar as alterações nos veiculos
+    // Escutar as alterações nos veículos
     await escutarVeiculos();
 
-        const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
-        console.log("Veiculos obtidos do Firestore:", veiculosSnapshot.docs.length); // Log para depuração
+    const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
+    console.log("Veículos obtidos do Firestore:", veiculosSnapshot.docs.length); // Log para depuração
 
-        veiculosSnapshot.docs.forEach(doc => {
-            const veiculo = doc.id; 
-            const dados = doc.data();
-            console.log("Veiculo:", veiculo, "Dados:", dados); // Log para depuração
-            atualizarTabela(veiculo, dados); // Atualiza a tabela com os dados dos veiculos
-        });
+    veiculosSnapshot.docs.forEach(doc => {
+        const veiculo = doc.id; 
+        const dados = doc.data();
+        console.log("Veículo:", veiculo, "Dados:", dados); // Log para depuração
+        atualizarTabela(veiculo, dados); // Atualiza a tabela com os dados dos veículos
+    });
 
+    return semanas; // Retorna o array de semanas
 }
+
+
 
 // Função para escutar as alterações nos veiculos
 async function escutarVeiculos() {
