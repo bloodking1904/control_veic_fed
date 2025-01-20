@@ -289,8 +289,8 @@ button.entrar-button:hover {
     width: 300px;
     position: fixed; /* Fixa o calendário na tela */
     top: 50%; /* Centraliza verticalmente */
-    left: 50%; /* Centraliza horizontalmente */
-    transform: translate(-50%, -50%); /* Move o calendário para o centro */
+    left: 75%; /* Centraliza horizontalmente */
+    transform: translate(-50%, -75%); /* Move o calendário para o centro */
     z-index: 1000; /* Garante que o calendário fique acima dos outros elementos */
     background-color: white; /* Fundo branco para melhor legibilidade */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); /* Sombra para destaque */
