@@ -128,47 +128,6 @@ async function carregarVeiculos() {
 
 }
 
-
-document.getElementById('iniciarViagem').addEventListener('click', function() {
-    const calendar = document.getElementById('calendario');
-    const calendarHeader = document.getElementById('calendarHeader');
-    const calendarDays = document.getElementById('calendarDays');
-
-    // Toggle display of the calendar
-    calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';
-
-    // Clear previous days
-    calendarDays.innerHTML = '';
-
-    // Get current date to determine the month and year
-    const now = new Date();
-    const month = now.getMonth();
-    const year = now.getFullYear();
-
-    // Set the header
-    calendarHeader.textContent = `${getMonthName(month)} ${year}`;
-
-    // Generate days for the calendar based on currentWeekIndex and totalWeeks
-    const totalDays = getDaysForCalendar(currentWeekIndex, totalWeeks, year, month);
-    
-    totalDays.forEach(day => {
-        const dayElement = document.createElement('div');
-        dayElement.textContent = day.getDate();
-        dayElement.classList.add('calendar-day');
-        
-        // Adding click event to select the date
-        dayElement.addEventListener('click', function() {
-            // Logic to handle date selection
-            dayElement.classList.toggle('selected'); // Toggle selection
-        });
-
-        calendarDays.appendChild(dayElement);
-    });
-});
-
-
-
-
 // Função para escutar as alterações nos veiculos
 async function escutarVeiculos() {
         const veiculosCollection = collection(db, 'veiculos');
@@ -694,8 +653,6 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
-            <button id="iniciar-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                onclick="iniciarViagem('${nome}', '${cliente}', '${dia}', '${linha}')">Início Viagem</button>
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
                 onclick="finalizarViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
         </div>
@@ -733,74 +690,6 @@ window.adicionarVeiculo = adicionarVeiculo;
 
 // Adiciona a função ao objeto global window
 window.toggleCidadeInput = toggleCidadeInput;
-
-
-// Função para iniciar a viagem
-function iniciarViagem(nome, cliente, dia, linha) {
-    const calendar = document.getElementById('calendario');
-    const calendarHeader = document.getElementById('calendarHeader');
-    const calendarDays = document.getElementById('calendarDays');
-
-    // Toggle display of the calendar
-    calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';
-
-    // Clear previous days
-    calendarDays.innerHTML = '';
-
-    // Get current date to determine the month and year
-    const now = new Date();
-    const month = now.getMonth();
-    const year = now.getFullYear();
-
-    // Set the header
-    calendarHeader.textContent = `${getMonthName(month)} ${year}`;
-
-    // Generate days for the calendar based on currentWeekIndex and totalWeeks
-    const totalDays = getDaysForCalendar(currentWeekIndex, totalWeeks, year, month);
-    
-    totalDays.forEach(day => {
-        const dayElement = document.createElement('div');
-        dayElement.textContent = day.getDate();
-        dayElement.classList.add('calendar-day');
-        
-        // Adding click event to select the date
-        dayElement.addEventListener('click', function() {
-            dayElement.classList.toggle('selected'); // Toggle selection
-        });
-
-        calendarDays.appendChild(dayElement);
-    });
-}
-
-// Helper function to get month names
-function getMonthName(monthIndex) {
-    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-    return monthNames[monthIndex];
-}
-
-// Adiciona a função ao objeto global window
-window.iniciarViagem = iniciarViagem;
-
-// Function to get days for the calendar
-function getDaysForCalendar(currentWeekIndex, totalWeeks, year, month) {
-    let days = [];
-    const startOfWeek = new Date(year, month, (currentWeekIndex * 7) + 1);
-
-    for (let i = 0; i < (totalWeeks * 7); i++) {
-        const currentDate = new Date(startOfWeek);
-        currentDate.setDate(startOfWeek.getDate() + i);
-        days.push(currentDate);
-    }
-
-    return days;
-}
-
-// Adiciona a função ao objeto global window
-window.getDaysForCalendar = getDaysForCalendar;
-
-
-
-
 
 // Função para consultar a observação e permitir a edição de cidade, cliente e veículo
 async function consultarObservacao(idVeiculo, dia) {
