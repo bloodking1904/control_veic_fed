@@ -725,20 +725,22 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
 }
 
 
-function mostrarCalendario() {
+async function mostrarCalendario() {
     const calendar = document.getElementById('calendario');
     const calendarHeader = document.getElementById('calendarHeader');
     const calendarDays = document.getElementById('calendarDays');
-	const semanas = await carregarVeiculos();
-	// Agora você pode usar 'semanas' para acessar as datas
-	console.log(semanas);
+
     // Toggle display of the calendar
     calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';
 
     // Clear previous days
     calendarDays.innerHTML = '';
 
-    // Set the header
+    // Obter as semanas chamando a função carregarVeiculos
+    const semanas = await carregarVeiculos(); // Agora você pode usar 'semanas' para acessar as datas
+    console.log(semanas); // Log para verificar as semanas
+
+    // Definir o cabeçalho do calendário com as datas da semana atual
     const { inicio, fim } = semanas[currentWeekIndex]; // Obter as datas da semana atual
     calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`;
 
