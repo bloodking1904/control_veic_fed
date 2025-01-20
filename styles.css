@@ -28,7 +28,7 @@ body {
     margin-bottom: 20px;
    /* box-sizing: border-box; /* Inclui padding e border na largura total */
     background-color: rgba(255, 255, 255, 0.8); /* Fundo levemente transparente para o cabeçalho */
-    z-index: 1000; /* Garante que o cabeçalho fique acima de outros elementos */
+    z-index: 999; /* Garante que o cabeçalho fique acima de outros elementos */
 }
 
 .header h1 {
@@ -221,7 +221,7 @@ button.entrar-button:hover {
   display: flex; /* Alterado para flex para permitir centralização */
   justify-content: center;
   align-items: flex-start; /* Alinha os itens ao topo */
-  z-index: 999;
+  z-index: 998;
 }
 
 .selecao-status {
@@ -232,7 +232,7 @@ button.entrar-button:hover {
   display: none;
   flex-direction: column;
   align-items: center;
-  z-index: 1000; /* Aumentado para garantir que fique acima do overlay */
+  z-index: 997; /* Aumentado para garantir que fique acima do overlay */
   margin-bottom: 50vh; /* Adiciona uma margem inferior de 50% da altura da viewport */
 }
 
