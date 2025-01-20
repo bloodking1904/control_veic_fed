@@ -174,6 +174,9 @@ function getMonthName(monthIndex) {
     return monthNames[monthIndex];
 }
 
+// Adiciona a função ao objeto global window
+window.getMonthName = getMonthName;
+
 // Function to get days for the calendar
 function getDaysForCalendar(currentWeekIndex, totalWeeks, year, month) {
     let days = [];
@@ -187,7 +190,8 @@ function getDaysForCalendar(currentWeekIndex, totalWeeks, year, month) {
 
     return days;
 }
-
+// Adiciona a função ao objeto global window
+window.getDaysForCalendar = getDaysForCalendar;
 
 
 
