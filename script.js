@@ -604,7 +604,6 @@ window.finalizarViagem = finalizarViagem;
 
 // Função para finalizar a viagem para um período de dias
 async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
-    // Captura a seleção de dias
     const diasSelecionados = document.querySelectorAll('.calendar-day.selected');
 
     if (diasSelecionados.length === 0) {
@@ -612,16 +611,15 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
         return;
     }
 
-    // Para cada dia selecionado, você pode aplicar o status
     for (const diaElement of diasSelecionados) {
         const diaIndex = parseInt(diaElement.textContent) - 1; // Ajuste para índice correto
 
         const statusData = {
-            status: 'Em Atendimento', // ou o status que você deseja
-            data: { cidade: cidade, cliente: cliente } // Inclua os dados que você deseja
+            status: 'Em Atendimento',
+            data: { cidade: cidade, cliente: cliente }
         };
 
-        await atualizarStatusFirestore(nome, diaIndex, statusData); // Atualiza o status no Firestore
+        await atualizarStatusFirestore(nome, diaIndex, statusData);
 
         // Atualiza visualmente o veículo
         const veiculoDiv = document.querySelector(`.linha[data-linha="${linha}"] .celula[data-dia="${diaIndex}"] .veiculo`);
@@ -633,12 +631,12 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
                 <span style="font-weight: bold;">${nome}</span>
                 <div class="status" style="color: red; border: 1px solid black; font-weight: bold;">Em Atendimento</div>
                 <div><strong>Colaborador:</strong> ${cliente}</div>
-                <div><strong>Cidade:</strong> ${cidade}</div> <!-- Exibe cidade -->
+                <div><strong>Cidade:</strong> ${cidade}</div>
             `;
         }
     }
 
-    // Após atualizar, você pode fechar o calendário
+    // Fecha o calendário após a confirmação
     document.getElementById('calendario').style.display = 'none';
 }
 
@@ -722,31 +720,38 @@ function mostrarCalendario() {
     // Clear previous days
     calendarDays.innerHTML = '';
 
-    // Get current date to determine the month and year
-    const now = new Date();
-    const month = now.getMonth();
-    const year = now.getFullYear();
-
     // Set the header
-    calendarHeader.textContent = `${getMonthName(month)} ${year}`;
+    const { inicio, fim } = semanas[currentWeekIndex]; // Obter as datas da semana atual
+    calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`;
 
-    // Generate days for the calendar based on currentWeekIndex and totalWeeks
-    const totalDays = getDaysForCalendar(currentWeekIndex, totalWeeks, year, month);
-    
-    totalDays.forEach(day => {
+    // Gerar os dias para o calendário com base na semana atual
+    for (let i = 0; i < 7; i++) {
+        const currentDate = new Date(inicio);
+        currentDate.setDate(inicio.getDate() + i); // Ajusta para o dia correto
+
         const dayElement = document.createElement('div');
-        dayElement.textContent = day.getDate();
+        dayElement.textContent = currentDate.getDate();
         dayElement.classList.add('calendar-day');
-        
-        // Adding click event to select the date
+
+        // Adicionando evento de clique para selecionar o dia
         dayElement.addEventListener('click', function() {
-            dayElement.classList.toggle('selected'); // Toggle selection
+            dayElement.classList.toggle('selected'); // Alterna a seleção
         });
 
         calendarDays.appendChild(dayElement);
-    });
+    }
 }
 
+// Função para formatar a data
+function getFormattedDate(date) {
+    const dia = (`0${date.getDate()}`).slice(-2);
+    const mes = (`0${date.getMonth() + 1}`).slice(-2);
+    const ano = date.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+}
+
+// Adiciona a função ao objeto global window
+window.getFormattedDate = getFormattedDate;
 // Adiciona a função ao objeto global window
 window.mostrarCalendario = mostrarCalendario;
 
