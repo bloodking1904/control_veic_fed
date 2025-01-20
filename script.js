@@ -750,6 +750,31 @@ function mostrarCalendario() {
 // Adiciona a função ao objeto global window
 window.mostrarCalendario = mostrarCalendario;
 
+// Helper function to get month names
+function getMonthName(monthIndex) {
+    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    return monthNames[monthIndex];
+}
+
+// Function to get days for the calendar
+function getDaysForCalendar(currentWeekIndex, totalWeeks, year, month) {
+    let days = [];
+    const startOfWeek = new Date(year, month, (currentWeekIndex * 7) + 1); // Starting from the first day of the current week
+
+    for (let i = 0; i < (totalWeeks * 7); i++) {
+        const currentDate = new Date(startOfWeek);
+        currentDate.setDate(startOfWeek.getDate() + i);
+        days.push(currentDate);
+    }
+
+    return days;
+}
+
+// Adiciona a função ao objeto global window
+window.getMonthName = getMonthName;
+
+// Adiciona a função ao objeto global window
+window.getDaysForCalendar = getDaysForCalendar;
 
 // Função para habilitar o campo de texto para outra cidade
 function toggleCidadeInput(checkbox) {
