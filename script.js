@@ -129,6 +129,65 @@ async function carregarVeiculos() {
 }
 
 
+document.getElementById('iniciarViagem').addEventListener('click', function() {
+    const calendar = document.getElementById('calendario');
+    const calendarHeader = document.getElementById('calendarHeader');
+    const calendarDays = document.getElementById('calendarDays');
+
+    // Toggle display of the calendar
+    calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';
+
+    // Clear previous days
+    calendarDays.innerHTML = '';
+
+    // Get current date to determine the month and year
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+
+    // Set the header
+    calendarHeader.textContent = `${getMonthName(month)} ${year}`;
+
+    // Generate days for the calendar based on currentWeekIndex and totalWeeks
+    const totalDays = getDaysForCalendar(currentWeekIndex, totalWeeks, year, month);
+    
+    totalDays.forEach(day => {
+        const dayElement = document.createElement('div');
+        dayElement.textContent = day.getDate();
+        dayElement.classList.add('calendar-day');
+        
+        // Adding click event to select the date
+        dayElement.addEventListener('click', function() {
+            // Logic to handle date selection
+            dayElement.classList.toggle('selected'); // Toggle selection
+        });
+
+        calendarDays.appendChild(dayElement);
+    });
+});
+
+// Helper function to get month names
+function getMonthName(monthIndex) {
+    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+    return monthNames[monthIndex];
+}
+
+// Function to get days for the calendar
+function getDaysForCalendar(currentWeekIndex, totalWeeks, year, month) {
+    let days = [];
+    const startOfWeek = new Date(year, month, (currentWeekIndex * 7) + 1); // Starting from the first day of the current week
+
+    for (let i = 0; i < (totalWeeks * 7); i++) {
+        const currentDate = new Date(startOfWeek);
+        currentDate.setDate(startOfWeek.getDate() + i);
+        days.push(currentDate);
+    }
+
+    return days;
+}
+
+
+
 // Função para escutar as alterações nos veiculos
 async function escutarVeiculos() {
         const veiculosCollection = collection(db, 'veiculos');
