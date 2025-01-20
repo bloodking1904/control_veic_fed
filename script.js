@@ -729,7 +729,9 @@ function mostrarCalendario() {
     const calendar = document.getElementById('calendario');
     const calendarHeader = document.getElementById('calendarHeader');
     const calendarDays = document.getElementById('calendarDays');
-
+	const semanas = await carregarVeiculos();
+	// Agora você pode usar 'semanas' para acessar as datas
+	console.log(semanas);
     // Toggle display of the calendar
     calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';
 
