@@ -71,11 +71,11 @@ function verificarAutenticacao() {
 }
 
 
-// Função para carregar veículos
+// Função para carregar veiculos
 async function carregarVeiculos() {
     console.log("Chamando carregarVeiculos()...");
     const tabela = document.getElementById('tabela-veiculos');
-    tabela.innerHTML = ''; // Limpa a tabela antes de adicionar veículos
+    tabela.innerHTML = ''; // Limpa a tabela antes de adicionar veiculos
 
     // Criar o cabeçalho da tabela
     const cabecalho = document.createElement('div');
@@ -93,22 +93,9 @@ async function carregarVeiculos() {
     const segundaAtual = new Date(dataAtual);
     segundaAtual.setDate(dataAtual.getDate() + offset); // Ajusta para a segunda-feira da semana atual
 
-    // Criar um array para armazenar as semanas
-    const semanas = []; 
-
     // Calcular a data de início da semana com base no currentWeekIndex
-    for (let i = 0; i < totalWeeks; i++) {
-        const dataInicioSemana = new Date(segundaAtual);
-        dataInicioSemana.setDate(segundaAtual.getDate() + (i * 7)); // Ajusta para a semana correta
-        const dataFimSemana = new Date(dataInicioSemana);
-        dataFimSemana.setDate(dataInicioSemana.getDate() + 6); // Adiciona 6 dias para obter o domingo
-
-        // Armazenar as datas de início e fim da semana
-        semanas.push({
-            inicio: dataInicioSemana,
-            fim: dataFimSemana
-        });
-    }
+    const dataInicioSemana = new Date(segundaAtual);
+    dataInicioSemana.setDate(segundaAtual.getDate() + (currentWeekIndex - 1) * 7); // Ajusta para a semana correta
 
     // Adicionar cabeçalho com as datas
     diasDaSemana.forEach((dia, index) => {
@@ -116,8 +103,8 @@ async function carregarVeiculos() {
         celula.classList.add('celula');
 
         // Calcular a data para o dia correto da semana
-        const dataFormatada = new Date(segundaAtual);
-        dataFormatada.setDate(segundaAtual.getDate() + (currentWeekIndex * 7) + index); // Adiciona o índice para cada dia
+        const dataFormatada = new Date(dataInicioSemana);
+        dataFormatada.setDate(dataInicioSemana.getDate() + index); // Adiciona o índice para cada dia
         const diaFormatado = (`0${dataFormatada.getDate()}`).slice(-2) + '/' + (`0${dataFormatada.getMonth() + 1}`).slice(-2) + '/' + dataFormatada.getFullYear(); // Formato DD/MM/AAAA
 
         celula.innerHTML = `${dia}<br>${diaFormatado}`; // Adiciona o nome do dia e a data
@@ -126,23 +113,20 @@ async function carregarVeiculos() {
 
     tabela.appendChild(cabecalho); // Adiciona o cabeçalho à tabela
 
-    // Escutar as alterações nos veículos
+    // Escutar as alterações nos veiculos
     await escutarVeiculos();
 
-    const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
-    console.log("Veículos obtidos do Firestore:", veiculosSnapshot.docs.length); // Log para depuração
+        const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
+        console.log("Veiculos obtidos do Firestore:", veiculosSnapshot.docs.length); // Log para depuração
 
-    veiculosSnapshot.docs.forEach(doc => {
-        const veiculo = doc.id; 
-        const dados = doc.data();
-        console.log("Veículo:", veiculo, "Dados:", dados); // Log para depuração
-        atualizarTabela(veiculo, dados); // Atualiza a tabela com os dados dos veículos
-    });
+        veiculosSnapshot.docs.forEach(doc => {
+            const veiculo = doc.id; 
+            const dados = doc.data();
+            console.log("Veiculo:", veiculo, "Dados:", dados); // Log para depuração
+            atualizarTabela(veiculo, dados); // Atualiza a tabela com os dados dos veiculos
+        });
 
-    return semanas; // Retorna o array de semanas
 }
-
-
 
 // Função para escutar as alterações nos veiculos
 async function escutarVeiculos() {
@@ -581,7 +565,7 @@ function mostrarSelecaoEducacao(nome, dia, linha) {
 window.mostrarSelecaoEducacao = mostrarSelecaoEducacao;
 
 
-// Função para finalizar a viagem (para um único dia)
+// Modificação da função para finalizar a viagem
 async function finalizarViagem(nome, cliente, dia, linha, cidade) {
     const observacao = document.getElementById('observacao-texto').value; // Captura a observação
 
@@ -595,7 +579,7 @@ async function finalizarViagem(nome, cliente, dia, linha, cidade) {
     // Atualiza o status no Firestore
     await adicionarStatus(nome, 'Em Atendimento', 'red', dia, linha, data); // Passa o objeto data
 
-    // Atualiza visualmente o veículo
+    // Atualiza visualmente o veiculo
     const veiculoDiv = document.querySelector(`.linha[data-linha="${linha}"] .celula[data-dia="${dia}"] .veiculo`);
 
     if (veiculoDiv) {
@@ -608,7 +592,7 @@ async function finalizarViagem(nome, cliente, dia, linha, cidade) {
             <div><strong>Cidade:</strong> ${cidade}</div> <!-- Exibe cidade -->
         `;
     } else {
-        console.error("Div do veículo não encontrada ao atualizar visualmente.");
+        console.error("Div do veiculo não encontrada ao atualizar visualmente.");
     }
 
     fecharSelecaoStatus(); // Fecha todas as seleções 
@@ -616,49 +600,6 @@ async function finalizarViagem(nome, cliente, dia, linha, cidade) {
 
 // Adiciona a função finalizar viagem ao objeto global window
 window.finalizarViagem = finalizarViagem;
-
-
-// Função para finalizar a viagem para um período de dias
-async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
-    const diasSelecionados = document.querySelectorAll('.calendar-day.selected');
-
-    if (diasSelecionados.length === 0) {
-        alert("Nenhum dia selecionado para o período de viagem.");
-        return;
-    }
-
-    for (const diaElement of diasSelecionados) {
-        const diaIndex = parseInt(diaElement.textContent) - 1; // Ajuste para índice correto
-
-        const statusData = {
-            status: 'Em Atendimento',
-            data: { cidade: cidade, cliente: cliente }
-        };
-
-        await atualizarStatusFirestore(nome, diaIndex, statusData);
-
-        // Atualiza visualmente o veículo
-        const veiculoDiv = document.querySelector(`.linha[data-linha="${linha}"] .celula[data-dia="${diaIndex}"] .veiculo`);
-
-        if (veiculoDiv) {
-            veiculoDiv.innerHTML = ` 
-                <button class="adicionar" data-id-veiculo="${nome}" data-dia="${diaIndex}" data-linha="${linha}" 
-                    onclick="mostrarSelecaoStatus(this)" style="font-size: 1.5em; padding: 10px; background-color: green; color: white; border: none; border-radius: 5px; width: 40px; height: 40px;">+</button>
-                <span style="font-weight: bold;">${nome}</span>
-                <div class="status" style="color: red; border: 1px solid black; font-weight: bold;">Em Atendimento</div>
-                <div><strong>Colaborador:</strong> ${cliente}</div>
-                <div><strong>Cidade:</strong> ${cidade}</div>
-            `;
-        }
-    }
-
-    // Fecha o calendário após a confirmação
-    document.getElementById('calendario').style.display = 'none';
-}
-
-// Adiciona a função finalizar viagem ao objeto global window
-window.finalizarPeriodoViagem = finalizarPeriodoViagem;
-
 
 // Função para finalizar o atendimento
 function finalizarAtendimento(nome, cliente, dia, linha) {
@@ -712,8 +653,6 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
-            <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                onclick="mostrarCalendario()">Período Viagem</button>
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
                 onclick="finalizarViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
         </div>
@@ -723,83 +662,6 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
     document.getElementById('overlay').style.display = 'flex';
     document.getElementById('status-selecao').style.display = 'flex';
 }
-
-
-async function mostrarCalendario() {
-    const calendar = document.getElementById('calendario');
-    const calendarHeader = document.getElementById('calendarHeader');
-    const calendarDays = document.getElementById('calendarDays');
-
-    // Toggle display of the calendar
-    calendar.style.display = calendar.style.display === 'block' ? 'none' : 'block';
-
-    // Clear previous days
-    calendarDays.innerHTML = '';
-
-    // Obter as semanas chamando a função carregarVeiculos
-    const semanas = await carregarVeiculos(); // Agora você pode usar 'semanas' para acessar as datas
-    console.log(semanas); // Log para verificar as semanas
-
-    // Definir o cabeçalho do calendário com as datas da semana atual
-    const { inicio, fim } = semanas[currentWeekIndex]; // Obter as datas da semana atual
-    calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`;
-
-    // Gerar os dias para o calendário com base na semana atual
-    for (let i = 0; i < 7; i++) {
-        const currentDate = new Date(inicio);
-        currentDate.setDate(inicio.getDate() + i); // Ajusta para o dia correto
-
-        const dayElement = document.createElement('div');
-        dayElement.textContent = currentDate.getDate();
-        dayElement.classList.add('calendar-day');
-
-        // Adicionando evento de clique para selecionar o dia
-        dayElement.addEventListener('click', function() {
-            dayElement.classList.toggle('selected'); // Alterna a seleção
-        });
-
-        calendarDays.appendChild(dayElement);
-    }
-}
-
-// Função para formatar a data
-function getFormattedDate(date) {
-    const dia = (`0${date.getDate()}`).slice(-2);
-    const mes = (`0${date.getMonth() + 1}`).slice(-2);
-    const ano = date.getFullYear();
-    return `${dia}/${mes}/${ano}`;
-}
-
-// Adiciona a função ao objeto global window
-window.getFormattedDate = getFormattedDate;
-// Adiciona a função ao objeto global window
-window.mostrarCalendario = mostrarCalendario;
-
-// Helper function to get month names
-function getMonthName(monthIndex) {
-    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-    return monthNames[monthIndex];
-}
-
-// Function to get days for the calendar
-function getDaysForCalendar(currentWeekIndex, totalWeeks, year, month) {
-    let days = [];
-    const startOfWeek = new Date(year, month, (currentWeekIndex * 7) + 1); // Starting from the first day of the current week
-
-    for (let i = 0; i < (totalWeeks * 7); i++) {
-        const currentDate = new Date(startOfWeek);
-        currentDate.setDate(startOfWeek.getDate() + i);
-        days.push(currentDate);
-    }
-
-    return days;
-}
-
-// Adiciona a função ao objeto global window
-window.getMonthName = getMonthName;
-
-// Adiciona a função ao objeto global window
-window.getDaysForCalendar = getDaysForCalendar;
 
 // Função para habilitar o campo de texto para outra cidade
 function toggleCidadeInput(checkbox) {
