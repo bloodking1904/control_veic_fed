@@ -565,7 +565,7 @@ function mostrarSelecaoEducacao(nome, dia, linha) {
 window.mostrarSelecaoEducacao = mostrarSelecaoEducacao;
 
 
-// Modificação da função para finalizar a viagem
+// Função para finalizar a viagem (para um único dia)
 async function finalizarViagem(nome, cliente, dia, linha, cidade) {
     const observacao = document.getElementById('observacao-texto').value; // Captura a observação
 
@@ -579,7 +579,7 @@ async function finalizarViagem(nome, cliente, dia, linha, cidade) {
     // Atualiza o status no Firestore
     await adicionarStatus(nome, 'Em Atendimento', 'red', dia, linha, data); // Passa o objeto data
 
-    // Atualiza visualmente o veiculo
+    // Atualiza visualmente o veículo
     const veiculoDiv = document.querySelector(`.linha[data-linha="${linha}"] .celula[data-dia="${dia}"] .veiculo`);
 
     if (veiculoDiv) {
@@ -592,7 +592,7 @@ async function finalizarViagem(nome, cliente, dia, linha, cidade) {
             <div><strong>Cidade:</strong> ${cidade}</div> <!-- Exibe cidade -->
         `;
     } else {
-        console.error("Div do veiculo não encontrada ao atualizar visualmente.");
+        console.error("Div do veículo não encontrada ao atualizar visualmente.");
     }
 
     fecharSelecaoStatus(); // Fecha todas as seleções 
@@ -600,6 +600,51 @@ async function finalizarViagem(nome, cliente, dia, linha, cidade) {
 
 // Adiciona a função finalizar viagem ao objeto global window
 window.finalizarViagem = finalizarViagem;
+
+
+// Função para finalizar a viagem para um período de dias
+async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
+    // Captura a seleção de dias
+    const diasSelecionados = document.querySelectorAll('.calendar-day.selected');
+
+    if (diasSelecionados.length === 0) {
+        alert("Nenhum dia selecionado para o período de viagem.");
+        return;
+    }
+
+    // Para cada dia selecionado, você pode aplicar o status
+    for (const diaElement of diasSelecionados) {
+        const diaIndex = parseInt(diaElement.textContent) - 1; // Ajuste para índice correto
+
+        const statusData = {
+            status: 'Em Atendimento', // ou o status que você deseja
+            data: { cidade: cidade, cliente: cliente } // Inclua os dados que você deseja
+        };
+
+        await atualizarStatusFirestore(nome, diaIndex, statusData); // Atualiza o status no Firestore
+
+        // Atualiza visualmente o veículo
+        const veiculoDiv = document.querySelector(`.linha[data-linha="${linha}"] .celula[data-dia="${diaIndex}"] .veiculo`);
+
+        if (veiculoDiv) {
+            veiculoDiv.innerHTML = ` 
+                <button class="adicionar" data-id-veiculo="${nome}" data-dia="${diaIndex}" data-linha="${linha}" 
+                    onclick="mostrarSelecaoStatus(this)" style="font-size: 1.5em; padding: 10px; background-color: green; color: white; border: none; border-radius: 5px; width: 40px; height: 40px;">+</button>
+                <span style="font-weight: bold;">${nome}</span>
+                <div class="status" style="color: red; border: 1px solid black; font-weight: bold;">Em Atendimento</div>
+                <div><strong>Colaborador:</strong> ${cliente}</div>
+                <div><strong>Cidade:</strong> ${cidade}</div> <!-- Exibe cidade -->
+            `;
+        }
+    }
+
+    // Após atualizar, você pode fechar o calendário
+    document.getElementById('calendario').style.display = 'none';
+}
+
+// Adiciona a função finalizar viagem ao objeto global window
+window.finalizarPeriodoViagem = finalizarPeriodoViagem;
+
 
 // Função para finalizar o atendimento
 function finalizarAtendimento(nome, cliente, dia, linha) {
