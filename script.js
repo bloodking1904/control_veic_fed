@@ -712,10 +712,12 @@ function getCidade() {
     }
 }
 
+
+
 // Função para mostrar o calendário
 async function mostrarCalendario() {
     const calendar = document.getElementById('calendario');
-    const calendarHeader = document.getElementById('calendarHeader');
+    const calendarHeader = document.getElementById('header-data'); // Altere para pegar o header correto
     const calendarDays = document.getElementById('calendarDays');
 
     // Limpa o conteúdo anterior do calendário
@@ -751,7 +753,7 @@ async function mostrarCalendario() {
         });
 
         calendarDays.appendChild(dayElement);
-    };
+    }
 
     // Adiciona o botão OK para fechar o calendário
     const okButton = document.createElement('button');
@@ -761,6 +763,16 @@ async function mostrarCalendario() {
     };
     calendarDays.appendChild(okButton);
 }
+
+// Função para navegar entre as semanas
+function navegarSemana(direcao) {
+    if (currentWeekIndex + direcao >= 0 && currentWeekIndex + direcao <= totalWeeks) {
+        currentWeekIndex += direcao; // Atualiza o índice da semana
+        mostrarCalendario(); // Atualiza o calendário para mostrar a nova semana
+    }
+}
+
+
 
 // Função para finalizar o período de viagem
 async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
@@ -790,6 +802,9 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
 function fecharCalendario() {
     document.getElementById('calendario').style.display = 'none';
 }
+
+// Adiciona a função ao objeto global window
+window.navegarSemana = navegarSemana;
 
 // Adiciona a função ao objeto global window
 window.mostrarCalendario = mostrarCalendario;
