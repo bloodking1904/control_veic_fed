@@ -716,7 +716,7 @@ function mostrarCalendario() {
             });
 
             calendarDays.appendChild(dayElement);
-        });
+        };
 
         // Adiciona o botão OK para fechar o calendário
         const okButton = document.createElement('button');
