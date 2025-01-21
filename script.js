@@ -81,8 +81,6 @@ function verificarAutenticacao() {
     }
 }
 
-
-
 // Função para carregar veículos
 async function carregarVeiculos() {
     console.log("Chamando carregarVeiculos()...");
@@ -119,8 +117,10 @@ async function carregarVeiculos() {
         semanas.push({
             inicio: dataInicioSemana,
             fim: dataFimSemana
-            console.log("inicio da semana:", inicio, "data fim da semana:", fim); // Log para depuração
         });
+
+        // Adicionar logs para visualizar os dados
+        console.log(`Semana ${i + 1}: Início - ${dataInicioSemana}, Fim - ${dataFimSemana}`);
     }
 
     // Adicionar cabeçalho com as datas
