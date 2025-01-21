@@ -107,7 +107,7 @@ async function carregarVeiculos() {
     const semanas = []; 
 
     // Calcular a data de início da semana com base no currentWeekIndex
-    for (let i = 0; i <= totalWeeks; i++) {
+    for (let i = 0; i <= totalWeeks; i++) { // Começa de 0 até totalWeeks
         const dataInicioSemana = new Date(segundaAtual);
         dataInicioSemana.setDate(segundaAtual.getDate() + (i * 7)); // Ajusta para a semana correta
         const dataFimSemana = new Date(dataInicioSemana);
@@ -120,17 +120,18 @@ async function carregarVeiculos() {
         });
 
         // Adicionar logs para visualizar os dados
-        console.log(`Semana ${i + 1}: Início - ${dataInicioSemana}, Fim - ${dataFimSemana}`);
+        console.log(`Semana ${i}: Início - ${dataInicioSemana}, Fim - ${dataFimSemana}`);
     }
 
-    // Adicionar cabeçalho com as datas
+    // Adicionar cabeçalho com as datas para a semana atual
+    const { inicio, fim } = semanas[currentWeekIndex]; // Pega a semana atual
     diasDaSemana.forEach((dia, index) => {
         const celula = document.createElement('div');
         celula.classList.add('celula');
 
         // Calcular a data para o dia correto da semana
-        const dataFormatada = new Date(segundaAtual);
-        dataFormatada.setDate(segundaAtual.getDate() + (currentWeekIndex - 1) * 7 + index); // Adiciona o índice e o número da semana
+        const dataFormatada = new Date(inicio);
+        dataFormatada.setDate(inicio.getDate() + index); // Adiciona o índice para cada dia
         const diaFormatado = (`0${dataFormatada.getDate()}`).slice(-2) + '/' + (`0${dataFormatada.getMonth() + 1}`).slice(-2) + '/' + dataFormatada.getFullYear(); // Formato DD/MM/AAAA
 
         celula.innerHTML = `${dia}<br>${diaFormatado}`; // Adiciona o nome do dia e a data
@@ -154,7 +155,6 @@ async function carregarVeiculos() {
 
     return semanas; // Retorna o array de semanas
 }
-
 
 
 // Função para escutar as alterações nos veiculos
