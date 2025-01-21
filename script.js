@@ -739,7 +739,7 @@ async function mostrarCalendario() {
     calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`;
 
     // Gerar os dias para o calendário
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i <= 7; i++) {
         const currentDate = new Date(inicio);
         currentDate.setDate(inicio.getDate() + i);
 
