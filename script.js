@@ -119,6 +119,7 @@ async function carregarVeiculos() {
         semanas.push({
             inicio: dataInicioSemana,
             fim: dataFimSemana
+            console.log("inicio da semana:", inicio, "data fim da semana:", fim); // Log para depuração
         });
     }
 
