@@ -653,6 +653,8 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
+	    <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
+    		onclick="mostrarCalendario()">Período Viagem</button>
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
                 onclick="finalizarViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
         </div>
@@ -681,6 +683,85 @@ function getCidade() {
         return document.getElementById('cidade-destino').value; // Retorna o valor digitado se a caixa não estiver marcada
     }
 }
+
+// Função para mostrar o calendário
+function mostrarCalendario() {
+    const calendar = document.getElementById('calendario');
+    const calendarHeader = document.getElementById('calendarHeader');
+    const calendarDays = document.getElementById('calendarDays');
+
+    // Limpa o conteúdo anterior do calendário
+    calendarDays.innerHTML = '';
+
+    // Mostra o calendário
+    calendar.style.display = 'block';
+
+    // Obter as semanas chamando a função carregarVeiculos
+    carregarVeiculos().then(semanas => {
+        const { inicio, fim } = semanas[currentWeekIndex]; // Pega a semana atual
+        calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`;
+
+        // Gerar os dias para o calendário
+        for (let i = 0; i < 7; i++) {
+            const currentDate = new Date(inicio);
+            currentDate.setDate(inicio.getDate() + i);
+
+            const dayElement = document.createElement('div');
+            dayElement.textContent = currentDate.getDate();
+            dayElement.classList.add('calendar-day');
+
+            // Evento de clique para selecionar o dia
+            dayElement.addEventListener('click', function () {
+                dayElement.classList.toggle('selected'); // Alterna a seleção
+            });
+
+            calendarDays.appendChild(dayElement);
+        });
+
+        // Adiciona o botão OK para fechar o calendário
+        const okButton = document.createElement('button');
+        okButton.textContent = 'OK';
+        okButton.onclick = function () {
+            fecharCalendario(); // Fecha o calendário
+        };
+        calendarDays.appendChild(okButton);
+    });
+}
+
+// Função para finalizar o período de viagem
+async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
+    const diasSelecionados = document.querySelectorAll('.calendar-day.selected');
+
+    if (diasSelecionados.length === 0) {
+        alert("Nenhum dia selecionado para o período de viagem.");
+        return;
+    }
+
+    for (const diaElement of diasSelecionados) {
+        const diaIndex = parseInt(diaElement.textContent) - 1; // Ajuste para índice correto
+
+        const statusData = {
+            status: 'Em Atendimento',
+            data: { cidade: cidade, cliente: cliente }
+        };
+
+        await atualizarStatusFirestore(nome, diaIndex, statusData); // Atualiza o status no Firestore
+    }
+
+    // Fecha o calendário após a confirmação
+    fecharCalendario();
+}
+
+// Função para fechar o calendário
+function fecharCalendario() {
+    document.getElementById('calendario').style.display = 'none';
+}
+
+// Adiciona a função ao objeto global window
+window.mostrarCalendario = mostrarCalendario;
+
+// Adiciona a função ao objeto global window
+window.fecharCalendario = fecharCalendario;
 
 // Adiciona a função ao objeto global window
 window.getCidade = getCidade;
