@@ -39,6 +39,17 @@ if (urlsProtegidas.includes(window.location.href) && !loggedInUser) {
 let currentWeekIndex = 1; // Índice da semana atual (0-6)
 const totalWeeks = 6; // Total de semanas
 
+// Função para formatar a data
+function getFormattedDate(date) {
+    const dia = (`0${date.getDate()}`).slice(-2); // Formata o dia
+    const mes = (`0${date.getMonth() + 1}`).slice(-2); // Formata o mês (mês é zero-indexado)
+    const ano = date.getFullYear(); // Obtém o ano
+    return `${dia}/${mes}/${ano}`; // Retorna a data formatada
+}
+
+// Adiciona a função ao objeto global window
+window.getFormattedDate = getFormattedDate;
+
 // Função para verificar se o usuário está autenticado
 function verificarAutenticacao() {
     console.log("Verificando autenticação...");
