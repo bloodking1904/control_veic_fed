@@ -689,7 +689,7 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
 	    <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
     		onclick="mostrarCalendario()">Período Viagem</button>
             <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                onclick="finalizarViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
+                onclick="finalizarPeriodoViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
         </div>
     `;
 
