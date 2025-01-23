@@ -97,7 +97,7 @@ async function carregarVeiculos() {
     // Obter a data atual
     const dataAtual = new Date();
 
-    // Calcular o início da semana atual (semana4)
+    // Calcular o início da semana atual (semana1)
     const diaDaSemanaAtual = dataAtual.getDay();
     const offset = diaDaSemanaAtual === 0 ? -6 : 1 - diaDaSemanaAtual; // Se domingo, ajusta para -6 para pegar a segunda
     const segundaAtual = new Date(dataAtual);
@@ -106,10 +106,14 @@ async function carregarVeiculos() {
     // Criar um array para armazenar as semanas
     const semanas = []; 
 
-    // Calcular a data de início da semana com base no currentWeekIndex
+    // Calcular a data de início da semana anterior para semana 0
+    const dataInicioSemana0 = new Date(segundaAtual);
+    dataInicioSemana0.setDate(segundaAtual.getDate() - 7); // Ajusta para a semana anterior
+
+    // Calcular as semanas
     for (let i = 0; i < totalWeeks; i++) { // Começa de 0 até totalWeeks
-        const dataInicioSemana = new Date(segundaAtual);
-        dataInicioSemana.setDate(segundaAtual.getDate() + (i * 7)); // Ajusta para a semana correta
+        const dataInicioSemana = new Date(dataInicioSemana0);
+        dataInicioSemana.setDate(dataInicioSemana0.getDate() + (i * 7)); // Ajusta para a semana correta
         const dataFimSemana = new Date(dataInicioSemana);
         dataFimSemana.setDate(dataInicioSemana.getDate() + 6); // Adiciona 6 dias para obter o domingo
 
