@@ -107,7 +107,7 @@ async function carregarVeiculos() {
     const semanas = []; 
 
     // Calcular a data de início da semana com base no currentWeekIndex
-    for (let i = 0; i <= totalWeeks; i++) { // Começa de 0 até totalWeeks
+    for (let i = 0; i < totalWeeks; i++) { // Começa de 0 até totalWeeks
         const dataInicioSemana = new Date(segundaAtual);
         dataInicioSemana.setDate(segundaAtual.getDate() + (i * 7)); // Ajusta para a semana correta
         const dataFimSemana = new Date(dataInicioSemana);
