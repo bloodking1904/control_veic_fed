@@ -778,7 +778,6 @@ function navegarSemana(direcao) {
 }
 
 
-
 // Função para finalizar o período de viagem
 async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
     const diasSelecionados = document.querySelectorAll('.calendar-day.selected');
@@ -788,9 +787,17 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
         return;
     }
 
+    // Cria um array para armazenar os dias que serão atualizados
+    const diasParaAtualizar = [];
+
+    // Adiciona cada dia selecionado ao array
     for (const diaElement of diasSelecionados) {
         const diaIndex = parseInt(diaElement.textContent) - 1; // Ajuste para índice correto
+        diasParaAtualizar.push(diaIndex);
+    }
 
+    // Atualiza o status para todos os dias selecionados
+    for (const diaIndex of diasParaAtualizar) {
         const statusData = {
             status: 'Em Atendimento',
             data: { cidade: cidade, cliente: cliente }
