@@ -816,6 +816,9 @@ function fecharCalendario() {
 }
 
 // Adiciona a função ao objeto global window
+window.finalizarPeriodoViagem = finalizarPeriodoViagem;
+
+// Adiciona a função ao objeto global window
 window.navegarSemana = navegarSemana;
 
 // Adiciona a função ao objeto global window
