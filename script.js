@@ -796,6 +796,9 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
         diasParaAtualizar.push(diaIndex);
     }
 
+    // Log para ver os dias selecionados
+    console.log("Dias selecionados para atualização:", diasParaAtualizar);
+	
     // Atualiza o status para todos os dias selecionados
     for (const diaIndex of diasParaAtualizar) {
         const statusData = {
