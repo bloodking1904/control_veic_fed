@@ -376,15 +376,15 @@ function atualizarTabela(veiculo, dados) {
 }
 
 // Função para atualizar o status no Firestore
-async function atualizarStatusFirestore(idVeiculo, dia, statusData) {
+async function atualizarStatusFirestore(idVeiculo, semana, dia, statusData) {
     try {
-        console.log(`Atualizando status do veiculo: ${idVeiculo}, Dia: ${dia}, Status: ${statusData.status}`);
+        console.log(`Atualizando status do veiculo: ${idVeiculo}, Semana: ${semana}, Dia: ${dia}, Status: ${statusData.status}`);
         const veiculoRef = doc(db, 'veiculos', idVeiculo);
 
         // Usar merge para atualizar o campo dentro do mapa existente
         await setDoc(veiculoRef, {
-            [`semana${currentWeekIndex}`]: { 
-                ...await getDoc(veiculoRef).then(snapshot => snapshot.data()[`semana${currentWeekIndex}`]), // Obtém os dados existentes
+            [`semana${semana}`]: { 
+                ...await getDoc(veiculoRef).then(snapshot => snapshot.data()[`semana${semana}`]), // Obtém os dados existentes
                 [dia]: statusData // Atualiza o dia específico
             }
         }, { merge: true });
@@ -798,7 +798,7 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
 
     // Log para ver os dias selecionados
     console.log("Dias selecionados para atualização:", diasParaAtualizar);
-	
+
     // Atualiza o status para todos os dias selecionados
     for (const diaIndex of diasParaAtualizar) {
         const statusData = {
@@ -806,7 +806,11 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
             data: { cidade: cidade, cliente: cliente }
         };
 
-        await atualizarStatusFirestore(nome, diaIndex, statusData); // Atualiza o status no Firestore
+        // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
+        const semanaAtual = currentWeekIndex; // Exemplo: 0 para semana0, 1 para semana1, etc.
+
+        // Chama a função para atualizar o status no Firestore
+        await atualizarStatusFirestore(nome, semanaAtual, diaIndex, statusData); // Passa a semana e o dia
     }
 
     // Fecha o calendário após a confirmação
