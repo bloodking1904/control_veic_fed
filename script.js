@@ -706,19 +706,7 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
     document.getElementById('overlay').style.display = 'flex';
     document.getElementById('status-selecao').style.display = 'flex';
 
-    // Fecha o calendário após a confirmação
-    fecharcidadeinput();
-fecharSelecaoStatus(); // Fecha todas as seleções 
-
 }
-
-
-// Função para fechar o calendário
-function fecharcidadeinput() {
-    document.getElementById('cidade-input').style.display = 'none';
-}
-// Adiciona a função ao objeto global window
-window.fecharcidadeinput = fecharcidadeinput;
 
 // Função para habilitar o campo de texto para outra cidade
 function toggleCidadeInput(checkbox) {
@@ -837,6 +825,9 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
 
     // Fecha o calendário após a confirmação
     fecharCalendario();
+
+    // Fecha a seleção de status
+    fecharSelecaoStatus(); // Adicione esta linha	
 }
 
 
