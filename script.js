@@ -385,9 +385,12 @@ async function atualizarStatusFirestore(idVeiculo, semana, dia, statusData) {
         const dadosExistentes = await getDoc(veiculoRef);
         const semanaDados = dadosExistentes.data()[`semana${semana}`]; // Acessa a semana correta
 
-        // Atualiza o campo específico do dia na semana
+        // Verifica se a semana existe
         if (semanaDados) {
+            // Atualiza o campo específico do dia na semana
             semanaDados[dia] = statusData; // Atualiza o status e dados do dia
+
+            // Atualiza a semana no Firestore
             await setDoc(veiculoRef, {
                 [`semana${semana}`]: semanaDados // Atualiza a semana no Firestore
             }, { merge: true });
