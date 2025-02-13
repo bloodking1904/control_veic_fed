@@ -705,7 +705,19 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
     statusSelecao.innerHTML = cidadeInput;
     document.getElementById('overlay').style.display = 'flex';
     document.getElementById('status-selecao').style.display = 'flex';
+
+    // Fecha o calendário após a confirmação
+    fecharcidadeinput();
+
 }
+
+
+// Função para fechar o calendário
+function fecharcidadeinput() {
+    document.getElementById('cidade-input').style.display = 'none';
+}
+// Adiciona a função ao objeto global window
+window.fecharcidadeinput = fecharcidadeinput;
 
 // Função para habilitar o campo de texto para outra cidade
 function toggleCidadeInput(checkbox) {
