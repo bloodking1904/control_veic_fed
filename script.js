@@ -802,8 +802,15 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
 
     // Adiciona cada dia selecionado ao array
     for (const diaElement of diasSelecionados) {
-        const diaIndex = parseInt(diaElement.textContent); // Ajuste para índice correto (0-6)
-        diasParaAtualizar.push(diaIndex);
+        const diaSelecionado = parseInt(diaElement.textContent); // Obtenha o dia do mês
+        const dataSelecionada = new Date(); // Data atual para calcular a semana
+        dataSelecionada.setDate(diaSelecionado); // Defina o dia selecionado
+
+        // Calcule o dia da semana (0 = domingo, 1 = segunda, ..., 6 = sábado)
+        const diaDaSemana = (dataSelecionada.getDay() + 6) % 7; // Para que segunda-feira seja 0
+
+        // Mapeie para o índice da semana atual
+        diasParaAtualizar.push(diaDaSemana);
     }
 
     // Log para ver os dias selecionados
@@ -825,10 +832,11 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
 
     // Fecha o calendário após a confirmação
     fecharCalendario();
-
+	
     // Fecha a seleção de status
     fecharSelecaoStatus(); // Adicione esta linha	
 }
+
 
 
 // Função para fechar o calendário
