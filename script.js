@@ -708,6 +708,7 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
 
     // Fecha o calendário após a confirmação
     fecharcidadeinput();
+fecharSelecaoStatus(); // Fecha todas as seleções 
 
 }
 
