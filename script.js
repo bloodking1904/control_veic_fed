@@ -381,13 +381,19 @@ async function atualizarStatusFirestore(idVeiculo, semana, dia, statusData) {
         console.log(`Atualizando status do veiculo: ${idVeiculo}, Semana: ${semana}, Dia: ${dia}, Status: ${statusData.status}`);
         const veiculoRef = doc(db, 'veiculos', idVeiculo);
 
-        // Usar merge para atualizar o campo dentro do mapa existente
-        await setDoc(veiculoRef, {
-            [`semana${semana}`]: { 
-                ...await getDoc(veiculoRef).then(snapshot => snapshot.data()[`semana${semana}`]), // Obtém os dados existentes
-                [dia]: statusData // Atualiza o dia específico
-            }
-        }, { merge: true });
+        // Obter dados existentes da semana atual
+        const dadosExistentes = await getDoc(veiculoRef);
+        const semanaDados = dadosExistentes.data()[`semana${semana}`]; // Acessa a semana correta
+
+        // Atualiza o campo específico do dia na semana
+        if (semanaDados) {
+            semanaDados[dia] = statusData; // Atualiza o status e dados do dia
+            await setDoc(veiculoRef, {
+                [`semana${semana}`]: semanaDados // Atualiza a semana no Firestore
+            }, { merge: true });
+        } else {
+            console.error("Dados da semana não encontrados.");
+        }
 
         console.log("Status atualizado com sucesso.");
     } catch (error) {
@@ -792,7 +798,7 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
 
     // Adiciona cada dia selecionado ao array
     for (const diaElement of diasSelecionados) {
-        const diaIndex = parseInt(diaElement.textContent); // Ajuste para índice correto
+        const diaIndex = parseInt(diaElement.textContent) - 1; // Ajuste para índice correto (0-6)
         diasParaAtualizar.push(diaIndex);
     }
 
@@ -816,6 +822,7 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
     // Fecha o calendário após a confirmação
     fecharCalendario();
 }
+
 
 // Função para fechar o calendário
 function fecharCalendario() {
