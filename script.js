@@ -801,7 +801,7 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
 
     // Adiciona cada dia selecionado ao array
     for (const diaElement of diasSelecionados) {
-        const diaIndex = parseInt(diaElement.textContent) - 1; // Ajuste para índice correto (0-6)
+        const diaIndex = parseInt(diaElement.textContent); // Ajuste para índice correto (0-6)
         diasParaAtualizar.push(diaIndex);
     }
 
