@@ -761,7 +761,7 @@ async function mostrarCalendario() {
     diasDaSemana.forEach(dia => {
         const headerCell = document.createElement('div');
         headerCell.textContent = dia;
-        headerCell.classList.add('calendar-header-day'); // Adiciona uma classe para estilização, se necessário
+        headerCell.classList.add('calendar-day'); // Adiciona uma classe para estilização, se necessário
         headerRow.appendChild(headerCell);
     });
 
