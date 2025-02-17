@@ -820,11 +820,11 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
     for (const diaIndex of diasParaAtualizar) {
         const statusData = {
             status: 'Em Atendimento',
-            data: { cidade: cidade, cliente: cliente }
+            data: { cidade: cidade, cliente: cliente, observacao: document.getElementById('observacao-texto').value } // Captura a observação
         };
 
-        // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
-        const semanaAtual = currentWeekIndex; // Exemplo: 0 para semana0, 1 para semana1, etc.
+        // Determinar a semana correta
+        const semanaAtual = currentWeekIndex;
 
         // Chama a função para atualizar o status no Firestore
         await atualizarStatusFirestore(nome, semanaAtual, diaIndex, statusData); // Passa a semana e o dia
@@ -832,9 +832,7 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
 
     // Fecha o calendário após a confirmação
     fecharCalendario();
-	
-    // Fecha a seleção de status
-    fecharSelecaoStatus(); // Adicione esta linha	
+    fecharSelecaoStatus();
 }
 
 
