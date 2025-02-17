@@ -309,37 +309,10 @@ button.entrar-button:hover {
     text-align: center;
 }
 
-#calendarDays {
-    display: flex; /* Garante que os dias sejam exibidos em linha */
-    flex-direction: column; /* Define a direção como coluna para separar cabeçalho e dias */
-}
-
-.calendar-days-row {
-    display: flex; /* Exibe os dias em linha */
-}
-
-.calendar-header-day,
 .calendar-day {
-    flex: 1; /* Faz cada dia ocupar igualmente o espaço disponível */
-    text-align: center; /* Centraliza o texto */
-    padding: 10px; /* Adiciona padding */
-    height: 40px; /* Define uma altura fixa para manter todos do mesmo tamanho */
-    box-sizing: border-box; /* Inclui padding na largura e altura */
-}
-
-/* Estilo específico para os cabeçalhos dos dias da semana */
-.calendar-header-day {
-    font-weight: bold; /* Negrito para os cabeçalhos */
-    background-color: #f0f0f0; /* Fundo leve para os cabeçalhos */
-    border-bottom: 2px solid #ccc; /* Linha abaixo dos cabeçalhos */
-}
-/* Estilo específico para os dias numéricos */
-.calendar-day {
-    cursor: pointer; /* Muda o cursor ao passar sobre o dia */
-    transition: background-color 0.3s; /* Transição suave para o fundo */
-}
-.calendar-day:hover {
-    background-color: #e0e0e0; /* Cor ao passar o mouse */
+    padding: 10px;
+    border: 1px solid #ccc;
+    cursor: pointer;
 }
 
 .calendar-day.selected {
