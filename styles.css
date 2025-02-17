@@ -318,14 +318,6 @@ button.entrar-button:hover {
 .calendar-day.selected {
     background-color: #e0e0e0; /* Cor para dias selecionados */
 }
-.calendar-header-day {
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-    background-color: #f0f0f0; /* Cor de fundo para os cabeçalhos */
-    border-bottom: 2px solid #ccc; /* Linha abaixo dos cabeçalhos */
-}
-
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
