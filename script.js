@@ -1016,7 +1016,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     document.getElementById('seta-direita').addEventListener('click', () => {
-        if (currentWeekIndex <= totalWeeks) {
+        if (currentWeekIndex < totalWeeks) {
             currentWeekIndex++;
             carregarVeiculos().catch(console.error);
         }
