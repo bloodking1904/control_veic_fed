@@ -1,7 +1,7 @@
 
 const users = {
-    admin: 'cpl2025',
-	convidado: 'fiems2025'
+    admin: 'cpl25',
+	convidado: 'fiems25'
 };
 
 document.getElementById('login-form').addEventListener('submit', function(event) {
