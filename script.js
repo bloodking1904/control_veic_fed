@@ -820,7 +820,7 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
     for (const diaIndex of diasParaAtualizar) {
         const statusData = {
             status: 'Em Atendimento',
-            data: { cidade: cidade, cliente: cliente }
+            data: { cidade: cidade, cliente: cliente, observacao: document.getElementById('observacao-texto').value } // Captura a observação
         };
 
         // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
@@ -841,7 +841,6 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
         diaElement.classList.remove('selected'); // Remove a classe de seleção
     });
 }
-
 
 
 // Função para fechar o calendário
