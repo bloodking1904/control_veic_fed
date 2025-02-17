@@ -424,7 +424,7 @@ async function resetarStatusTodosVeiculos() {
             const veiculoRef = doc.ref;
 
             // Atualiza o status para 'Disponível' para cada semana (de 0 até totalWeeks)
-            for (let semana = 0; semana <= totalWeeks; semana++) {
+            for (let semana = 0; semana < totalWeeks; semana++) {
                 for (let dia = 0; dia < 7; dia++) {
                     batch.set(veiculoRef, {
                         [`semana${semana}`]: {
@@ -781,7 +781,7 @@ async function mostrarCalendario() {
 
 // Função para navegar entre as semanas
 function navegarSemana(direcao) {
-    if (currentWeekIndex + direcao >= 0 && currentWeekIndex + direcao <= totalWeeks) {
+    if (currentWeekIndex + direcao >= 0 && currentWeekIndex + direcao < totalWeeks) {
         currentWeekIndex += direcao; // Atualiza o índice da semana
         mostrarCalendario(); // Atualiza o calendário para mostrar a nova semana
     }
