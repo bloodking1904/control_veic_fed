@@ -753,6 +753,21 @@ async function mostrarCalendario() {
     const { inicio, fim } = semanas[currentWeekIndex]; // Pega a semana atual
     calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`;
 
+    // Criar uma linha para os cabeçalhos dos dias da semana
+    const diasDaSemana = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
+    const headerRow = document.createElement('div');
+
+    // Adiciona os nomes dos dias da semana ao cabeçalho
+    diasDaSemana.forEach(dia => {
+        const headerCell = document.createElement('div');
+        headerCell.textContent = dia;
+        headerCell.classList.add('calendar-header-day'); // Adiciona uma classe para estilização, se necessário
+        headerRow.appendChild(headerCell);
+    });
+
+    // Adiciona a linha de cabeçalho ao calendário
+    calendarDays.appendChild(headerRow);
+
     // Gerar os dias para o calendário
     for (let i = 0; i < 7; i++) {
         const currentDate = new Date(inicio);
@@ -778,6 +793,7 @@ async function mostrarCalendario() {
     };
     calendarDays.appendChild(okButton);
 }
+
 
 // Função para navegar entre as semanas
 function navegarSemana(direcao) {
