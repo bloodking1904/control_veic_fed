@@ -695,9 +695,13 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
-	    <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
-    		onclick="mostrarCalendario()">Período Viagem</button>
-            <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
+            <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px; float: left;" 
+                onclick="mostrarCalendario()">Período Viagem</button>
+            <button id="manha" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px; float: left; margin-left: 10px;" 
+                onclick="togglePeriodo('manha')">MANHÃ</button>
+            <button id="tarde" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px; float: left; margin-left: 10px;" 
+                onclick="togglePeriodo('tarde')">TARDE</button>
+            <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px; float: right;" 
                 onclick="finalizarPeriodoViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
         </div>
     `;
@@ -705,8 +709,26 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
     statusSelecao.innerHTML = cidadeInput;
     document.getElementById('overlay').style.display = 'flex';
     document.getElementById('status-selecao').style.display = 'flex';
-
 }
+
+let periodoSelecionado = {manha: false, tarde: false};
+
+function togglePeriodo(periodo) {
+    const botaoManha = document.getElementById('manha');
+    const botaoTarde = document.getElementById('tarde');
+
+    if (periodo === 'manha') {
+        periodoSelecionado.manha = !periodoSelecionado.manha;
+        botaoManha.style.backgroundColor = periodoSelecionado.manha ? 'lightblue' : 'lightgray';
+    } else if (periodo === 'tarde') {
+        periodoSelecionado.tarde = !periodoSelecionado.tarde;
+        botaoTarde.style.backgroundColor = periodoSelecionado.tarde ? 'lightblue' : 'lightgray';
+    }
+}
+
+// Adiciona a função ao objeto global window
+window.togglePeriodo = togglePeriodo;
+
 
 // Função para habilitar o campo de texto para outra cidade
 function toggleCidadeInput(checkbox) {
@@ -837,6 +859,21 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
         await atualizarStatusFirestore(nome, semanaAtual, diaIndex, statusData); // Passa a semana e o dia
     }
 
+    // Aplicar cores às células
+    diasSelecionados.forEach(diaElement => {
+        const celula = diaElement; // A célula correspondente a cada dia selecionado
+        if (periodoSelecionado.manha && periodoSelecionado.tarde) {
+            celula.style.backgroundColor = 'lightblue'; // Se ambos os períodos estão selecionados
+        } else if (periodoSelecionado.manha) {
+            celula.style.backgroundColor = 'lightblue'; // Apenas metade da célula
+            // Aqui você pode adicionar lógica para mudar a cor da metade esquerda
+        } else if (periodoSelecionado.tarde) {
+            celula.style.backgroundColor = 'lightblue'; // Apenas metade da célula
+            // Aqui você pode adicionar lógica para mudar a cor da metade direita
+        }
+    });
+	
+
     // Fecha o calendário após a confirmação
     fecharCalendario();
 
@@ -889,7 +926,10 @@ async function consultarObservacao(idVeiculo, dia) {
         const observacao = statusData.observacao || ""; // Captura a observação ou vazio se não existir
         const cidade = statusData.cidade || ""; // Captura a cidade ou vazio se não existir
         const cliente = statusData.cliente || ""; // Captura o cliente ou vazio se não existir
-        //const veiculo = statusData.veiculo || ""; // Captura o veículo ou vazio se não existir
+
+        // Verifica se os períodos estão definidos
+        const periodoManha = statusData.periodo?.manha || false;
+        const periodoTarde = statusData.periodo?.tarde || false;
 
         const detalhesDiv = document.createElement('div');
         detalhesDiv.innerHTML = ` 
@@ -901,6 +941,10 @@ async function consultarObservacao(idVeiculo, dia) {
                 <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade"><br><br>
                 <label style="font-size: 2em; font-weight: bold;">Colaborador:</label><br>
                 <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente"><br><br>
+                <button id="manha" style="background-color: ${periodoManha ? 'lightblue' : 'lightgray'}; color: black; font-size: 1.2em; padding: 8px 16px;" 
+                    onclick="togglePeriodo('manha')">MANHÃ</button>
+                <button id="tarde" style="background-color: ${periodoTarde ? 'lightblue' : 'lightgray'}; color: black; font-size: 1.2em; padding: 8px 16px;" 
+                    onclick="togglePeriodo('tarde')">TARDE</button>
                 <button id="editar-observacao" style="background-color: green; color: white; font-size: 2em; padding: 10px 20px;" 
                     onclick="editarObservacao('${idVeiculo}', '${dia}')">EDITAR</button>
             </div>
@@ -920,7 +964,10 @@ async function editarObservacao(idVeiculo, dia) {
     const novaObservacao = document.getElementById('observacao-editar').value;
     const novaCidade = document.getElementById('cidade-editar').value;
     const novoCliente = document.getElementById('cliente-editar').value;
-    //const novoVeiculo = document.getElementById('veiculo-editar').value;
+
+    // Captura o estado dos períodos
+    const periodoManha = document.getElementById('manha').style.backgroundColor === 'lightblue';
+    const periodoTarde = document.getElementById('tarde').style.backgroundColor === 'lightblue';
 
     const veiculoRef = doc(db, 'veiculos', idVeiculo);
     
@@ -933,7 +980,7 @@ async function editarObservacao(idVeiculo, dia) {
                     observacao: novaObservacao, // Atualiza a observação
                     cidade: novaCidade, // Atualiza a cidade
                     cliente: novoCliente, // Atualiza o cliente
-                    //veiculo: novoVeiculo // Atualiza o veículo
+                    periodo: { manha: periodoManha, tarde: periodoTarde } // Atualiza o estado dos períodos
                 }
             }
         }
