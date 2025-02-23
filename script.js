@@ -720,11 +720,13 @@ function toggleCidadeInput(checkbox) {
 // Função para obter a cidade com base na seleção
 function getCidade() {
     const cidadePadraoCheckbox = document.getElementById('cidade-padrao');
+    // Se a caixa estiver marcada, retorna 'Campo Grande'
     if (cidadePadraoCheckbox.checked) {
-        return 'Campo Grande'; // Retorna a cidade padrão se a caixa estiver marcada
-    } else {
-        return document.getElementById('cidade-destino').value; // Retorna o valor digitado se a caixa não estiver marcada
-    }
+        return 'Campo Grande'; 
+    } 
+    // Caso contrário, retorna o valor do campo de texto. Adicione uma verificação para garantir que não esteja vazio.
+    const cidadeDestino = document.getElementById('cidade-destino').value.trim();
+    return cidadeDestino.length > 0 ? cidadeDestino : 'Campo Grande'; // Retorna Campo Grande se o campo estiver vazio
 }
 
 
@@ -791,7 +793,7 @@ function navegarSemana(direcao) {
 
 
 // Função para finalizar o período de viagem
-async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
+async function finalizarPeriodoViagem(nome, cliente, linha) {
     const diasSelecionados = document.querySelectorAll('.calendar-day.selected');
 
     if (diasSelecionados.length === 0) {
@@ -818,11 +820,14 @@ async function finalizarPeriodoViagem(nome, cliente, linha, cidade) {
     // Log para ver os dias selecionados
     console.log("Dias selecionados para atualização:", diasParaAtualizar);
 
+    // Obtenha a cidade selecionada usando a função getCidade
+    const cidadeSelecionada = getCidade();
+
     // Atualiza o status para todos os dias selecionados
     for (const diaIndex of diasParaAtualizar) {
         const statusData = {
             status: 'Em Atendimento',
-            data: { cidade: cidade, cliente: cliente, observacao: document.getElementById('observacao-texto').value } // Captura a observação
+            data: { cidade: cidadeSelecionada, cliente: cliente, observacao: document.getElementById('observacao-texto').value } // Captura a observação
         };
 
         // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
