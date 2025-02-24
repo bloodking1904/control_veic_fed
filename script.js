@@ -696,21 +696,23 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
             
-            <!-- Botão Período Viagem -->
-            <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                onclick="mostrarCalendario()">Período Viagem</button>
-            
-            <!-- Botões MANHÃ e TARDE -->
-            <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                <button id="manha-button" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px; margin-top: 10px;" 
-                    onclick="togglePeriodo('manha')">MANHÃ</button>
-                <button id="tarde-button" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px;" 
-                    onclick="togglePeriodo('tarde')">TARDE</button>
-            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <!-- Botão Período Viagem -->
+                <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
+                    onclick="mostrarCalendario()">Período Viagem</button>
+                
+                <!-- Botões MANHÃ e TARDE -->
+                <div style="display: flex; flex-direction: column; align-items: center; margin: 0 20px;">
+                    <button id="manha-button" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px;" 
+                        onclick="togglePeriodo('manha')">MANHÃ</button>
+                    <button id="tarde-button" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px;" 
+                        onclick="togglePeriodo('tarde')">TARDE</button>
+                </div>
 
-            <!-- Botão CONFIRMAR VIAGEM -->
-            <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px; margin-top: 10px; align-self: flex-end;" 
-                onclick="finalizarPeriodoViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
+                <!-- Botão CONFIRMAR VIAGEM -->
+                <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
+                    onclick="finalizarPeriodoViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
+            </div>
         </div>
     `;
 
