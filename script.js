@@ -897,11 +897,18 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
 
         // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
         const semanaAtual = currentWeekIndex; // Exemplo: 0 para semana0, 1 para semana1, etc.
-
-        // Chama a função para atualizar o status no Firestore
+	    
+	// Mostrar o loader
+        document.getElementById('loading').style.display = 'flex';
+	    
+        
+	// Chama a função para atualizar o status no Firestore
         await atualizarStatusFirestore(nome, semanaAtual, diaIndex, statusData); // Passa a semana e o dia
     }
 
+	// Ocultar o loader
+        document.getElementById('loading').style.display = 'none';
+	
     // Fecha o calendário após a confirmação
     fecharCalendario();
 
