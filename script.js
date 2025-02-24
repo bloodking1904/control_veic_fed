@@ -695,9 +695,21 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
             <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
                 style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
-	    <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
-    		onclick="mostrarCalendario()">Período Viagem</button>
-            <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
+            
+            <!-- Botão Período Viagem -->
+            <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
+                onclick="mostrarCalendario()">Período Viagem</button>
+            
+            <!-- Botões MANHÃ e TARDE -->
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                <button id="manha-button" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px; margin-top: 10px;" 
+                    onclick="togglePeriodo('manha')">MANHÃ</button>
+                <button id="tarde-button" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px;" 
+                    onclick="togglePeriodo('tarde')">TARDE</button>
+            </div>
+
+            <!-- Botão CONFIRMAR VIAGEM -->
+            <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px; margin-top: 10px; align-self: flex-end;" 
                 onclick="finalizarPeriodoViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
         </div>
     `;
@@ -705,8 +717,21 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
     statusSelecao.innerHTML = cidadeInput;
     document.getElementById('overlay').style.display = 'flex';
     document.getElementById('status-selecao').style.display = 'flex';
-
 }
+
+// Variável global para rastrear os períodos selecionados
+let periodosSelecionados = { manha: false, tarde: false };
+
+// Função para alternar a seleção de períodos
+function togglePeriodo(periodo) {
+    periodosSelecionados[periodo] = !periodosSelecionados[periodo]; // Alterna o estado do período
+
+    const button = document.getElementById(`${periodo}-button`);
+    button.style.backgroundColor = periodosSelecionados[periodo] ? 'lightblue' : 'lightgray'; // Muda a cor do botão
+}
+
+// Adiciona a função ao objeto global window
+window.togglePeriodo = togglePeriodo;
 
 // Função para habilitar o campo de texto para outra cidade
 function toggleCidadeInput(checkbox) {
@@ -823,11 +848,26 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
     // Obtenha a cidade selecionada usando a função getCidade
     const cidadeSelecionada = getCidade();
 
+    // Montar a informação sobre os períodos selecionados
+    let periodoSelecionado = '';
+    if (periodosSelecionados.manha && periodosSelecionados.tarde) {
+        periodoSelecionado = 'Manhã e Tarde'; // Ambos os períodos
+    } else if (periodosSelecionados.manha) {
+        periodoSelecionado = 'Manhã'; // Apenas Manhã
+    } else if (periodosSelecionados.tarde) {
+        periodoSelecionado = 'Tarde'; // Apenas Tarde
+    }
+
     // Atualiza o status para todos os dias selecionados
     for (const diaIndex of diasParaAtualizar) {
         const statusData = {
             status: 'Em Atendimento',
-            data: { cidade: cidadeSelecionada, cliente: cliente, observacao: document.getElementById('observacao-texto').value } // Captura a observação
+            data: {
+                cidade: cidadeSelecionada,
+                cliente: cliente,
+                observacao: document.getElementById('observacao-texto').value, // Captura a observação
+                periodo: periodoSelecionado // Adiciona a informação do período
+            }
         };
 
         // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
@@ -841,7 +881,7 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
     fecharCalendario();
 
     // Fecha a seleção de status
-    fecharSelecaoStatus(); // Adicione esta linha
+    fecharSelecaoStatus(); 
 
     // Limpar a seleção de dias no calendário
     diasSelecionados.forEach(diaElement => {
