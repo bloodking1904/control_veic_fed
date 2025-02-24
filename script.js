@@ -383,7 +383,23 @@ function atualizarTabela(veiculo, dados) {
 
         linha.appendChild(celula);
     }
+    // Limpa os dados de período após a atualização para evitar lixo de atualizações anteriores
+    limparDadosPeriodo(linha);
 }
+
+// Função para limpar os dados de período
+function limparDadosPeriodo(linha) {
+    const celulas = linha.querySelectorAll('.celula');
+    celulas.forEach(celula => {
+        const periodoDiv = celula.querySelector('div[style*="position: relative;"]'); // Seleciona o div de período
+        if (periodoDiv) {
+            periodoDiv.innerHTML = ''; // Limpa o conteúdo do div de período
+        }
+    });
+}
+
+// Adiciona a função ao objeto global window
+window.limparDadosPeriodo = limparDadosPeriodo;
 
 // Função para atualizar o status no Firestore
 async function atualizarStatusFirestore(idVeiculo, semana, dia, statusData) {
