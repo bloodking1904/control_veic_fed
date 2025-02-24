@@ -1023,6 +1023,8 @@ async function atualizarPeriodo(idVeiculo, dia, novoPeriodo) {
     fecharSelecaoStatus(); 
 }
 
+// Adiciona a função ao objeto global window
+window.atualizarPeriodo = atualizarPeriodo;
 
 // Função para editar a observação, cidade, cliente e veículo
 async function editarObservacao(idVeiculo, dia) {
