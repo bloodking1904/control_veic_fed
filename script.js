@@ -842,6 +842,12 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
         return;
     }
 
+    // Limpa o objeto de períodos selecionados
+    periodosSelecionados = {
+        manha: false,
+        tarde: false
+    };
+
     // Cria um array para armazenar os dias que serão atualizados
     const diasParaAtualizar = [];
 
