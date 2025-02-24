@@ -1016,6 +1016,16 @@ async function atualizarPeriodo(idVeiculo, dia, novoPeriodo) {
         }
     };
 
+
+
+
+
+
+	editarObservacao();
+
+
+
+	
     await atualizarStatusFirestore(idVeiculo, currentWeekIndex, dia, statusData); // Atualiza o Firestore
     console.log(`Período atualizado para ${novoPeriodo} no veículo ${idVeiculo} no dia ${dia}.`);
 
