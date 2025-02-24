@@ -357,6 +357,10 @@ function atualizarTabela(veiculo, dados) {
             `;
         }
 
+        // Extraindo informações do status, incluindo o período
+        const periodo = statusAtual.data ? statusAtual.data.periodo : '';  // Obtém a informação do período
+
+        // Monta o conteúdo da célula
         celula.innerHTML = `
             <div class="veiculo">
                 ${botaoAdicionar} <!-- O botão só será adicionado se o usuário for admin -->
@@ -364,10 +368,16 @@ function atualizarTabela(veiculo, dados) {
                 <div class="status" style="color: ${statusAtual.status === 'Em Viagem' ? 'yellow' : (statusAtual.status === 'Disponível' ? 'green' : 'red')}; border: 1px solid black; font-weight: bold;">
                     ${statusAtual.status}
                 </div>
-                ${statusAtual.data ? `
+                ${statusAtual.data ? ` 
                     <div style="white-space: nowrap;"><strong>Cidade:</strong> ${statusAtual.data.cidade || 'N/A'}</div>
                     <div><strong>Colaborador:</strong> ${statusAtual.data.cliente || 'N/A'}</div>
                 ` : ''}
+                
+                <!-- Exibe MANHÃ e TARDE conforme o período -->
+                <div style="font-size: 0.8em; position: relative; width: 100%; height: 100%;">
+                    ${periodo.includes('Manhã') ? '<div style="position: absolute; top: 0; left: 0;">MANHÃ</div>' : ''}
+                    ${periodo.includes('Tarde') ? '<div style="position: absolute; top: 0; right: 0;">TARDE</div>' : ''}
+                </div>
             </div>
         `;
 
