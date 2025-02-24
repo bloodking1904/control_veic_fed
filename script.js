@@ -374,9 +374,9 @@ function atualizarTabela(veiculo, dados) {
                 ` : ''}
                 
                 <!-- Exibe MANHÃ e TARDE conforme o período -->
-                <div style="font-size: 0.8em; position: relative; width: 100%; height: 100%;">
-                    ${periodo.includes('Manhã') ? '<div style="position: absolute; top: 0; left: 0;">MANHÃ</div>' : ''}
-                    ${periodo.includes('Tarde') ? '<div style="position: absolute; top: 0; right: 0;">TARDE</div>' : ''}
+                <div style="font-size: 0.6em; position: relative; width: 100%; height: 100%;">
+                    ${periodo.includes('Manhã') ? '<div style="position: absolute; top: 0; left: 0; color: darkblue; font-weight: bold; border: 1px solid darkblue; padding: 2px; background-color: white;">MANHÃ</div>' : ''}
+                    ${periodo.includes('Tarde') ? '<div style="position: absolute; top: 0; right: 0; color: darkblue; font-weight: bold; border: 1px solid darkblue; padding: 2px; background-color: white;">TARDE</div>' : ''}
                 </div>
             </div>
         `;
