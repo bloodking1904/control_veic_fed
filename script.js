@@ -740,7 +740,12 @@ let periodosSelecionados = { manha: false, tarde: false };
 
 // Função para alternar a seleção de períodos
 function togglePeriodo(periodo) {
-    periodosSelecionados[periodo] = !periodosSelecionados[periodo]; // Alterna o estado do período
+    // Limpar os períodos antes de definir novos
+    if (periodo === 'manha') {
+        periodosSelecionados.manha = !periodosSelecionados.manha;
+    } else if (periodo === 'tarde') {
+        periodosSelecionados.tarde = !periodosSelecionados.tarde;
+    }
 
     const button = document.getElementById(`${periodo}-button`);
     button.style.backgroundColor = periodosSelecionados[periodo] ? 'lightblue' : 'lightgray'; // Muda a cor do botão
@@ -842,6 +847,10 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
         return;
     }
 
+    // Limpa os períodos selecionados antes de adicionar novos
+    const periodosAntes = { ...periodosSelecionados }; // Salva os períodos antes da limpeza
+    periodosSelecionados = { manha: false, tarde: false }; // Limpa os períodos
+
     // Cria um array para armazenar os dias que serão atualizados
     const diasParaAtualizar = [];
 
@@ -866,11 +875,11 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
 
     // Montar a informação sobre os períodos selecionados
     let periodoSelecionado = '';
-    if (periodosSelecionados.manha && periodosSelecionados.tarde) {
+    if (periodosAntes.manha && periodosAntes.tarde) {
         periodoSelecionado = 'Manhã e Tarde'; // Ambos os períodos
-    } else if (periodosSelecionados.manha) {
+    } else if (periodosAntes.manha) {
         periodoSelecionado = 'Manhã'; // Apenas Manhã
-    } else if (periodosSelecionados.tarde) {
+    } else if (periodosAntes.tarde) {
         periodoSelecionado = 'Tarde'; // Apenas Tarde
     }
 
