@@ -941,6 +941,7 @@ window.adicionarVeiculo = adicionarVeiculo;
 // Adiciona a função ao objeto global window
 window.toggleCidadeInput = toggleCidadeInput;
 
+
 // Função para consultar a observação e permitir a edição de cidade, cliente e veículo
 async function consultarObservacao(idVeiculo, dia) {
     const veiculoRef = doc(db, 'veiculos', idVeiculo);
@@ -954,7 +955,11 @@ async function consultarObservacao(idVeiculo, dia) {
         const observacao = statusData.observacao || ""; // Captura a observação ou vazio se não existir
         const cidade = statusData.cidade || ""; // Captura a cidade ou vazio se não existir
         const cliente = statusData.cliente || ""; // Captura o cliente ou vazio se não existir
-        //const veiculo = statusData.veiculo || ""; // Captura o veículo ou vazio se não existir
+        const periodo = statusData.periodo || ""; // Captura o período
+
+        // Determina quais botões exibir
+        const showManhaButton = !periodo.includes('Manhã');
+        const showTardeButton = !periodo.includes('Tarde');
 
         const detalhesDiv = document.createElement('div');
         detalhesDiv.innerHTML = ` 
@@ -966,11 +971,15 @@ async function consultarObservacao(idVeiculo, dia) {
                 <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade"><br><br>
                 <label style="font-size: 2em; font-weight: bold;">Colaborador:</label><br>
                 <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente"><br><br>
+                <div>
+                    ${showManhaButton ? `<button id="manha-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 8px 16px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Manhã')">Adicionar MANHÃ</button>` : ''}
+                    ${showTardeButton ? `<button id="tarde-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 8px 16px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Tarde')">Adicionar TARDE</button>` : ''}
+                </div>
                 <button id="editar-observacao" style="background-color: green; color: white; font-size: 2em; padding: 10px 20px;" 
                     onclick="editarObservacao('${idVeiculo}', '${dia}')">EDITAR</button>
             </div>
         `;
-        
+
         document.getElementById('status-selecao').innerHTML = detalhesDiv.innerHTML;
         document.getElementById('overlay').style.display = 'flex';
         document.getElementById('status-selecao').style.display = 'flex';
@@ -979,6 +988,41 @@ async function consultarObservacao(idVeiculo, dia) {
         alert("Veiculo não encontrado.");
     }
 }
+
+// Função para atualizar o período de atendimento
+async function atualizarPeriodo(idVeiculo, dia, novoPeriodo) {
+    const veiculoRef = doc(db, 'veiculos', idVeiculo);
+    const dados = (await getDoc(veiculoRef)).data();
+
+    // Obtém os dados existentes
+    const semanaDados = dados[`semana${currentWeekIndex}`];
+    const statusAtual = semanaDados[dia];
+
+    // Atualiza o período
+    let periodos = statusAtual.data.periodo ? statusAtual.data.periodo.split(' e ') : [];
+
+    if (novoPeriodo === 'Manhã' && !periodos.includes('Manhã')) {
+        periodos.push('Manhã');
+    } else if (novoPeriodo === 'Tarde' && !periodos.includes('Tarde')) {
+        periodos.push('Tarde');
+    }
+
+    // Atualiza o status
+    const statusData = {
+        status: statusAtual.status,
+        data: {
+            ...statusAtual.data,
+            periodo: periodos.join(' e ') // Atualiza a string de período
+        }
+    };
+
+    await atualizarStatusFirestore(idVeiculo, currentWeekIndex, dia, statusData); // Atualiza o Firestore
+    console.log(`Período atualizado para ${novoPeriodo} no veículo ${idVeiculo} no dia ${dia}.`);
+
+    // Fecha a seleção de status
+    fecharSelecaoStatus(); 
+}
+
 
 // Função para editar a observação, cidade, cliente e veículo
 async function editarObservacao(idVeiculo, dia) {
