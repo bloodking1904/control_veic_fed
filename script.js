@@ -1022,12 +1022,15 @@ async function atualizarPeriodo(idVeiculo, dia, novoPeriodo) {
             periodo: periodos.join(' e ') // Atualiza a string de período
         }
     };
-
+// Mostrar o loader
+document.getElementById('loading').style.display = 'flex';
+	
     await atualizarStatusFirestore(idVeiculo, currentWeekIndex, dia, statusData); // Atualiza o Firestore
     console.log(`Período atualizado para ${novoPeriodo} no veículo ${idVeiculo} no dia ${dia}.`);
 
-    // Fecha a seleção de status
-   // fecharSelecaoStatus(); 
+// Ocultar o loader
+document.getElementById('loading').style.display = 'none';
+	
 }
 
 // Adiciona a função ao objeto global window
