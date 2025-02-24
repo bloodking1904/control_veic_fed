@@ -384,7 +384,7 @@ function atualizarTabela(veiculo, dados) {
         linha.appendChild(celula);
     }
     // Limpa os dados de período após a atualização para evitar lixo de atualizações anteriores
-    limparDadosPeriodo(linha);
+    //limparDadosPeriodo(linha);
 }
 
 // Função para limpar os dados de período
