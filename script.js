@@ -970,21 +970,25 @@ async function consultarObservacao(idVeiculo, dia) {
 
         const detalhesDiv = document.createElement('div');
         detalhesDiv.innerHTML = ` 
-            <div>
+		<div>
                 <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
                 <textarea id="observacao-editar" rows="4" maxlength="700"
                 style="width: 523px; height: 218px; font-size: 14px;">${observacao}</textarea><br><br>
+                
                 <label style="font-size: 2em; font-weight: bold;">Cidade:</label><br>
-                <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade"><br><br>
+                <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade" style="width: 600px; height: 40px; font-size: 16px;"><br><br>
+                
                 <label style="font-size: 2em; font-weight: bold;">Colaborador:</label><br>
-                <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente"><br><br>
+                <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente" style="width: 600px; height: 40px; font-size: 16px;"><br><br>
+
                 <div>
                     ${showManhaButton ? `<button id="manha-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 8px 16px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Manhã')">Adicionar MANHÃ</button>` : ''}
                     ${showTardeButton ? `<button id="tarde-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 8px 16px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Tarde')">Adicionar TARDE</button>` : ''}
                 </div>
+
                 <button id="editar-observacao" style="background-color: green; color: white; font-size: 2em; padding: 10px 20px;" 
                     onclick="editarObservacao('${idVeiculo}', '${dia}')">EDITAR</button>
-            </div>
+            	</div>
         `;
 
         document.getElementById('status-selecao').innerHTML = detalhesDiv.innerHTML;
