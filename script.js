@@ -396,20 +396,34 @@ async function atualizarStatusFirestore(idVeiculo, semana, dia, statusData) {
 
         // Obter dados existentes da semana atual
         const dadosExistentes = await getDoc(veiculoRef);
+        
+        // Adiciona uma verificação para garantir que dadosExistentes não é undefined
+        if (!dadosExistentes.exists()) {
+            console.error("Veículo não encontrado.");
+            return;
+        }
+
         const semanaDados = dadosExistentes.data()[`semana${semana}`]; // Acessa a semana correta
 
         // Verifica se a semana existe
-        if (semanaDados) {
-            // Atualiza o campo específico do dia na semana
-            semanaDados[dia] = statusData; // Atualiza o status e dados do dia
-
-            // Atualiza a semana no Firestore
-            await setDoc(veiculoRef, {
-                [`semana${semana}`]: semanaDados // Atualiza a semana no Firestore
-            }, { merge: true });
-        } else {
+        if (!semanaDados) {
             console.error("Dados da semana não encontrados.");
+            return;
         }
+
+        // Verifica se o dia existe na semana
+        if (!semanaDados[dia]) {
+            console.error(`Dados para o dia ${dia} não encontrados na semana ${semana}.`);
+            return;
+        }
+
+        // Atualiza o campo específico do dia na semana
+        semanaDados[dia] = statusData; // Atualiza o status e dados do dia
+
+        // Atualiza a semana no Firestore
+        await setDoc(veiculoRef, {
+            [`semana${semana}`]: semanaDados // Atualiza a semana no Firestore
+        }, { merge: true });
 
         console.log("Status atualizado com sucesso.");
 
