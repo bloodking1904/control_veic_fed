@@ -982,8 +982,8 @@ async function consultarObservacao(idVeiculo, dia) {
                 <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente" style="width: 523px; height: 40px; font-size: 16px;"><br><br>
 
                 <div>
-                    ${showManhaButton ? `<button id="manha-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 8px 16px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Manhã')">Adicionar MANHÃ</button>` : ''}
-                    ${showTardeButton ? `<button id="tarde-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 8px 16px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Tarde')">Adicionar TARDE</button>` : ''}
+                    ${showManhaButton ? `<button id="manha-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 10px 0px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Manhã')">Adicionar MANHÃ</button>` : ''}
+                    ${showTardeButton ? `<button id="tarde-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 10px 0px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Tarde')">Adicionar TARDE</button>` : ''}
                 </div>
 
                 <button id="editar-observacao" style="background-color: green; color: white; font-size: 2em; padding: 10px 20px;" 
