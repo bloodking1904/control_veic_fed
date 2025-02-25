@@ -987,7 +987,7 @@ async function consultarObservacao(idVeiculo, dia) {
                 </div>
 
                 <button id="editar-observacao" style="background-color: green; color: white; font-size: 2em; padding: 10px 20px;" 
-                    onclick="editarObservacao('${idVeiculo}', '${dia}')">EDITAR</button>
+                    onclick="editarObservacao('${idVeiculo}', '${dia}')">SALVAR</button>
             	</div>
         `;
 
