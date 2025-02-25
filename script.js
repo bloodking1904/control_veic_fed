@@ -391,42 +391,31 @@ function atualizarTabela(veiculo, dados) {
 // Função para atualizar o status no Firestore
 async function atualizarStatusFirestore(idVeiculo, semana, dia, statusData) {
     try {
-        console.log(`Atualizando status do veiculo: ${idVeiculo}, Semana: ${semana}, Dia: ${dia}, Status: ${statusData.status}`);
+        console.log(`Atualizando status do veiculo: ${idVeiculo}, Semana: ${semana}, Dia: ${dia}, Status: ${JSON.stringify(statusData)}`);
         const veiculoRef = doc(db, 'veiculos', idVeiculo);
 
         // Obter dados existentes da semana atual
         const dadosExistentes = await getDoc(veiculoRef);
-        
-        // Adiciona uma verificação para garantir que dadosExistentes não é undefined
         if (!dadosExistentes.exists()) {
             console.error("Veículo não encontrado.");
             return;
         }
-
         const semanaDados = dadosExistentes.data()[`semana${semana}`]; // Acessa a semana correta
 
         // Verifica se a semana existe
-        if (!semanaDados) {
+        if (semanaDados) {
+            // Atualiza o campo específico do dia na semana
+            semanaDados[dia] = statusData; // Atualiza o status e dados do dia
+
+            // Atualiza a semana no Firestore
+            await setDoc(veiculoRef, {
+                [`semana${semana}`]: semanaDados // Atualiza a semana no Firestore
+            }, { merge: true });
+        } else {
             console.error("Dados da semana não encontrados.");
-            return;
         }
-
-        // Verifica se o dia existe na semana
-        if (!semanaDados[dia]) {
-            console.error(`Dados para o dia ${dia} não encontrados na semana ${semana}.`);
-            return;
-        }
-
-        // Atualiza o campo específico do dia na semana
-        semanaDados[dia] = statusData; // Atualiza o status e dados do dia
-
-        // Atualiza a semana no Firestore
-        await setDoc(veiculoRef, {
-            [`semana${semana}`]: semanaDados // Atualiza a semana no Firestore
-        }, { merge: true });
 
         console.log("Status atualizado com sucesso.");
-
     } catch (error) {
         console.error("Erro ao atualizar status:", error);
     }
