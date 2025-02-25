@@ -486,6 +486,12 @@ async function adicionarStatus(idVeiculo, status, cor, dia, linha, data) {
         data: data || null // Ensure data is not undefined
     };
 
+    // Verifique se statusData está definido corretamente
+    if (!statusData || !statusData.status) {
+        console.error("Dados de status não estão corretos:", statusData);
+        return; // Sai da função se os dados de status não estiverem corretos
+    }
+
     fecharSelecaoStatus();
 
     const celula = document.querySelector(`.linha[data-linha="${linha}"] .celula[data-dia="${dia}"]`);
@@ -517,9 +523,12 @@ async function adicionarStatus(idVeiculo, status, cor, dia, linha, data) {
         ` : ''}
     `;
 
-    await atualizarStatusFirestore(idVeiculo, dia, statusData); // Passa o objeto statusData
+    // Atualiza o status no Firestore
+    await atualizarStatusFirestore(idVeiculo, currentWeekIndex, dia, statusData); // Passa o objeto statusData
+
     console.log("Status adicionado com sucesso.");
 }
+
 window.adicionarStatus = adicionarStatus;
 
 // Função para mostrar a seleção de status
