@@ -976,10 +976,10 @@ async function consultarObservacao(idVeiculo, dia) {
                 style="width: 523px; height: 218px; font-size: 14px;">${observacao}</textarea><br><br>
                 
                 <label style="font-size: 2em; font-weight: bold;">Cidade:</label><br>
-                <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade" style="width: 600px; height: 40px; font-size: 16px;"><br><br>
+                <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade" style="width: 523px; height: 40px; font-size: 16px;"><br><br>
                 
                 <label style="font-size: 2em; font-weight: bold;">Colaborador:</label><br>
-                <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente" style="width: 600px; height: 40px; font-size: 16px;"><br><br>
+                <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente" style="width: 523px; height: 40px; font-size: 16px;"><br><br>
 
                 <div>
                     ${showManhaButton ? `<button id="manha-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 8px 16px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Manhã')">Adicionar MANHÃ</button>` : ''}
