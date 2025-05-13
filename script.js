@@ -36,8 +36,8 @@ if (urlsProtegidas.includes(window.location.href) && !loggedInUser) {
 }
 
 // Definição das variáveis globais
-let currentWeekIndex = 1; // Índice da semana atual (0-6)
-const totalWeeks = 6; // Total de semanas
+let currentWeekIndex = 7; // Índice da semana atual (0-6)
+const totalWeeks = 13; // Total de semanas
 
 // Função para formatar a data
 function getFormattedDate(date) {
