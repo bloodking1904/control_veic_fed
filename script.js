@@ -113,7 +113,7 @@ async function carregarVeiculos() {
     // Calcular as semanas
     for (let i = 0; i <= totalWeeks; i++) { // Começa de 0 até totalWeeks
         const dataInicioSemana = new Date(dataInicioSemana0);
-        dataInicioSemana.setDate(dataInicioSemana0.getDate() + (i * 49)); // Ajusta para a semana correta
+        dataInicioSemana.setDate(dataInicioSemana0.getDate() + (i * 7)); // Ajusta para a semana correta
         const dataFimSemana = new Date(dataInicioSemana);
         dataFimSemana.setDate(dataInicioSemana.getDate() + 6); // Adiciona 6 dias para obter o domingo
 
