@@ -104,12 +104,13 @@ async function adicionarSemanasNovas() {
     }
 }
 
-adicionarSemanasNovas();
+
 
 
 // Função para carregar veículos
 async function carregarVeiculos() {
-    console.log("Chamando carregarVeiculos()...");
+    console.log("Chamando carregarVeiculos()...");	
+	adicionarSemanasNovas();
     const tabela = document.getElementById('tabela-veiculos');
     tabela.innerHTML = ''; // Limpa a tabela antes de adicionar veículos
 
