@@ -36,8 +36,8 @@ if (urlsProtegidas.includes(window.location.href) && !loggedInUser) {
 }
 
 // Definição das variáveis globais
-let currentWeekIndex = 1; // Índice da semana atual (0-6)
-const totalWeeks = 6; // Total de semanas
+let currentWeekIndex = 7; // Índice da semana atual (0-6)
+const totalWeeks = 13; // Total de semanas
 
 // Função para formatar a data
 function getFormattedDate(date) {
@@ -189,7 +189,7 @@ async function atualizarDadosDasSemanas() {
         const veiculoDados = dados.data();
 
         // Loop para transferir dados entre as semanas
-        for (let i = 0; i < 6; i++) { // De 0 até 5
+        for (let i = 0; i < 13; i++) { // De 0 até 13
             console.log(`Limpando dados da semana ${i} para veiculo: ${veiculoRef.id}`);
 
             // Limpar dados da semana atual
@@ -202,11 +202,18 @@ async function atualizarDadosDasSemanas() {
                     4: { status: 'Disponível', data: null },
                     5: { status: 'Disponível', data: null },
                     6: { status: 'Disponível', data: null },
+                    7: { status: 'Disponível', data: null },
+                    8: { status: 'Disponível', data: null },
+                    9: { status: 'Disponível', data: null },
+                    10: { status: 'Disponível', data: null },
+                    11: { status: 'Disponível', data: null },
+                    12: { status: 'Disponível', data: null },
+                    13: { status: 'Disponível', data: null },			
                 }
             }, { merge: true });
 
             // Transferir dados da semana seguinte
-            if (i <= 5) { // Não transferir dados para a semana 6
+            if (i <= 12) { // Não transferir dados para a semana 6
                 const dadosSemanaSeguinte = veiculoDados[`semana${i + 1}`];
                 console.log(`Transferindo dados da semana ${i + 1} para semana ${i} para veiculo: ${veiculoRef.id}`);
 
@@ -223,14 +230,14 @@ async function atualizarDadosDasSemanas() {
         // Para a semana 6, apenas limpar dados
         console.log(`Limpando dados da semana 6 para veiculo: ${veiculoRef.id}`);
         await setDoc(veiculoRef, {
-            [`semana6`]: {
+            [`semana13`]: {
                 0: { status: 'Disponível', data: null },
                 1: { status: 'Disponível', data: null },
                 2: { status: 'Disponível', data: null },
                 3: { status: 'Disponível', data: null },
                 4: { status: 'Disponível', data: null },
                 5: { status: 'Disponível', data: null },
-                6: { status: 'Disponível', data: null },
+                6: { status: 'Disponível', data: null },	
             }
         }, { merge: true });
 
