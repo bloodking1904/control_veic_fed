@@ -81,6 +81,32 @@ function verificarAutenticacao() {
     }
 }
 
+
+async function adicionarSemanasNovas() {
+    const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
+
+    for (const doc of veiculosSnapshot.docs) {
+        const veiculoRef = doc.ref;
+        let novasSemanas = {};
+
+        for (let i = 14; i <= 28; i++) {
+            // Cria o map da semana com 0 a 6
+            let semanaMap = {};
+            for (let dia = 0; dia <= 6; dia++) {
+                semanaMap[dia] = { status: "Disponível", data: null };
+            }
+            novasSemanas[`semana${i}`] = semanaMap;
+        }
+
+        // Faz o merge das novas semanas no veículo
+        await setDoc(veiculoRef, novasSemanas, { merge: true });
+        console.log(`Semanas 14 a 28 criadas para veículo: ${veiculoRef.id}`);
+    }
+}
+
+adicionarSemanasNovas();
+
+
 // Função para carregar veículos
 async function carregarVeiculos() {
     console.log("Chamando carregarVeiculos()...");
