@@ -189,7 +189,7 @@ async function atualizarDadosDasSemanas() {
         const veiculoDados = dados.data();
 
         // Loop para transferir dados entre as semanas
-        for (let i = 0; i < 28; i++) { // De 0 até 13
+        for (let i = 0; i < 28; i++) { // De 0 até 28
             console.log(`Limpando dados da semana ${i} para veiculo: ${veiculoRef.id}`);
 
             // Limpar dados da semana atual
@@ -202,28 +202,6 @@ async function atualizarDadosDasSemanas() {
                     4: { status: 'Disponível', data: null },
                     5: { status: 'Disponível', data: null },
                     6: { status: 'Disponível', data: null },
-                    7: { status: 'Disponível', data: null },
-                    8: { status: 'Disponível', data: null },
-                    9: { status: 'Disponível', data: null },
-                    10: { status: 'Disponível', data: null },
-                    11: { status: 'Disponível', data: null },
-                    12: { status: 'Disponível', data: null },
-                    13: { status: 'Disponível', data: null },
-                    14: { status: 'Disponível', data: null },
-                    15: { status: 'Disponível', data: null },
-                    16: { status: 'Disponível', data: null },
-                    17: { status: 'Disponível', data: null },
-                    18: { status: 'Disponível', data: null },
-                    19: { status: 'Disponível', data: null },
-                    20: { status: 'Disponível', data: null },
-                    21: { status: 'Disponível', data: null },
-                    22: { status: 'Disponível', data: null },
-                    23: { status: 'Disponível', data: null },
-                    24: { status: 'Disponível', data: null },
-                    25: { status: 'Disponível', data: null },
-                    26: { status: 'Disponível', data: null },
-                    27: { status: 'Disponível', data: null },
-                    28: { status: 'Disponível', data: null },
                 }
             }, { merge: true });
 
