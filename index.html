@@ -20,13 +20,14 @@
 </div>
 
 	<div id="calendario" class="calendar">
-   	<div id="calendarHeader" class="calendar-header">
-        <button id="seta-esquerda" onclick="navegarSemana(-1)">←</button>
-        <span id="header-data"></span>
-        <button id="seta-direita" onclick="navegarSemana(1)">→</button>
-    	</div>
-    	<div id="calendarDays" class="calendar-days"></div>
-	</div>
+    	<div id="calendarHeader" class="calendar-header">
+        <button id="seta-esquerda-calendario" onclick="navegarSemana(-1)">←</button> <span id="header-data"></span>
+        <button id="seta-direita-calendario" onclick="navegarSemana(1)">→</button> </div>
+   	<div id="calendarWeekdays" class="calendar-days" style="font-weight: bold; background-color: #f0f0f0;">
+        </div>
+    	<div id="calendarDays" class="calendar-days">
+        </div>
+    </div>
     
    <div id="loading" class="loading" style="display: none;">
     <div class="loader"></div>
