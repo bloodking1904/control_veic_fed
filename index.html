@@ -28,10 +28,14 @@
     	<div id="calendarDays" class="calendar-days"></div>
 	</div>
     
-    <div id="loading" class="loading" style="display: none;">
+   <div id="loading" class="loading" style="display: none;">
     <div class="loader"></div>
-    <p>Aguarde, atualizando status dos Veiculos...</p>
+    <p id="loading-message">Aguarde, atualizando status dos Veículos...</p> <div class="progress-bar-container" style="width: 80%; background-color: #ddd; margin-top: 10px; border-radius: 5px;">
+        <div id="progress-bar" style="width: 0%; height: 20px; background-color: #4CAF50; text-align: center; line-height: 20px; color: white; border-radius: 5px;">
+            0%
+        </div>
     </div>
+    <p id="progress-status" style="margin-top: 5px; font-size: 0.9em;"></p> </div>
     
     <div class="tabela" id="tabela-veiculos">
         <div class="linha cabecalho">
