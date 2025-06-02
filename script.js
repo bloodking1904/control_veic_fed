@@ -430,46 +430,108 @@ window.confirmarResetarStatus = function () {
 
 // Função para resetar o status de todos os veiculos
 async function resetarStatusTodosVeiculos() {
+    console.log("Iniciando resetarStatusTodosVeiculos...");
+    const loadingDiv = document.getElementById('loading');
+    const loadingMessage = document.getElementById('loading-message');
+    const progressBar = document.getElementById('progress-bar');
+    const progressStatus = document.getElementById('progress-status');
+
+    // Mostrar o loader e preparar a barra de progresso
+    loadingMessage.textContent = "Preparando para resetar status dos veículos...";
+    progressBar.style.width = '0%';
+    progressBar.textContent = '0%';
+    progressStatus.textContent = '';
+    loadingDiv.style.display = 'flex';
+
     try {
-        // Mostrar o loader
-        document.getElementById('loading').style.display = 'flex';
-
+        console.log("Obtendo veiculosSnapshot...");
         const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
-        const batch = writeBatch(db); // Usar batch para atualizar vários documentos de forma eficiente
+        const totalVeiculos = veiculosSnapshot.docs.length;
+        console.log("veiculosSnapshot obtido:", totalVeiculos, "documentos.");
 
-        veiculosSnapshot.docs.forEach(doc => {
+        if (totalVeiculos === 0) {
+            loadingMessage.textContent = "Nenhum veículo encontrado para resetar.";
+            progressBar.style.width = '100%';
+            progressBar.textContent = '100%';
+            progressStatus.textContent = 'Concluído.';
+            // Pequeno delay para o usuário ver a mensagem antes de fechar
+            setTimeout(() => {
+                loadingDiv.style.display = 'none';
+            }, 2000);
+            return;
+        }
+
+        loadingMessage.textContent = `Resetando status de ${totalVeiculos} veículo(s)...`;
+
+        // Define o tamanho máximo de operações por batch (limite do Firestore é 500)
+        // Cada veículo * semanas * dias = número de 'set' por veículo.
+        // Vamos fazer um batch por veículo para simplificar o feedback de progresso.
+        // Se cada veículo tiver muitas semanas, pode ser necessário quebrar ainda mais.
+        // Para este exemplo, vamos cometer um batch por veículo.
+
+        let veiculosProcessados = 0;
+
+        for (const doc of veiculosSnapshot.docs) {
             const veiculoRef = doc.ref;
+            const batch = writeBatch(db);
+            let operacoesNoBatch = 0;
+
+            console.log("Processando veículo:", doc.id);
+            progressStatus.textContent = `Processando ${doc.id}...`;
 
             // Atualiza o status para 'Disponível' para cada semana (de 0 até totalWeeks)
-            for (let semana = 0; semana <= totalWeeks; semana++) {
+            for (let semana = 0; semana <= totalWeeks; semana++) { // totalWeeks é uma variável global
                 for (let dia = 0; dia < 7; dia++) {
                     batch.set(veiculoRef, {
                         [`semana${semana}`]: {
-                            [dia]: { 
-                                status: 'Disponível', 
-                                data: null 
+                            [dia]: {
+                                status: 'Disponível',
+                                data: null
                             }
                         }
                     }, { merge: true });
+                    operacoesNoBatch++;
                 }
             }
-        });
 
-        await batch.commit(); // Executa todas as operações em um único lote
+            console.log(`Veículo ${doc.id}: ${operacoesNoBatch} operações no batch.`);
+            if (operacoesNoBatch > 0) {
+                console.log(`Executando batch.commit() para ${doc.id}...`);
+                await batch.commit();
+                console.log(`batch.commit() para ${doc.id} concluído.`);
+            }
 
-        // Ocultar o loader
-        document.getElementById('loading').style.display = 'none';
+            veiculosProcessados++;
+            const percentualCompleto = Math.round((veiculosProcessados / totalVeiculos) * 100);
+            progressBar.style.width = percentualCompleto + '%';
+            progressBar.textContent = percentualCompleto + '%';
+            progressStatus.textContent = `Veículo ${doc.id} resetado. (${veiculosProcessados}/${totalVeiculos})`;
 
-        console.log("Status de todos os veiculos resetados com sucesso.");
+            // Pequena pausa para permitir que a UI atualize - opcional, mas pode ajudar em navegadores mais lentos
+            // await new Promise(resolve => setTimeout(resolve, 50)); // Ex: 50ms
+        }
 
-        // Chama a função para atualizar visualmente os veiculos
-        await carregarVeiculos(); // Atualiza a tabela de veiculos
+        loadingMessage.textContent = "Status de todos os veículos resetados com sucesso!";
+        progressStatus.textContent = "Atualização completa.";
+        console.log("Status de todos os veículos resetados com sucesso.");
+
+        console.log("Chamando carregarVeiculos()...");
+        await carregarVeiculos(); //
+        console.log("carregarVeiculos() concluído.");
+
+        // Delay para o usuário ver a mensagem final antes de fechar o loader
+        setTimeout(() => {
+            loadingDiv.style.display = 'none';
+        }, 2000);
+
     } catch (error) {
-        // Ocultar o loader em caso de erro
-        document.getElementById('loading').style.display = 'none';
-        
-        console.error("Erro ao resetar status:", error);
-        alert("Ocorreu um erro ao resetar o status dos veiculos.");
+        loadingMessage.textContent = "Ocorreu um erro!";
+        progressStatus.textContent = `Erro: ${error.message}`;
+        progressBar.style.backgroundColor = 'red'; // Indica erro na barra
+        progressBar.textContent = 'Erro';
+        console.error("Erro detalhado ao resetar status:", error);
+        alert("Ocorreu um erro ao resetar o status dos veículos. Verifique o console para detalhes.");
+        // Não esconder o loader imediatamente em caso de erro, para o usuário ver a mensagem
     }
 }
 
