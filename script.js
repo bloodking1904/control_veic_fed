@@ -1235,6 +1235,9 @@ function fecharSelecaoStatus() {
     console.log("Fechando seleção de status.");
     document.getElementById('status-selecao').style.display = 'none';
     document.getElementById('overlay').style.display = 'none';
+
+	//chamada para fechar o calendário também
+	fecharCalendario(); //
 }
 
 window.fecharSelecaoStatus = fecharSelecaoStatus;
