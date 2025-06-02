@@ -856,28 +856,42 @@ function getCidade() {
 // Função para mostrar o calendário
 async function mostrarCalendario() {
     const calendar = document.getElementById('calendario');
-    const calendarHeader = document.getElementById('header-data'); // Altere para pegar o header correto
-    const calendarDays = document.getElementById('calendarDays');
+    const calendarHeader = document.getElementById('header-data');
+    const calendarWeekdaysDiv = document.getElementById('calendarWeekdays'); // Novo
+    const calendarDaysDiv = document.getElementById('calendarDays');
 
     // Limpa o conteúdo anterior do calendário
-    calendarDays.innerHTML = '';
+    calendarWeekdaysDiv.innerHTML = ''; // Limpa nomes dos dias
+    calendarDaysDiv.innerHTML = '';    // Limpa números dos dias
 
     // Mostra o calendário
     calendar.style.display = 'block';
 
     // Obter as semanas chamando a função carregarVeiculos
-    const semanas = await carregarVeiculos(); // A função carregarVeiculos deve retornar as semanas
+    // A função carregarVeiculos já calcula e retorna as semanas.
+    const semanas = await carregarVeiculos(); 
 
     // Verifica se o currentWeekIndex é válido
-    if (currentWeekIndex < 0 || currentWeekIndex >= semanas.length) {
+    if (currentWeekIndex < 0 || currentWeekIndex >= semanas.length) { // currentWeekIndex é uma variável global.
         console.error("Índice de semana atual fora dos limites.");
         return;
     }
 
     const { inicio, fim } = semanas[currentWeekIndex]; // Pega a semana atual
-    calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`;
+    calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`; // getFormattedDate é uma função sua.
 
-    // Gerar os dias para o calendário
+    // Adicionar nomes dos dias da semana (SEG a DOM)
+    const diasAbreviados = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
+    diasAbreviados.forEach(diaNome => {
+        const dayNameElement = document.createElement('div');
+        dayNameElement.textContent = diaNome;
+        dayNameElement.classList.add('calendar-day-name'); // Nova classe para estilização opcional
+        // Você pode adicionar 'celula' se quiser que herde os estilos de .celula,
+        // mas .calendar-day-name é mais específico.
+        calendarWeekdaysDiv.appendChild(dayNameElement);
+    });
+
+    // Gerar os números dos dias para o calendário
     for (let i = 0; i < 7; i++) {
         const currentDate = new Date(inicio);
         currentDate.setDate(inicio.getDate() + i);
@@ -891,19 +905,33 @@ async function mostrarCalendario() {
             dayElement.classList.toggle('selected'); // Alterna a seleção
         });
 
-        calendarDays.appendChild(dayElement);
+        calendarDaysDiv.appendChild(dayElement);
     }
 
-    // Adiciona o botão OK para fechar o calendário
-    const okButton = document.createElement('button');
-    okButton.textContent = 'OK';
-    okButton.onclick = function () {
-        fecharCalendario(); // Fecha o calendário
-    };
-    calendarDays.appendChild(okButton);
+    // Adiciona o botão OK para fechar o calendário (se ainda não estiver fixo no HTML)
+    // Verifica se o botão OK já existe para não duplicar
+    if (!document.getElementById('calendar-ok-button')) {
+        const okButton = document.createElement('button');
+        okButton.textContent = 'OK';
+        okButton.id = 'calendar-ok-button'; // Adiciona um ID para evitar duplicação
+        okButton.style.marginTop = '10px'; // Adiciona um pouco de espaço
+        okButton.style.padding = '8px 16px';
+        okButton.style.backgroundColor = '#007bff';
+        okButton.style.color = 'white';
+        okButton.style.border = 'none';
+        okButton.style.borderRadius = '4px';
+        okButton.style.cursor = 'pointer';
+        okButton.onclick = function () {
+            fecharCalendario(); // fecharCalendario é uma função sua.
+        };
+        // Adiciona o botão OK ao final do div 'calendar'
+        calendar.appendChild(okButton);
+    }
+    
+    // Ajustar IDs dos botões de navegação do calendário se você alterou no HTML
+    document.getElementById('seta-esquerda-calendario').onclick = () => navegarSemana(-1); // navegarSemana é uma função sua.
+    document.getElementById('seta-direita-calendario').onclick = () => navegarSemana(1);
 }
-
-
 
 // Função para navegar entre as semanas
 function navegarSemana(direcao) {
