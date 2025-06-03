@@ -151,7 +151,7 @@ button.entrar-button:hover {
 .tabela > .linha.cabecalho > .celula {
     background: #FFFFFF; 
     color: #003366; /* Texto azul escuro */
-    font-size: 0.9em; /* Ajuste de tamanho */
+    font-size: 1.1em; /* Ajuste de tamanho */
     font-weight: bold;
     padding: 8px 5px;
     text-align: center;
