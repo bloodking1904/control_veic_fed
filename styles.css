@@ -26,7 +26,7 @@ body {
     left: 0;
     width: 100%;
     text-align: center;
-    padding: 12px 0; /* Padding vertical ajustado */
+    /*padding: 12px 0; /* Padding vertical ajustado */
     background-color: #003366; /* Azul naval escuro (inspirado no bg-dark do FIEMS) */
     color: white; /* Texto do cabeçalho em branco */
     z-index: 1000;
