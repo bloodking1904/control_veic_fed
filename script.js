@@ -177,24 +177,86 @@ async function escutarVeiculos() {
         });
 }
 
-// Função para atualizar dados das semanas
+// Função para atualizar dados das semanas (MODIFICADA com barra de progresso)
 async function atualizarDadosDasSemanas() {
-    const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
+    const loadingDiv = document.getElementById('loading');
+    const loadingMessage = document.getElementById('loading-message');
+    const progressBar = document.getElementById('progress-bar');
+    const progressStatus = document.getElementById('progress-status');
 
-    for (const doc of veiculosSnapshot.docs) {
-        const veiculoRef = doc.ref;
+    // Mostrar o loader e preparar a barra de progresso
+    loadingMessage.textContent = "Preparando para atualizar dados das semanas...";
+    progressBar.style.width = '0%';
+    progressBar.style.backgroundColor = '#4CAF50'; // Reseta a cor caso tenha dado erro antes
+    progressBar.textContent = '0%';
+    progressStatus.textContent = '';
+    loadingDiv.style.display = 'flex';
 
-        // Obter dados atuais para o veiculo
-        const dados = await getDoc(veiculoRef);
-        const veiculoDados = dados.data();
+    try {
+        console.log("Iniciando atualização dos dados das semanas...");
+        const veiculosSnapshot = await getDocs(collection(db, 'veiculos')); //
+        const totalVeiculos = veiculosSnapshot.docs.length;
 
-        // Loop para transferir dados entre as semanas
-        for (let i = 0; i < 28; i++) { // De 0 até 28
-            console.log(`Limpando dados da semana ${i} para veiculo: ${veiculoRef.id}`);
+        if (totalVeiculos === 0) {
+            loadingMessage.textContent = "Nenhum veículo encontrado para atualizar.";
+            progressBar.style.width = '100%';
+            progressBar.textContent = '100%';
+            progressStatus.textContent = 'Concluído.';
+            setTimeout(() => {
+                loadingDiv.style.display = 'none';
+            }, 2000);
+            return;
+        }
 
-            // Limpar dados da semana atual
-            await setDoc(veiculoRef, {
-                [`semana${i}`]: {
+        loadingMessage.textContent = `Atualizando dados de ${totalVeiculos} veículo(s)...`;
+        let veiculosProcessados = 0;
+
+        for (const docSnapshot of veiculosSnapshot.docs) { // Renomeado para evitar conflito com 'doc' de 'getDoc' interno
+            const veiculoRef = docSnapshot.ref;
+            const veiculoId = docSnapshot.id;
+
+            console.log(`Processando atualização para veículo: ${veiculoId}`);
+            progressStatus.textContent = `Atualizando ${veiculoId}...`;
+
+            // Obter dados atuais para o veículo (necessário para a lógica de transferência)
+            const dadosVeiculoDoc = await getDoc(veiculoRef); //
+            const veiculoDados = dadosVeiculoDoc.data();
+
+            // Usaremos um batch para as operações de cada veículo, para otimizar as escritas.
+            const batch = writeBatch(db); //
+
+            // Loop para transferir dados entre as semanas
+            for (let i = 0; i < totalWeeks; i++) { // totalWeeks é uma variável global
+                // Limpar dados da semana atual (que receberá os dados da próxima)
+                // Na verdade, vamos sobrescrever com os dados da semana seguinte ou limpar se for a última
+                
+                const dadosSemanaSeguinte = veiculoDados[`semana${i + 1}`];
+
+                if (dadosSemanaSeguinte) {
+                    // Transfere dados da semana seguinte para a semana atual (i)
+                    batch.set(veiculoRef, {
+                        [`semana${i}`]: dadosSemanaSeguinte
+                    }, { merge: true });
+                } else {
+                    // Se não há dados na semana seguinte (ou é a penúltima semana do loop),
+                    // limpa a semana i (que não receberá dados da i+1)
+                    batch.set(veiculoRef, {
+                        [`semana${i}`]: {
+                            0: { status: 'Disponível', data: null },
+                            1: { status: 'Disponível', data: null },
+                            2: { status: 'Disponível', data: null },
+                            3: { status: 'Disponível', data: null },
+                            4: { status: 'Disponível', data: null },
+                            5: { status: 'Disponível', data: null },
+                            6: { status: 'Disponível', data: null },
+                        }
+                    }, { merge: true });
+                }
+            }
+
+            // Limpar dados da última semana (totalWeeks) pois ela não recebe dados de nenhuma semana posterior
+            batch.set(veiculoRef, {
+                [`semana${totalWeeks}`]: { // Limpa a semana totalWeeks (ex: semana28 se totalWeeks for 28)
                     0: { status: 'Disponível', data: null },
                     1: { status: 'Disponível', data: null },
                     2: { status: 'Disponível', data: null },
@@ -204,38 +266,36 @@ async function atualizarDadosDasSemanas() {
                     6: { status: 'Disponível', data: null },
                 }
             }, { merge: true });
+            
+            await batch.commit(); // Comita as alterações para este veículo
+            console.log(`Dados do veículo ${veiculoId} atualizados no batch.`);
 
-            // Transferir dados da semana seguinte
-            if (i <= 27) { // Não transferir dados para a semana 28
-                const dadosSemanaSeguinte = veiculoDados[`semana${i + 1}`];
-                console.log(`Transferindo dados da semana ${i + 1} para semana ${i} para veiculo: ${veiculoRef.id}`);
+            veiculosProcessados++;
+            const percentualCompleto = Math.round((veiculosProcessados / totalVeiculos) * 100);
+            progressBar.style.width = percentualCompleto + '%';
+            progressBar.textContent = percentualCompleto + '%';
+            progressStatus.textContent = `Veículo ${veiculoId} atualizado. (${veiculosProcessados}/${totalVeiculos})`;
 
-                if (dadosSemanaSeguinte) {
-                    await setDoc(veiculoRef, {
-                        [`semana${i}`]: dadosSemanaSeguinte
-                    }, { merge: true });
-                } else {
-                    console.warn(`Nenhum dado encontrado para a semana ${i + 1} do veiculo: ${veiculoRef.id}`);
-                }
-            }
+            // await new Promise(resolve => setTimeout(resolve, 50)); // Pausa opcional
         }
 
-        // Para a semana 6, apenas limpar dados
-        console.log(`Limpando dados da semana 28 para veiculo: ${veiculoRef.id}`);
-        await setDoc(veiculoRef, {
-            [`semana28`]: {
-                0: { status: 'Disponível', data: null },
-                1: { status: 'Disponível', data: null },
-                2: { status: 'Disponível', data: null },
-                3: { status: 'Disponível', data: null },
-                4: { status: 'Disponível', data: null },
-                5: { status: 'Disponível', data: null },
-                6: { status: 'Disponível', data: null },	
-            }
-        }, { merge: true });
+        loadingMessage.textContent = "Atualização dos dados das semanas concluída!";
+        progressStatus.textContent = "Atualização completa.";
+        console.log("Atualização de dados das semanas concluída para todos os veículos.");
 
-        console.log(`Atualização de dados concluída para veiculo: ${veiculoRef.id}`);
-    };
+        setTimeout(() => {
+            loadingDiv.style.display = 'none';
+        }, 2000);
+
+    } catch (error) {
+        loadingMessage.textContent = "Ocorreu um erro na atualização!";
+        progressStatus.textContent = `Erro: ${error.message}`;
+        progressBar.style.backgroundColor = 'red';
+        progressBar.textContent = 'Erro';
+        console.error("Erro ao atualizar dados das semanas:", error);
+        alert("Ocorreu um erro ao atualizar os dados das semanas. Verifique o console.");
+        // Não esconder o loader imediatamente em caso de erro
+    }
 }
 
 // Função para obter a data atual do Firestore
