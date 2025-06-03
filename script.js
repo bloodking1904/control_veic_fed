@@ -1002,40 +1002,65 @@ function navegarSemana(direcao) {
 }
 
 
-// Função para finalizar o período de viagem
-async function finalizarPeriodoViagem(nome, cliente, linha) {
-    const diasSelecionados = document.querySelectorAll('.calendar-day.selected');
+// Função para finalizar o período de viagem 
+async function finalizarPeriodoViagem(nome, cliente, linha) { // 'linha' não parece ser usada nesta função específica para determinar o dia
+    const diasSelecionadosElements = document.querySelectorAll('#calendarDays .calendar-day.selected');
 
-    if (diasSelecionados.length === 0) {
+    if (diasSelecionadosElements.length === 0) {
         alert("Nenhum dia selecionado para o período de viagem.");
         return;
     }
 
-    // Limpa os períodos selecionados antes de adicionar novos
-    const periodosAntes = { ...periodosSelecionados }; // Salva os períodos antes da limpeza
-    periodosSelecionados = { manha: false, tarde: false }; // Limpa os períodos
+    // Salva os períodos (Manhã/Tarde) antes de limpar a variável global
+    const periodosAntes = { ...periodosSelecionados }; // periodosSelecionados é uma variável global
+    periodosSelecionados = { manha: false, tarde: false }; // Limpa a variável global de períodos
 
-    // Cria um array para armazenar os dias que serão atualizados
     const diasParaAtualizar = [];
 
-    // Adiciona cada dia selecionado ao array
-    for (const diaElement of diasSelecionados) {
-        const diaSelecionado = parseInt(diaElement.textContent); // Obtenha o dia do mês
-        const dataSelecionada = new Date(); // Data atual para calcular a semana
-        dataSelecionada.setDate(diaSelecionado); // Defina o dia selecionado
+    // 1. Obter a data de início da semana atual que está sendo exibida no calendário
+    const semanas = await carregarVeiculos(); // carregarVeiculos é uma função sua que retorna as semanas
+    
+    // Validação do currentWeekIndex (índice da semana atual)
+    if (currentWeekIndex < 0 || currentWeekIndex >= semanas.length) { // currentWeekIndex é uma variável global
+        console.error("Índice de semana atual inválido em finalizarPeriodoViagem:", currentWeekIndex);
+        alert("Erro: Índice da semana atual é inválido. Tente novamente.");
+        return;
+    }
+    const dataInicioSemanaCalendario = new Date(semanas[currentWeekIndex].inicio);
 
-        // Calcule o dia da semana (0 = domingo, 1 = segunda, ..., 6 = sábado)
-        const diaDaSemana = (dataSelecionada.getDay() + 6) % 7; // Para que segunda-feira seja 0
+    // 2. Mapear os dias do mês selecionados para índices da semana (0-6, onde 0 é Segunda)
+    for (const diaElement of diasSelecionadosElements) {
+        const diaDoMesSelecionado = parseInt(diaElement.textContent); // Ex: 16, 17...
 
-        // Mapeie para o índice da semana atual
-        diasParaAtualizar.push(diaDaSemana);
+        let indiceDoDiaNoCalendario = -1;
+        for (let i = 0; i < 7; i++) {
+            const dataIterada = new Date(dataInicioSemanaCalendario);
+            dataIterada.setDate(dataInicioSemanaCalendario.getDate() + i);
+            if (dataIterada.getDate() === diaDoMesSelecionado) {
+                // Assumindo que carregarVeiculos garante que 'dataInicioSemanaCalendario' é uma Segunda,
+                // então 'i' (0-6) já corresponde a Seg(0) a Dom(6)
+                indiceDoDiaNoCalendario = i;
+                break;
+            }
+        }
+
+        if (indiceDoDiaNoCalendario !== -1) {
+            diasParaAtualizar.push(indiceDoDiaNoCalendario);
+        } else {
+            // Este log é importante para depurar se um dia não for mapeado corretamente
+            console.warn(`Não foi possível mapear o dia do mês ${diaDoMesSelecionado} para um índice na semana do calendário iniciada em ${dataInicioSemanaCalendario.toLocaleDateString()}.`);
+        }
     }
 
-    // Log para ver os dias selecionados
-    console.log("Dias selecionados para atualização:", diasParaAtualizar);
+    console.log("Dias selecionados para atualização (índices 0-6 para Firestore, 0=Seg):", diasParaAtualizar);
 
+    if (diasParaAtualizar.length === 0 && diasSelecionadosElements.length > 0) {
+        alert("Erro ao processar os dias selecionados. Verifique o console para mais detalhes.");
+        return; // Impede a continuação se nenhum dia puder ser mapeado
+    }
+    
     // Obtenha a cidade selecionada usando a função getCidade
-    const cidadeSelecionada = getCidade();
+    const cidadeSelecionada = getCidade(); // getCidade é uma função sua
 
     // Montar a informação sobre os períodos selecionados
     let periodoSelecionado = '';
@@ -1046,42 +1071,49 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
     } else if (periodosAntes.tarde) {
         periodoSelecionado = 'Tarde'; // Apenas Tarde
     }
+    
+    const observacaoTexto = document.getElementById('observacao-texto').value; // Captura a observação
 
-    // Atualiza o status para todos os dias selecionados
-    for (const diaIndex of diasParaAtualizar) {
-        const statusData = {
-            status: 'Em Atendimento',
-            data: {
-                cidade: cidadeSelecionada,
-                cliente: cliente,
-                observacao: document.getElementById('observacao-texto').value, // Captura a observação
-                periodo: periodoSelecionado // Adiciona a informação do período
-            }
-        };
+    // Mostrar o loader ANTES do loop de atualizações
+    document.getElementById('loading').style.display = 'flex'; //
 
-        // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
-        const semanaAtual = currentWeekIndex; // Exemplo: 0 para semana0, 1 para semana1, etc.
-	    
-	// Mostrar o loader
-        document.getElementById('loading').style.display = 'flex';
-	    
-        
-	// Chama a função para atualizar o status no Firestore
-        await atualizarStatusFirestore(nome, semanaAtual, diaIndex, statusData); // Passa a semana e o dia
+    try {
+        // Atualiza o status para todos os dias selecionados e mapeados
+        for (const diaIndex of diasParaAtualizar) {
+            const statusData = {
+                status: 'Em Atendimento',
+                data: {
+                    cidade: cidadeSelecionada,
+                    cliente: cliente,
+                    observacao: observacaoTexto, 
+                    periodo: periodoSelecionado 
+                }
+            };
+
+            // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
+            const semanaAtual = currentWeekIndex;
+            
+            // Chama a função para atualizar o status no Firestore
+            await atualizarStatusFirestore(nome, semanaAtual, diaIndex, statusData); // atualizarStatusFirestore é uma função sua
+        }
+    } catch (error) {
+        console.error("Erro durante a atualização do status no Firestore:", error);
+        alert("Ocorreu um erro ao atualizar os status. Verifique o console.");
+    } finally {
+        // Ocultar o loader APÓS todas as atualizações ou em caso de erro dentro do try
+        document.getElementById('loading').style.display = 'none'; //
     }
-
-	// Ocultar o loader
-        document.getElementById('loading').style.display = 'none';
 	
     // Fecha o calendário após a confirmação
-    fecharCalendario();
+    fecharCalendario(); // fecharCalendario é uma função sua
 
     // Fecha a seleção de status
-    fecharSelecaoStatus(); 
+    fecharSelecaoStatus(); // fecharSelecaoStatus é uma função sua
 
-    // Limpar a seleção de dias no calendário
-    diasSelecionados.forEach(diaElement => {
-        diaElement.classList.remove('selected'); // Remove a classe de seleção
+    // Limpar a seleção de dias no calendário (os elementos são recriados por mostrarCalendario de qualquer forma,
+    // mas não custa garantir que a classe 'selected' seja removida se os elementos persistirem por algum motivo)
+    diasSelecionadosElements.forEach(diaElement => {
+        diaElement.classList.remove('selected');
     });
 }
 
