@@ -169,7 +169,7 @@ button.entrar-button:hover {
     /* Se você quer que os dias da semana fiquem fixos no topo da tabela ao rolar a tabela (não a página inteira),
        você aplicaria position:sticky aqui. O header principal já é fixo na página. */
     position: sticky;
-    top: 70px; /* Altura do header principal da página. AJUSTE CONFORME NECESSÁRIO */
+    top: 65px; /* Altura do header principal da página. AJUSTE CONFORME NECESSÁRIO */
     z-index: 501; /* Acima das células de dados, abaixo do header principal */
     /* display: contents; */ /* Mantido do seu original, permite que a grid da .tabela controle os filhos diretos */
 }
@@ -248,26 +248,30 @@ button.entrar-button:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Um pouco mais escuro */
-  display: flex;
-  justify-content: center;
-  align-items: center; /* Centraliza o pop-up verticalmente também */
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none; /* Mantenha none, o JS vai mudar para 'block' ou 'flex' */
   z-index: 999;
+  /* justify-content e align-items não são necessários se o filho for posicionado absolutamente */
 }
 
-.selecao-status { /* Pop-up de seleção de status */
-  position: relative; 
+.selecao-status {
+  position: fixed; /* MUDANÇA CRÍTICA: de 'relative' para 'fixed' */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centraliza o elemento */
+  
   background-color: white;
   padding: 25px;
-  border-radius: 8px; /* Bordas mais suaves */
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  z-index: 1000; /* Acima do overlay */
-  /* margin-bottom: 50vh; -- Removido pois align-items: center no overlay já centraliza */
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Sombra mais pronunciada */
-  max-width: 500px; /* Limita a largura */
+  border-radius: 8px;
+  display: none; /* JS controla a exibição */
+  flex-direction: column; /* Mantido para o conteúdo interno do pop-up */
+  align-items: center;   /* Mantido para o conteúdo interno do pop-up */
+  z-index: 1000; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  max-width: 500px;
   width: 90%;
+  max-height: 80vh; /* Adicionado para evitar que seja muito alto e permitir rolagem interna */
+  overflow-y: auto; /* Permite rolagem interna se o conteúdo do pop-up for grande */
 }
 
 /* BOTÃO RESETAR STATUS - será estilizado na próxima etapa */
