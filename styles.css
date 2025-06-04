@@ -286,24 +286,32 @@ button.entrar-button:hover {
     border-radius: 2px;
 }
 
-/* Botão Adicionar '+' dentro da célula */
+/* Botão Adicionar '+' dentro da célula - Opção 1: Circular com Sombra */
 .adicionar {
-    background: #007bff; /* Azul de Bootstrap para "adicionar" */
+    background-color: #007bff; 
     color: white;
     border: none;
-    border-radius: 50%; /* Redondo */
+    border-radius: 50%; /* Mantém redondo */
     cursor: pointer;
-    font-size: 0.9em; /* Tamanho da fonte do '+' */
+    font-size: 1em;  /* Aumenta um pouco o '+' para melhor clique */
     font-weight: bold;
-    line-height: 1; /* Para centralizar o '+' verticalmente */
-    width: 20px;  /* Largura e altura iguais para ser um círculo */
-    height: 20px;
-    padding: 0; /* Remover padding para controle preciso do tamanho */
+    line-height: 22px; /* Ajustar para centralizar o '+' na altura do botão */
+    width: 22px;      /* Aumenta um pouco o tamanho total */
+    height: 22px;
+    padding: 0;
     margin-bottom: 5px;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    display: flex; /* Para centralizar o '+' dentro do círculo */
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Sombra sutil */
 }
-.adicionar:hover {
-    background: #0056b3; /* Azul mais escuro */
+
+.adicionar:hover,
+.adicionar:focus {
+    background-color: #0056b3; /* Azul mais escuro */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Sombra um pouco mais forte no hover */
+    outline: none;
 }
 
 /* Caixa de texto do status (Disponível, Em Atendimento...) */
