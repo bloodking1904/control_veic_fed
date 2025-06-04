@@ -832,40 +832,38 @@ window.finalizarAtendimento = finalizarAtendimento;
 function adicionarVeiculo(nome, cliente, dia, linha) {
     const statusSelecao = document.getElementById('status-selecao');
 
-    const cidadeInput = ` 
-        <div class="cidade-input">
-            <label style="font-size: 2em; font-weight: bold;">Digite a cidade destino:</label><br>
-            <div>
-                <input type="checkbox" id="cidade-padrao" checked onchange="toggleCidadeInput(this)">
-                <label for="cidade-padrao" style="font-size: 1.5em;">Campo Grande</label>
-            </div>
-            <div>
-                <label for="cidade-destino" style="font-size: 1.5em;">Outra cidade</label>
-                <input type="text" id="cidade-destino" placeholder="Digite outra cidade" disabled>
-            </div><br>
-            <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
-            <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
-                style="width: 523px; height: 218px; font-size: 14px;"></textarea><br><br>
-            
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <!-- Botão Período Viagem -->
-                <button id="periodo-viagem" style="background-color: blue; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                    onclick="mostrarCalendario()">Período Viagem</button>
-                
-                <!-- Botões MANHÃ e TARDE -->
-                <div style="display: flex; flex-direction: column; align-items: center; margin: 0 20px;">
-                    <button id="manha-button" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px;" 
-                        onclick="togglePeriodo('manha')">MANHÃ</button>
-                    <button id="tarde-button" style="background-color: lightgray; color: black; font-size: 1.2em; padding: 8px 16px;" 
-                        onclick="togglePeriodo('tarde')">TARDE</button>
-                </div>
-
-                <!-- Botão CONFIRMAR VIAGEM -->
-                <button id="confirmar-viagem" style="background-color: green; color: white; font-size: 1.2em; padding: 8px 16px;" 
-                    onclick="finalizarPeriodoViagem('${nome}', '${cliente}', '${dia}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
-            </div>
+const cidadeInput = ` 
+    <div class="cidade-input">
+        <label style="font-size: 2em; font-weight: bold;">Digite a cidade destino:</label><br>
+        <div>
+            <input type="checkbox" id="cidade-padrao" checked onchange="toggleCidadeInput(this)">
+            <label for="cidade-padrao" style="font-size: 1.5em;">Campo Grande</label>
         </div>
-    `;
+        <div>
+            <label for="cidade-destino" style="font-size: 1.5em;">Outra cidade</label>
+            <input type="text" id="cidade-destino" placeholder="Digite outra cidade" disabled>
+        </div><br>
+        <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
+        <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3" 
+            style="width: 100%; height: 100px; font-size: 14px; box-sizing: border-box;"></textarea><br><br> {/* Width e height ajustados, box-sizing adicionado */}
+
+        {/* MODIFICAÇÃO: Adicionada classe 'action-buttons-container' e removidos styles inline dos botões */}
+        <div class="action-buttons-container"> 
+            <button id="periodo-viagem" class="popup-action-button" 
+                onclick="mostrarCalendario()">Período Viagem</button> 
+
+            <div class="period-toggle-buttons"> {/* Nova div para agrupar MANHÃ/TARDE */}
+                <button id="manha-button" class="popup-action-button period-button" 
+                    onclick="togglePeriodo('manha')">MANHÃ</button>
+                <button id="tarde-button" class="popup-action-button period-button" 
+                    onclick="togglePeriodo('tarde')">TARDE</button>
+            </div>
+
+            <button id="confirmar-viagem" class="popup-action-button btn-confirm" 
+                onclick="finalizarPeriodoViagem('<span class="math-inline">\{nome\}', '</span>{cliente}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
+        </div>
+    </div>
+`;
 
     statusSelecao.innerHTML = cidadeInput;
     document.getElementById('overlay').style.display = 'flex';
