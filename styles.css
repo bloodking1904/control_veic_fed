@@ -217,7 +217,7 @@ button.entrar-button:hover {
     width: 100%;
     height: 100%; /* Faz com que .veiculo ocupe toda a altura da .celula */
     position: relative; /* ESSENCIAL para o posicionamento absoluto dos filhos */
-    padding-bottom: 25px; /* Espaço reservado na parte inferior para os indicadores MANHÃ/TARDE */
+    padding-bottom: 15px; /* Espaço reservado na parte inferior para os indicadores MANHÃ/TARDE */
                            /* Ajuste este valor conforme o tamanho da fonte dos indicadores */
     box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
 }
