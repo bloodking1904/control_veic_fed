@@ -1031,7 +1031,7 @@ function navegarSemana(direcao) {
 }
 
 
-// Função para finalizar o período de viagem (AJUSTADA PARA MULTI-SEMANA)
+// Função para finalizar o período de viagem
 async function finalizarPeriodoViagem(nome, cliente, linha) {
     // Não vamos mais ler de 'diasSelecionadosElements' diretamente para lógica principal.
     // Usaremos 'selecoesDeViagemMultiSemana'.
@@ -1041,24 +1041,34 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
         return;
     }
 
-    // Salva os períodos (Manhã/Tarde) antes de limpar a variável global
+    // Salva os períodos (Manhã/Tarde) ANTES de limpar a variável global
     const periodosAntes = { ...periodosSelecionados }; // periodosSelecionados (Manhã/Tarde) é uma variável global
-    periodosSelecionados = { manha: false, tarde: false }; // Limpa a variável global de períodos Manhã/Tarde
+    // Não limpe periodosSelecionados aqui ainda, caso a validação falhe.
+
+    // *** NOVA VALIDAÇÃO ADICIONADA AQUI ***
+    if (!periodosAntes.manha && !periodosAntes.tarde) {
+        alert("Por favor, selecione um período (Manhã, Tarde ou Ambos) antes de confirmar a viagem.");
+        return; // Impede a continuação se nenhum período foi selecionado
+    }
+    // *** FIM DA NOVA VALIDAÇÃO ***
+
+    // Agora podemos limpar a variável global de períodos Manhã/Tarde, pois a validação passou
+    periodosSelecionados = { manha: false, tarde: false };
     
     // Obtenha a cidade selecionada usando a função getCidade
-    const cidadeSelecionada = getCidade(); // getCidade é uma função sua
+    const cidadeSelecionada = getCidade();
 
     // Montar a informação sobre os períodos selecionados (Manhã/Tarde)
-    let periodoSelecionadoStr = ''; // Renomeado para evitar conflito com a global 'periodosSelecionados'
+    let periodoSelecionadoStr = '';
     if (periodosAntes.manha && periodosAntes.tarde) {
         periodoSelecionadoStr = 'Manhã e Tarde';
     } else if (periodosAntes.manha) {
         periodoSelecionadoStr = 'Manhã';
-    } else if (periodosAntes.tarde) {
+    } else if (periodosAntes.tarde) { // Já validamos que pelo menos um é true
         periodoSelecionadoStr = 'Tarde';
     }
     
-    const observacaoTexto = document.getElementById('observacao-texto').value; // Captura a observação
+    const observacaoTexto = document.getElementById('observacao-texto').value;
 
     // Mostrar o loader ANTES do loop de atualizações
     document.getElementById('loading').style.display = 'flex';
@@ -1067,10 +1077,10 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
         // Itera sobre as semanas e dias armazenados em selecoesDeViagemMultiSemana
         for (const semanaKey in selecoesDeViagemMultiSemana) {
             if (selecoesDeViagemMultiSemana.hasOwnProperty(semanaKey)) {
-                const semanaIdx = parseInt(semanaKey.split('_')[1]); // Extrai o índice numérico da semana
+                const semanaIdx = parseInt(semanaKey.split('_')[1]);
                 const diasNestaSemana = selecoesDeViagemMultiSemana[semanaKey];
 
-                for (const diaIndex of diasNestaSemana) { // diaIndex já é 0-6 (Seg-Dom)
+                for (const diaIndex of diasNestaSemana) {
                     const statusData = {
                         status: 'Em Atendimento',
                         data: {
@@ -1080,9 +1090,8 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
                             periodo: periodoSelecionadoStr 
                         }
                     };
-
                     console.log(`--> Preparando para atualizar: Veículo ${nome}, Semana ${semanaIdx}, Dia ${diaIndex}`);
-                    await atualizarStatusFirestore(nome, semanaIdx, diaIndex, statusData); // atualizarStatusFirestore é uma função sua
+                    await atualizarStatusFirestore(nome, semanaIdx, diaIndex, statusData);
                 }
             }
         }
@@ -1101,14 +1110,11 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
     console.log("Seleções de viagem multi-semana limpas após finalizar.");
 
     // Fecha o calendário após a confirmação
-    fecharCalendario(); // fecharCalendario é uma função sua
+    fecharCalendario();
 
     // Fecha a seleção de status
-    fecharSelecaoStatus(); // fecharSelecaoStatus é uma função sua
+    fecharSelecaoStatus();
 
-    // A limpeza visual dos '.selected' no calendário ocorrerá na próxima vez que mostrarCalendario for chamado,
-    // pois ele reconstrói os dias. Mas para garantir, podemos limpar aqui também se os elementos
-    // ainda existirem no DOM e não forem imediatamente destruídos/reconstruídos.
     const diasSelecionadosElementsAindaNoDOM = document.querySelectorAll('#calendarDays .calendar-day.selected');
     diasSelecionadosElementsAindaNoDOM.forEach(diaElement => {
         diaElement.classList.remove('selected');
