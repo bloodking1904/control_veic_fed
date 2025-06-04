@@ -1155,56 +1155,58 @@ window.adicionarVeiculo = adicionarVeiculo;
 window.toggleCidadeInput = toggleCidadeInput;
 
 
-// Função para consultar a observação e permitir a edição de cidade, cliente e veículo
+// Função para consultar a observação e permitir a edição
 async function consultarObservacao(idVeiculo, dia) {
-    const veiculoRef = doc(db, 'veiculos', idVeiculo);
-    const veiculoSnapshot = await getDoc(veiculoRef);
+    const veiculoRef = doc(db, 'veiculos', idVeiculo); //
+    const veiculoSnapshot = await getDoc(veiculoRef); //
 
     if (veiculoSnapshot.exists()) {
         const dados = veiculoSnapshot.data();
-        const statusData = dados[`semana${currentWeekIndex}`]?.[dia]?.data || {}; // Captura os dados ou vazio se não existir
+        // Acessa os dados da semana correta e do dia correto.
+        const statusData = dados[`semana${currentWeekIndex}`]?.[dia]?.data || {}; 
+        // currentWeekIndex é uma variável global
 
-        // Captura os dados para a edição
-        const observacao = statusData.observacao || ""; // Captura a observação ou vazio se não existir
-        const cidade = statusData.cidade || ""; // Captura a cidade ou vazio se não existir
-        const cliente = statusData.cliente || ""; // Captura o cliente ou vazio se não existir
-        const periodo = statusData.periodo || ""; // Captura o período
+        const observacao = statusData.observacao || "";
+        const cidade = statusData.cidade || "";
+        const cliente = statusData.cliente || "";
+        const periodo = statusData.periodo || "";
 
-        // Determina quais botões exibir
         const showManhaButton = !periodo.includes('Manhã');
         const showTardeButton = !periodo.includes('Tarde');
 
-        const detalhesDiv = document.createElement('div');
-        detalhesDiv.innerHTML = ` 
-		<div>
-                <label style="font-size: 2em; font-weight: bold;">Observações:</label><br>
-                <textarea id="observacao-editar" rows="4" maxlength="700"
-                style="width: 523px; height: 218px; font-size: 14px;">${observacao}</textarea><br><br>
+        // MODIFICAÇÃO: Adicionadas classes e removidos styles inline
+        let detalhesHtml = ` 
+            <div class="observacao-editar-container"> {/* Novo container para melhor estilização */}
+                <label for="observacao-editar">Observações:</label>
+                <textarea id="observacao-editar" rows="4" maxlength="700">${observacao}</textarea>
                 
-                <label style="font-size: 2em; font-weight: bold;">Cidade:</label><br>
-                <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade" style="width: 523px; height: 40px; font-size: 16px;"><br><br>
+                <label for="cidade-editar">Cidade:</label>
+                <input type="text" id="cidade-editar" value="${cidade}" placeholder="Cidade">
                 
-                <label style="font-size: 2em; font-weight: bold;">Colaborador:</label><br>
-                <input type="text" id="cliente-editar" value="${cliente}" placeholder="Cliente" style="width: 523px; height: 40px; font-size: 16px;"><br><br>
+                <label for="cliente-editar">Colaborador:</label>
+                <input type="text" id="cliente-editar" value="${cliente}" placeholder="Colaborador">
 
-                <div>
-                    ${showManhaButton ? `<button id="manha-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 10px 0px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Manhã')">Adicionar MANHÃ</button>` : ''}
-                    ${showTardeButton ? `<button id="tarde-button" style="background-color: lightblue; color: black; font-size: 1.2em; padding: 10px 0px;" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Tarde')">Adicionar TARDE</button>` : ''}
+                <div class="period-update-buttons"> {/* Container para botões de período */}
+                    ${showManhaButton ? `<button id="adicionar-manha-obs" class="popup-action-button period-button" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Manhã')">Adicionar MANHÃ</button>` : ''}
+                    ${showTardeButton ? `<button id="adicionar-tarde-obs" class="popup-action-button period-button" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Tarde')">Adicionar TARDE</button>` : ''}
                 </div>
 
-                <button id="editar-observacao" style="background-color: green; color: white; font-size: 2em; padding: 10px 20px;" 
+                <button id="salvar-observacao" class="popup-action-button btn-confirm" 
                     onclick="editarObservacao('${idVeiculo}', '${dia}')">SALVAR</button>
-            	</div>
+            </div>
         `;
+        // A função editarObservacao e atualizarPeriodo já existem no seu código.
 
-        document.getElementById('status-selecao').innerHTML = detalhesDiv.innerHTML;
-        document.getElementById('overlay').style.display = 'flex';
-        document.getElementById('status-selecao').style.display = 'flex';
+        // O pop-up principal .selecao-status é reutilizado
+        document.getElementById('status-selecao').innerHTML = detalhesHtml; //
+        document.getElementById('overlay').style.display = 'flex'; //
+        document.getElementById('status-selecao').style.display = 'flex'; //
     } else {
-        console.error("Veiculo não encontrado.");
-        alert("Veiculo não encontrado.");
+        console.error("Veículo não encontrado para consultar observação.");
+        alert("Veículo não encontrado.");
     }
 }
+
 
 // Função para atualizar o período de atendimento
 async function atualizarPeriodo(idVeiculo, dia, novoPeriodo) {
