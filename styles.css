@@ -301,7 +301,6 @@ button.entrar-button:hover {
     padding: 0;
     margin-bottom: 5px;
     transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    display: flex; /* Para centralizar o '+' dentro do círculo */
     align-items: center;
     justify-content: center;
     box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Sombra sutil */
