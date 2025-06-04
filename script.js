@@ -38,6 +38,7 @@ if (urlsProtegidas.includes(window.location.href) && !loggedInUser) {
 // Definição das variáveis globais
 let currentWeekIndex = 23; // Índice da semana atual (0-6)
 const totalWeeks = 28; // Total de semanas
+let selecoesDeViagemMultiSemana = {}; // Objeto para armazenar seleções: { "semana_X": [diaIndice1, diaIndice2], ... }
 
 // Função para formatar a data
 function getFormattedDate(date) {
@@ -917,79 +918,107 @@ function getCidade() {
 async function mostrarCalendario() {
     const calendar = document.getElementById('calendario');
     const calendarHeader = document.getElementById('header-data');
-    const calendarWeekdaysDiv = document.getElementById('calendarWeekdays'); // Novo
+    const calendarWeekdaysDiv = document.getElementById('calendarWeekdays');
     const calendarDaysDiv = document.getElementById('calendarDays');
 
-    // Limpa o conteúdo anterior do calendário
-    calendarWeekdaysDiv.innerHTML = ''; // Limpa nomes dos dias
-    calendarDaysDiv.innerHTML = '';    // Limpa números dos dias
-
-    // Mostra o calendário
+    calendarWeekdaysDiv.innerHTML = '';
+    calendarDaysDiv.innerHTML = '';
     calendar.style.display = 'block';
 
-    // Obter as semanas chamando a função carregarVeiculos
-    // A função carregarVeiculos já calcula e retorna as semanas.
-    const semanas = await carregarVeiculos(); 
-
-    // Verifica se o currentWeekIndex é válido
-    if (currentWeekIndex < 0 || currentWeekIndex >= semanas.length) { // currentWeekIndex é uma variável global.
-        console.error("Índice de semana atual fora dos limites.");
+    const semanas = await carregarVeiculos(); //
+    if (currentWeekIndex < 0 || currentWeekIndex >= semanas.length) { //
+        console.error("Índice de semana atual fora dos limites em mostrarCalendario.");
         return;
     }
 
-    const { inicio, fim } = semanas[currentWeekIndex]; // Pega a semana atual
-    calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`; // getFormattedDate é uma função sua.
+    const { inicio, fim } = semanas[currentWeekIndex];
+    calendarHeader.textContent = `De ${getFormattedDate(inicio)} a ${getFormattedDate(fim)}`; //
 
-    // Adicionar nomes dos dias da semana (SEG a DOM)
     const diasAbreviados = ['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB', 'DOM'];
     diasAbreviados.forEach(diaNome => {
         const dayNameElement = document.createElement('div');
         dayNameElement.textContent = diaNome;
-        dayNameElement.classList.add('calendar-day-name'); // Nova classe para estilização opcional
-        // Você pode adicionar 'celula' se quiser que herde os estilos de .celula,
-        // mas .calendar-day-name é mais específico.
+        dayNameElement.classList.add('calendar-day-name');
         calendarWeekdaysDiv.appendChild(dayNameElement);
     });
 
-    // Gerar os números dos dias para o calendário
-    for (let i = 0; i < 7; i++) {
+    const diasSelecionadosNestaSemana = selecoesDeViagemMultiSemana[`semana_${currentWeekIndex}`] || [];
+
+    for (let i = 0; i < 7; i++) { // i é o índice do dia na semana (0=Seg, 1=Ter, ...)
         const currentDate = new Date(inicio);
         currentDate.setDate(inicio.getDate() + i);
 
         const dayElement = document.createElement('div');
-        dayElement.textContent = currentDate.getDate();
+        dayElement.textContent = currentDate.getDate(); // Dia do mês
         dayElement.classList.add('calendar-day');
+        dayElement.dataset.dayIndex = i; // Armazena o índice do dia (0-6)
+        dayElement.dataset.weekIndex = currentWeekIndex; // Armazena o índice da semana
 
-        // Evento de clique para selecionar o dia
+        // Verifica se este dia já está selecionado na nossa variável de armazenamento
+        if (diasSelecionadosNestaSemana.includes(i)) {
+            dayElement.classList.add('selected');
+        }
+
         dayElement.addEventListener('click', function () {
-            dayElement.classList.toggle('selected'); // Alterna a seleção
-        });
+            const weekIdx = parseInt(this.dataset.weekIndex);
+            const dayIdx = parseInt(this.dataset.dayIndex);
+            const weekKey = `semana_${weekIdx}`;
 
+            this.classList.toggle('selected');
+
+            if (!selecoesDeViagemMultiSemana[weekKey]) {
+                selecoesDeViagemMultiSemana[weekKey] = [];
+            }
+
+            const indexNaSelecao = selecoesDeViagemMultiSemana[weekKey].indexOf(dayIdx);
+
+            if (this.classList.contains('selected')) { // Se foi selecionado
+                if (indexNaSelecao === -1) { // E não estava na lista
+                    selecoesDeViagemMultiSemana[weekKey].push(dayIdx);
+                }
+            } else { // Se foi desmarcado
+                if (indexNaSelecao !== -1) { // E estava na lista
+                    selecoesDeViagemMultiSemana[weekKey].splice(indexNaSelecao, 1);
+                }
+            }
+            // Limpa a chave da semana se não houver mais dias selecionados nela
+            if (selecoesDeViagemMultiSemana[weekKey].length === 0) {
+                delete selecoesDeViagemMultiSemana[weekKey];
+            }
+            console.log("Seleções Atuais:", JSON.stringify(selecoesDeViagemMultiSemana));
+        });
         calendarDaysDiv.appendChild(dayElement);
     }
 
-    // Adiciona o botão OK para fechar o calendário (se ainda não estiver fixo no HTML)
-    // Verifica se o botão OK já existe para não duplicar
-    if (!document.getElementById('calendar-ok-button')) {
-        const okButton = document.createElement('button');
-        okButton.textContent = 'OK';
-        okButton.id = 'calendar-ok-button'; // Adiciona um ID para evitar duplicação
-        okButton.style.marginTop = '10px'; // Adiciona um pouco de espaço
-        okButton.style.padding = '8px 16px';
-        okButton.style.backgroundColor = '#007bff';
-        okButton.style.color = 'white';
-        okButton.style.border = 'none';
-        okButton.style.borderRadius = '4px';
-        okButton.style.cursor = 'pointer';
-        okButton.onclick = function () {
-            fecharCalendario(); // fecharCalendario é uma função sua.
-        };
-        // Adiciona o botão OK ao final do div 'calendar'
-        calendar.appendChild(okButton);
+    // Botão OK (se não estiver fixo no HTML)
+    const okButtonContainer = calendar.querySelector('#calendar-ok-button-container') || document.createElement('div');
+    okButtonContainer.id = 'calendar-ok-button-container';
+    okButtonContainer.innerHTML = ''; // Limpa o botão OK anterior para evitar duplicatas
+
+    const okButton = document.createElement('button');
+    okButton.textContent = 'OK';
+    okButton.id = 'calendar-ok-button';
+    // (Aplicar estilos ao okButton aqui, conforme sua preferência ou CSS)
+    okButton.style.marginTop = '10px'; 
+    okButton.style.padding = '8px 16px';
+    okButton.style.backgroundColor = '#0056b3';
+    okButton.style.color = 'white';
+    okButton.style.border = 'none';
+    okButton.style.borderRadius = '4px';
+    okButton.style.cursor = 'pointer';
+
+    okButton.onclick = function () {
+        // A função fecharCalendario agora NÃO deve limpar as seleçõesDeViagemMultiSemana
+        // Elas serão usadas por finalizarPeriodoViagem
+        fecharCalendario(); // fecharCalendario é uma função sua
+    };
+    okButtonContainer.appendChild(okButton);
+    if (!calendar.querySelector('#calendar-ok-button-container')) {
+        calendar.appendChild(okButtonContainer);
     }
     
-    // Ajustar IDs dos botões de navegação do calendário se você alterou no HTML
-    document.getElementById('seta-esquerda-calendario').onclick = () => navegarSemana(-1); // navegarSemana é uma função sua.
+    // Ajustar IDs dos botões de navegação do calendário
+    document.getElementById('seta-esquerda-calendario').onclick = () => navegarSemana(-1); // navegarSemana é uma função sua
     document.getElementById('seta-direita-calendario').onclick = () => navegarSemana(1);
 }
 
@@ -1002,117 +1031,86 @@ function navegarSemana(direcao) {
 }
 
 
-// Função para finalizar o período de viagem 
-async function finalizarPeriodoViagem(nome, cliente, linha) { // 'linha' não parece ser usada nesta função específica para determinar o dia
-    const diasSelecionadosElements = document.querySelectorAll('#calendarDays .calendar-day.selected');
+// Função para finalizar o período de viagem (AJUSTADA PARA MULTI-SEMANA)
+async function finalizarPeriodoViagem(nome, cliente, linha) {
+    // Não vamos mais ler de 'diasSelecionadosElements' diretamente para lógica principal.
+    // Usaremos 'selecoesDeViagemMultiSemana'.
 
-    if (diasSelecionadosElements.length === 0) {
+    if (Object.keys(selecoesDeViagemMultiSemana).length === 0) {
         alert("Nenhum dia selecionado para o período de viagem.");
         return;
     }
 
     // Salva os períodos (Manhã/Tarde) antes de limpar a variável global
-    const periodosAntes = { ...periodosSelecionados }; // periodosSelecionados é uma variável global
-    periodosSelecionados = { manha: false, tarde: false }; // Limpa a variável global de períodos
-
-    const diasParaAtualizar = [];
-
-    // 1. Obter a data de início da semana atual que está sendo exibida no calendário
-    const semanas = await carregarVeiculos(); // carregarVeiculos é uma função sua que retorna as semanas
-    
-    // Validação do currentWeekIndex (índice da semana atual)
-    if (currentWeekIndex < 0 || currentWeekIndex >= semanas.length) { // currentWeekIndex é uma variável global
-        console.error("Índice de semana atual inválido em finalizarPeriodoViagem:", currentWeekIndex);
-        alert("Erro: Índice da semana atual é inválido. Tente novamente.");
-        return;
-    }
-    const dataInicioSemanaCalendario = new Date(semanas[currentWeekIndex].inicio);
-
-    // 2. Mapear os dias do mês selecionados para índices da semana (0-6, onde 0 é Segunda)
-    for (const diaElement of diasSelecionadosElements) {
-        const diaDoMesSelecionado = parseInt(diaElement.textContent); // Ex: 16, 17...
-
-        let indiceDoDiaNoCalendario = -1;
-        for (let i = 0; i < 7; i++) {
-            const dataIterada = new Date(dataInicioSemanaCalendario);
-            dataIterada.setDate(dataInicioSemanaCalendario.getDate() + i);
-            if (dataIterada.getDate() === diaDoMesSelecionado) {
-                // Assumindo que carregarVeiculos garante que 'dataInicioSemanaCalendario' é uma Segunda,
-                // então 'i' (0-6) já corresponde a Seg(0) a Dom(6)
-                indiceDoDiaNoCalendario = i;
-                break;
-            }
-        }
-
-        if (indiceDoDiaNoCalendario !== -1) {
-            diasParaAtualizar.push(indiceDoDiaNoCalendario);
-        } else {
-            // Este log é importante para depurar se um dia não for mapeado corretamente
-            console.warn(`Não foi possível mapear o dia do mês ${diaDoMesSelecionado} para um índice na semana do calendário iniciada em ${dataInicioSemanaCalendario.toLocaleDateString()}.`);
-        }
-    }
-
-    console.log("Dias selecionados para atualização (índices 0-6 para Firestore, 0=Seg):", diasParaAtualizar);
-
-    if (diasParaAtualizar.length === 0 && diasSelecionadosElements.length > 0) {
-        alert("Erro ao processar os dias selecionados. Verifique o console para mais detalhes.");
-        return; // Impede a continuação se nenhum dia puder ser mapeado
-    }
+    const periodosAntes = { ...periodosSelecionados }; // periodosSelecionados (Manhã/Tarde) é uma variável global
+    periodosSelecionados = { manha: false, tarde: false }; // Limpa a variável global de períodos Manhã/Tarde
     
     // Obtenha a cidade selecionada usando a função getCidade
     const cidadeSelecionada = getCidade(); // getCidade é uma função sua
 
-    // Montar a informação sobre os períodos selecionados
-    let periodoSelecionado = '';
+    // Montar a informação sobre os períodos selecionados (Manhã/Tarde)
+    let periodoSelecionadoStr = ''; // Renomeado para evitar conflito com a global 'periodosSelecionados'
     if (periodosAntes.manha && periodosAntes.tarde) {
-        periodoSelecionado = 'Manhã e Tarde'; // Ambos os períodos
+        periodoSelecionadoStr = 'Manhã e Tarde';
     } else if (periodosAntes.manha) {
-        periodoSelecionado = 'Manhã'; // Apenas Manhã
+        periodoSelecionadoStr = 'Manhã';
     } else if (periodosAntes.tarde) {
-        periodoSelecionado = 'Tarde'; // Apenas Tarde
+        periodoSelecionadoStr = 'Tarde';
     }
     
     const observacaoTexto = document.getElementById('observacao-texto').value; // Captura a observação
 
     // Mostrar o loader ANTES do loop de atualizações
-    document.getElementById('loading').style.display = 'flex'; //
+    document.getElementById('loading').style.display = 'flex';
 
     try {
-        // Atualiza o status para todos os dias selecionados e mapeados
-        for (const diaIndex of diasParaAtualizar) {
-            const statusData = {
-                status: 'Em Atendimento',
-                data: {
-                    cidade: cidadeSelecionada,
-                    cliente: cliente,
-                    observacao: observacaoTexto, 
-                    periodo: periodoSelecionado 
-                }
-            };
+        // Itera sobre as semanas e dias armazenados em selecoesDeViagemMultiSemana
+        for (const semanaKey in selecoesDeViagemMultiSemana) {
+            if (selecoesDeViagemMultiSemana.hasOwnProperty(semanaKey)) {
+                const semanaIdx = parseInt(semanaKey.split('_')[1]); // Extrai o índice numérico da semana
+                const diasNestaSemana = selecoesDeViagemMultiSemana[semanaKey];
 
-            // Determinar a semana correta (considerando que currentWeekIndex é o índice da semana atual)
-            const semanaAtual = currentWeekIndex;
-            
-            // Chama a função para atualizar o status no Firestore
-            await atualizarStatusFirestore(nome, semanaAtual, diaIndex, statusData); // atualizarStatusFirestore é uma função sua
+                for (const diaIndex of diasNestaSemana) { // diaIndex já é 0-6 (Seg-Dom)
+                    const statusData = {
+                        status: 'Em Atendimento',
+                        data: {
+                            cidade: cidadeSelecionada,
+                            cliente: cliente,
+                            observacao: observacaoTexto, 
+                            periodo: periodoSelecionadoStr 
+                        }
+                    };
+
+                    console.log(`--> Preparando para atualizar: Veículo ${nome}, Semana ${semanaIdx}, Dia ${diaIndex}`);
+                    await atualizarStatusFirestore(nome, semanaIdx, diaIndex, statusData); // atualizarStatusFirestore é uma função sua
+                }
+            }
         }
+        console.log("Todas as atualizações multi-semana foram processadas.");
+
     } catch (error) {
-        console.error("Erro durante a atualização do status no Firestore:", error);
+        console.error("Erro durante a atualização do status no Firestore (multi-semana):", error);
         alert("Ocorreu um erro ao atualizar os status. Verifique o console.");
     } finally {
         // Ocultar o loader APÓS todas as atualizações ou em caso de erro dentro do try
-        document.getElementById('loading').style.display = 'none'; //
+        document.getElementById('loading').style.display = 'none';
     }
 	
+    // Limpa a variável de armazenamento de seleções de viagem após a confirmação
+    selecoesDeViagemMultiSemana = {}; 
+    console.log("Seleções de viagem multi-semana limpas após finalizar.");
+
     // Fecha o calendário após a confirmação
     fecharCalendario(); // fecharCalendario é uma função sua
 
     // Fecha a seleção de status
     fecharSelecaoStatus(); // fecharSelecaoStatus é uma função sua
 
-    // Limpar a seleção de dias no calendário (os elementos são recriados por mostrarCalendario de qualquer forma,
-    // mas não custa garantir que a classe 'selected' seja removida se os elementos persistirem por algum motivo)
-    diasSelecionadosElements.forEach(diaElement => {
+    // A limpeza visual dos '.selected' no calendário ocorrerá na próxima vez que mostrarCalendario for chamado,
+    // pois ele reconstrói os dias. Mas para garantir, podemos limpar aqui também se os elementos
+    // ainda existirem no DOM e não forem imediatamente destruídos/reconstruídos.
+    const diasSelecionadosElementsAindaNoDOM = document.querySelectorAll('#calendarDays .calendar-day.selected');
+    diasSelecionadosElementsAindaNoDOM.forEach(diaElement => {
         diaElement.classList.remove('selected');
     });
 }
