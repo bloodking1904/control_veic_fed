@@ -830,33 +830,49 @@ window.finalizarAtendimento = finalizarAtendimento;
 
 // Função para adicionar o veículo e cidade
 function adicionarVeiculo(nome, cliente, dia, linha) {
+    // Limpa quaisquer seleções de viagem multi-semana anteriores ao iniciar um novo agendamento de período
+    selecoesDeViagemMultiSemana = {}; 
+    console.log("Seleções de viagem multi-semana resetadas no início de adicionarVeiculo.");
+
     const statusSelecao = document.getElementById('status-selecao');
 
-const cidadeInput = ` 
+    // String HTML para o conteúdo do pop-up
+    const cidadeInput = `
     <div class="cidade-input">
-        {/* REMOVIDO style="font-size: 2em; font-weight: bold;" */}
         <label>Digite a cidade destino:</label><br> 
         <div>
             <input type="checkbox" id="cidade-padrao" checked onchange="toggleCidadeInput(this)">
-            {/* REMOVIDO style="font-size: 1.5em;" */}
             <label for="cidade-padrao">Campo Grande</label> 
         </div>
         <div>
-            {/* REMOVIDO style="font-size: 1.5em;" */}
             <label for="cidade-destino">Outra cidade</label> 
             <input type="text" id="cidade-destino" placeholder="Digite outra cidade" disabled>
         </div><br>
-        {/* REMOVIDO style="font-size: 2em; font-weight: bold;" */}
         <label>Observações:</label><br> 
         <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3"></textarea><br><br>
-        {/* ... resto do HTML dos botões ... */}
+        
+        <div class="action-buttons-container"> 
+            <button id="periodo-viagem" class="popup-action-button" 
+                onclick="mostrarCalendario()">Período Viagem</button> 
+            
+            <div class="period-toggle-buttons">
+                <button id="manha-button" class="popup-action-button period-button" 
+                    onclick="togglePeriodo('manha')">MANHÃ</button>
+                <button id="tarde-button" class="popup-action-button period-button" 
+                    onclick="togglePeriodo('tarde')">TARDE</button>
+            </div>
+
+            <button id="confirmar-viagem" class="popup-action-button btn-confirm" 
+                onclick="finalizarPeriodoViagem('${nome}', '${cliente}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
+        </div>
     </div>
 `;
 
     statusSelecao.innerHTML = cidadeInput;
-    document.getElementById('overlay').style.display = 'flex';
-    document.getElementById('status-selecao').style.display = 'flex';
+    document.getElementById('overlay').style.display = 'flex'; //
+    document.getElementById('status-selecao').style.display = 'flex'; //
 }
+
 
 // Variável global para rastrear os períodos selecionados
 let periodosSelecionados = { manha: false, tarde: false };
