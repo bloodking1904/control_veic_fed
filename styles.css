@@ -343,43 +343,212 @@ button.entrar-button:hover {
   /* Não precisa de flex aqui se o pop-up é fixed e centralizado com transform */
 }
 
-/* Pop-up de seleção de status */
+/* --- ESTILOS PARA O POP-UP DE SELEÇÃO DE STATUS E SEUS ELEMENTOS --- */
+
+/* Pop-up de seleção de status (já temos uma base, podemos refinar se necessário) */
 .selecao-status {
   position: fixed; 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px; /* Padding um pouco menor */
+  background-color: #FFFFFF; /* Fundo branco */
+  padding: 20px 25px; /* Padding ajustado */
   border-radius: 6px;
-  display: none; /* JS controla */
+  display: none; 
   flex-direction: column;
-  align-items: stretch; /* Para os botões internos ocuparem a largura */
+  align-items: stretch; 
   z-index: 1002; 
   box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-  max-width: 450px; /* Largura máxima ajustada */
+  max-width: 500px; /* Largura máxima */
   width: 90%;
-  max-height: 90vh; /* Altura máxima */
+  max-height: 90vh; 
   overflow-y: auto; 
 }
-/* Botões dentro do .selecao-status (Disponível, Em Atendimento, etc) */
-.selecao-status .status { /* Reutilizando a classe .status mas com contexto */
-    width: 100%; /* Ocupa toda a largura do pop-up */
-    margin: 5px 0; /* Espaçamento vertical */
-    padding: 10px;
-    font-size: 1em; /* Tamanho de fonte normal para botões */
-    cursor: pointer; /* São clicáveis aqui */
+
+/* Estilo para os botões de OPÇÃO DE STATUS (Disponível, Em Atendimento, etc.) dentro do .selecao-status */
+/* Reutilizando e adaptando a classe .status quando dentro de .selecao-status */
+.selecao-status .status { 
+    width: 100%; 
+    margin: 6px 0; /* Espaçamento vertical entre os botões de opção */
+    padding: 12px 15px; /* Padding interno dos botões */
+    font-size: 0.95em; 
+    font-weight: 500; /* Peso da fonte */
+    text-align: center; /* Centraliza o texto do botão */
+    border: 1px solid #ced4da; /* Borda cinza claro */
+    border-radius: 4px;   /* Cantos levemente arredondados */
+    background-color: #f8f9fa; /* Fundo cinza bem claro */
+    color: #212529;        /* Texto escuro */
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
+
 .selecao-status .status:hover {
-    background-color: #f0f0f0; /* Efeito hover sutil */
+    background-color: #e9ecef; /* Cinza um pouco mais escuro no hover */
+    border-color: #adb5bd;
 }
-/* Botão Fechar do .selecao-status (se for um button.entrar-button como no HTML) */
-.selecao-status button.entrar-button { /* Se o botão "Fechar" usa esta classe */
-    margin-top: 15px;
+
+/* Estilos específicos para botões de opção de status com cores, se necessário (exemplo) */
+/* Se você definir cores de fundo inline no JS, este CSS pode precisar ajustar a cor do texto para contraste */
+.selecao-status .status[style*="background-color: lightgreen"] { /* Disponível */
+    color: #155724; /* Texto verde escuro para fundo verde claro */
+    border-color: #c3e6cb;
+}
+.selecao-status .status[style*="background-color: lightcoral"] { /* Em Atendimento/Bloqueado */
+    color: #721c24; /* Texto vermelho escuro para fundo vermelho claro */
+    border-color: #f5c6cb;
+}
+.selecao-status .status[style*="background-color: lightyellow"] { /* Obs. Atendimento */
+    color: #856404; /* Texto escuro para fundo amarelo claro */
+    border-color: #ffeeba;
+}
+
+
+/* Inputs e Textarea dentro do .selecao-status (quando aparece para cidade, observações) */
+.selecao-status input[type="text"],
+.selecao-status textarea {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}
+
+.selecao-status input[type="text"]:focus,
+.selecao-status textarea:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.selecao-status textarea {
+    resize: vertical; /* Permite apenas redimensionamento vertical */
+    min-height: 80px;
+}
+
+.selecao-status label {
+    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 4px;
+    font-size: 0.9em;
+    color: #495057;
+}
+
+/* Checkbox para "Campo Grande" */
+.selecao-status input[type="checkbox"] {
+    margin-right: 5px;
+    vertical-align: middle;
+}
+.selecao-status input[type="checkbox"] + label { /* Label ao lado do checkbox */
+    font-weight: normal;
+    font-size: 0.9em;
+    margin-top: 0;
+    vertical-align: middle;
+}
+
+/* Botões de Ação (Período Viagem, MANHÃ, TARDE, CONFIRMAR VIAGEM) */
+/* Estilo base para botões de ação dentro do pop-up */
+.selecao-status .action-button { /* Adicione esta classe aos botões no JS se não tiverem uma comum */
+    padding: 10px 15px;
+    font-size: 0.9em;
+    font-weight: 600;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 5px; /* Pequena margem para espaçamento em flex container */
+}
+
+/* Botão "Período Viagem" (assumindo ID ou classe específica) */
+.selecao-status #periodo-viagem { /* Se tiver ID 'periodo-viagem' */
+    background-color: #007bff; /* Azul primário */
+    color: white;
+    border-color: #007bff;
+}
+.selecao-status #periodo-viagem:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Botões "MANHÃ" e "TARDE" (assumindo IDs) */
+.selecao-status #manha-button,
+.selecao-status #tarde-button {
+    background-color: #f8f9fa; /* Fundo claro padrão */
+    color: #212529;
+    border: 1px solid #ced4da;
+    flex-grow: 1; /* Para ocuparem espaço disponível se estiverem em um flex container */
+}
+.selecao-status #manha-button:hover,
+.selecao-status #tarde-button:hover {
+    background-color: #e2e6ea;
+    border-color: #dae0e5;
+}
+/* Estilo para quando MANHÃ/TARDE estão selecionados (JS adicionaria uma classe ou mudaria style) */
+.selecao-status #manha-button.selected, /* Exemplo se JS adicionar classe 'selected' */
+.selecao-status #tarde-button.selected {
+    background-color: #cfe2ff; /* Azul claro para indicar seleção */
+    color: #004085;
+    border-color: #b8daff;
+}
+/* Seu JS atualmente muda o style inline: style="background-color: lightblue;" */
+/* Você pode manter isso ou mudar o JS para adicionar uma classe e usar o CSS acima */
+
+
+/* Botão "CONFIRMAR VIAGEM" (assumindo ID) */
+.selecao-status #confirmar-viagem {
+    background-color: #28a745; /* Verde para confirmar */
+    color: white;
+    border-color: #28a745;
+}
+.selecao-status #confirmar-viagem:hover {
+    background-color: #1e7e34;
+    border-color: #1e7e34;
+}
+
+/* Botão "Fechar" do pop-up de status (se usar a classe .entrar-button) */
+.selecao-status button.entrar-button {
+    margin-top: 20px; /* Mais espaço acima do botão fechar */
     background-color: #6c757d; /* Cinza para "Fechar" */
+    color: white;
+    border-color: #6c757d;
+    padding: 10px 15px;
+    font-size: 0.9em;
+    font-weight: 600;
+    text-transform: uppercase;
 }
 .selecao-status button.entrar-button:hover {
     background-color: #5a6268;
+    border-color: #545b62;
+}
+
+/* Container para os botões de período e confirmar, se estiverem agrupados */
+/* O HTML gerado em adicionarVeiculo tem: <div style="display: flex; justify-content: space-between; align-items: center;"> */
+/* Você pode adicionar uma classe a essa div no JS, por exemplo 'action-buttons-row' */
+.selecao-status .action-buttons-row {
+    display: flex;
+    justify-content: space-around; /* Ou space-between */
+    align-items: center;
+    flex-wrap: wrap; /* Para quebrar em telas menores se necessário */
+    margin-top: 15px;
+    width: 100%;
+}
+.selecao-status .action-buttons-row > * { /* Aplica a botões e divs filhas */
+    margin: 5px; /* Margem entre os botões */
+}
+.selecao-status .action-buttons-row > div { /* Para a div que agrupa manha/tarde */
+    display: flex;
+    flex-direction: column; /* Manha em cima de Tarde */
+}
+.selecao-status .action-buttons-row > div > button { /* Botões Manhã/Tarde dentro da div */
+    width: 120px; /* Largura fixa para Manhã/Tarde, por exemplo */
+    margin-bottom: 5px;
+}
+.selecao-status .action-buttons-row > div > button:last-child {
+    margin-bottom: 0;
 }
 
 
