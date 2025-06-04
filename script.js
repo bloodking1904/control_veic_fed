@@ -417,29 +417,29 @@ function atualizarTabela(veiculo, dados) {
             `;
         }
 
-        // Extraindo informações do status, incluindo o período
-        const periodo = statusAtual.data ? statusAtual.data.periodo : '';  // Obtém a informação do período
+	// Extraindo informações do status, incluindo o período
+	const periodo = statusAtual.data ? statusAtual.data.periodo : '';  // Obtém a informação do período
 
-        // Monta o conteúdo da célula
-        celula.innerHTML = `
-            <div class="veiculo">
-                ${botaoAdicionar} <!-- O botão só será adicionado se o usuário for admin -->
-                <span style="font-weight: bold;">${veiculo}</span>
-                <div class="status" style="color: ${statusAtual.status === 'Em Viagem' ? 'yellow' : (statusAtual.status === 'Disponível' ? 'green' : 'red')}; border: 1px solid black; font-weight: bold;">
-                    ${statusAtual.status}
-                </div>
-                ${statusAtual.data ? ` 
-                    <div style="white-space: nowrap;"><strong>Cidade:</strong> ${statusAtual.data.cidade || 'N/A'}</div>
-                    <div><strong>Colaborador:</strong> ${statusAtual.data.cliente || 'N/A'}</div>
-                ` : ''}
-                
-                <!-- Exibe MANHÃ e TARDE conforme o período -->
-                <div style="font-size: 0.6em; position: relative; width: 100%; height: 100%;">
-                    ${periodo.includes('Manhã') ? '<div style="position: absolute; top: 0; left: 0; color: darkblue; font-weight: bold; border: 1px solid darkblue; padding: 2px; background-color: white;">MANHÃ</div>' : ''}
-                    ${periodo.includes('Tarde') ? '<div style="position: absolute; top: 0; right: 0; color: darkblue; font-weight: bold; border: 1px solid darkblue; padding: 2px; background-color: white;">TARDE</div>' : ''}
-                </div>
-            </div>
-        `;
+	// Monta o conteúdo da célula
+	celula.innerHTML = `
+    	<div class="veiculo">
+        	<div> ${botaoAdicionar}
+            	<span style="font-weight: bold;">${veiculo}</span>
+            	<div class="status" style="color: ${statusAtual.status === 'Em Viagem' ? 'yellow' : (statusAtual.status === 'Disponível' ? 'green' : 'red')}; /* ... outros estilos do status ... */">
+                	${statusAtual.status}
+            	</div>
+            	${statusAtual.data ? ` 
+                	<div style="font-size: 0.8em; white-space: nowrap; margin-top: 3px;"><strong>Cidade:</strong> ${statusAtual.data.cidade || 'N/A'}</div>
+                	<div style="font-size: 0.8em; word-break: break-word;"><strong>Colaborador:</strong> ${statusAtual.data.cliente || 'N/A'}</div>
+            	` : ''}
+        	</div>
+
+        	<div class="periodo-indicadores">
+            	<div style="visibility: ${periodo.includes('Manhã') ? 'visible' : 'hidden'};">MANHÃ</div>
+            	<div style="visibility: ${periodo.includes('Tarde') ? 'visible' : 'hidden'};">TARDE</div>
+        	</div>
+    	</div>
+	`;
 
         linha.appendChild(celula);
     }
