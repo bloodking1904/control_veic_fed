@@ -550,6 +550,67 @@ button.entrar-button:hover {
     border-color: #545b62; /* Adicionado para consistência */
 }
 
+/* --- ESTILOS PARA O POP-UP DE OBS. ATENDIMENTO (dentro de .selecao-status) --- */
+
+/* Container para os elementos de edição de observação */
+.selecao-status .observacao-editar-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Ocupa a largura do pop-up .selecao-status */
+}
+
+/* Labels dentro do formulário de edição de observação */
+.selecao-status .observacao-editar-container label {
+    font-size: 0.9em; /* Tamanho do label */
+    font-weight: 600;
+    color: #495057;
+    margin-top: 12px; /* Espaço acima do label */
+    margin-bottom: 4px; /* Espaço entre label e input/textarea */
+}
+.selecao-status .observacao-editar-container label:first-child {
+    margin-top: 0; /* Remove margem do primeiro label */
+}
+
+/* Textarea e Inputs dentro do formulário de edição de observação */
+/* Os estilos gerais de .selecao-status input[type="text"], .selecao-status textarea já se aplicam. */
+/* Podemos adicionar especificidade se necessário: */
+.selecao-status .observacao-editar-container textarea,
+.selecao-status .observacao-editar-container input[type="text"] {
+    width: 100%; /* Garante que ocupem toda a largura */
+    box-sizing: border-box; /* Inclui padding e borda na largura */
+    margin-bottom: 15px; /* Espaço abaixo de cada campo */
+    font-size: 15px; /* Ajuste de fonte, se desejar */
+}
+
+.selecao-status .observacao-editar-container textarea#observacao-editar {
+    height: 100px; /* Altura específica para a textarea de observação */
+}
+
+
+/* Container para os botões "Adicionar MANHÃ/TARDE" na tela de observação */
+.selecao-status .period-update-buttons {
+    display: flex;
+    justify-content: space-around; /* Ou space-between */
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+/* Botões "Adicionar MANHÃ/TARDE" na tela de observação */
+/* Eles já herdam .popup-action-button e .period-button */
+.selecao-status .observacao-editar-container #adicionar-manha-obs,
+.selecao-status .observacao-editar-container #adicionar-tarde-obs {
+    flex-grow: 1; /* Para que ocupem espaço similar se houver dois */
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+/* Botão "SALVAR" na tela de observação */
+/* Já herda .popup-action-button e .btn-confirm */
+.selecao-status .observacao-editar-container #salvar-observacao {
+    margin-top: 10px; /* Espaço acima do botão SALVAR */
+    padding: 12px 15px; /* Padding maior para botão principal de ação */
+}
+
 
 /* Loading spinner e overlay */
 .loading {
