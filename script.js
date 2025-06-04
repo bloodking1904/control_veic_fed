@@ -1176,7 +1176,7 @@ async function consultarObservacao(idVeiculo, dia) {
 
         // MODIFICAÇÃO: Adicionadas classes e removidos styles inline
         let detalhesHtml = ` 
-            <div class="observacao-editar-container"> {/* Novo container para melhor estilização */}
+            <div class="observacao-editar-container">
                 <label for="observacao-editar">Observações:</label>
                 <textarea id="observacao-editar" rows="4" maxlength="700">${observacao}</textarea>
                 
@@ -1186,7 +1186,7 @@ async function consultarObservacao(idVeiculo, dia) {
                 <label for="cliente-editar">Colaborador:</label>
                 <input type="text" id="cliente-editar" value="${cliente}" placeholder="Colaborador">
 
-                <div class="period-update-buttons"> {/* Container para botões de período */}
+                <div class="period-update-buttons">
                     ${showManhaButton ? `<button id="adicionar-manha-obs" class="popup-action-button period-button" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Manhã')">Adicionar MANHÃ</button>` : ''}
                     ${showTardeButton ? `<button id="adicionar-tarde-obs" class="popup-action-button period-button" onclick="atualizarPeriodo('${idVeiculo}', '${dia}', 'Tarde')">Adicionar TARDE</button>` : ''}
                 </div>
