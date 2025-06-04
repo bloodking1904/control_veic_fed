@@ -873,17 +873,21 @@ const cidadeInput = `
 // Variável global para rastrear os períodos selecionados
 let periodosSelecionados = { manha: false, tarde: false };
 
-// Função para alternar a seleção de períodos
+// Função para alternar a seleção de períodos (MODIFICADA)
 function togglePeriodo(periodo) {
-    // Limpar os períodos antes de definir novos
     if (periodo === 'manha') {
-        periodosSelecionados.manha = !periodosSelecionados.manha;
+        periodosSelecionados.manha = !periodosSelecionados.manha; // periodosSelecionados é global
     } else if (periodo === 'tarde') {
-        periodosSelecionados.tarde = !periodosSelecionados.tarde;
+        periodosSelecionados.tarde = !periodosSelecionados.tarde; // periodosSelecionados é global
     }
 
     const button = document.getElementById(`${periodo}-button`);
-    button.style.backgroundColor = periodosSelecionados[periodo] ? 'lightblue' : 'lightgray'; // Muda a cor do botão
+    // Em vez de mudar style inline, alterna uma classe CSS
+    if (periodosSelecionados[periodo]) {
+        button.classList.add('active-period-button');
+    } else {
+        button.classList.remove('active-period-button');
+    }
 }
 
 // Adiciona a função ao objeto global window
