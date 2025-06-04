@@ -20,7 +20,7 @@ body {
     left: 0;
     width: 100%;
     text-align: center;
-    padding: 10px 0; /* Padding vertical - AJUSTE ESTE VALOR CONFORME GOSTO */
+    /*padding: 10px 0; /* Padding vertical - AJUSTE ESTE VALOR CONFORME GOSTO */
     background-color: #003366; /* Azul naval escuro */
     color: white;
     z-index: 1000;
