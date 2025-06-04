@@ -295,7 +295,7 @@ button.entrar-button:hover {
     cursor: pointer;
     font-size: 1em;  /* Aumenta um pouco o '+' para melhor clique */
     font-weight: bold;
-    line-height: 22px; /* Ajustar para centralizar o '+' na altura do botão */
+    line-height: 1; /* Para centralizar o '+' verticalmente */    
     width: 22px;      /* Aumenta um pouco o tamanho total */
     height: 22px;
     padding: 0;
