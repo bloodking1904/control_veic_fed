@@ -301,8 +301,9 @@ button.entrar-button:hover {
     padding: 0;
     margin-bottom: 5px;
     transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    align-items: center;
-    justify-content: center;
+    /* display: flex;  -- Removido, line-height deve cuidar da centralização do texto '+' */
+    align-items: center; /* Mantido por segurança, mas line-height pode ser suficiente */
+    justify-content: center; /* Mantido por segurança */
     box-shadow: 0 1px 3px rgba(0,0,0,0.2); /* Sombra sutil */
 }
 
@@ -340,70 +341,63 @@ button.entrar-button:hover {
   background-color: rgba(0, 0, 0, 0.55); /* Um pouco menos transparente */
   display: none; /* JS controla a exibição */
   z-index: 1001; /* Abaixo dos pop-ups, mas acima do resto */
-  /* Não precisa de flex aqui se o pop-up é fixed e centralizado com transform */
 }
 
-/* --- ESTILOS PARA O POP-UP DE SELEÇÃO DE STATUS E SEUS ELEMENTOS --- */
-
-/* Pop-up de seleção de status (já temos uma base, podemos refinar se necessário) */
+/* Pop-up de seleção de status */
 .selecao-status {
   position: fixed; 
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #FFFFFF; /* Fundo branco */
-  padding: 20px 25px; /* Padding ajustado */
+  background-color: #FFFFFF; 
+  padding: 20px 25px; 
   border-radius: 6px;
   display: none; 
   flex-direction: column;
   align-items: stretch; 
   z-index: 1002; 
   box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-  max-width: 500px; /* Largura máxima */
+  max-width: 500px; 
   width: 90%;
   max-height: 90vh; 
   overflow-y: auto; 
 }
 
 /* Estilo para os botões de OPÇÃO DE STATUS (Disponível, Em Atendimento, etc.) dentro do .selecao-status */
-/* Reutilizando e adaptando a classe .status quando dentro de .selecao-status */
 .selecao-status .status { 
     width: 100%; 
-    margin: 6px 0; /* Espaçamento vertical entre os botões de opção */
-    padding: 12px 15px; /* Padding interno dos botões */
+    margin: 6px 0; 
+    padding: 12px 15px; 
     font-size: 0.95em; 
-    font-weight: 500; /* Peso da fonte */
-    text-align: center; /* Centraliza o texto do botão */
-    border: 1px solid #ced4da; /* Borda cinza claro */
-    border-radius: 4px;   /* Cantos levemente arredondados */
-    background-color: #f8f9fa; /* Fundo cinza bem claro */
-    color: #212529;        /* Texto escuro */
+    font-weight: 500; 
+    text-align: center; 
+    border: 1px solid #ced4da; 
+    border-radius: 4px;   
+    background-color: #f8f9fa; 
+    color: #212529;        
     cursor: pointer;
     transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .selecao-status .status:hover {
-    background-color: #e9ecef; /* Cinza um pouco mais escuro no hover */
+    background-color: #e9ecef; 
     border-color: #adb5bd;
 }
 
-/* Estilos específicos para botões de opção de status com cores, se necessário (exemplo) */
-/* Se você definir cores de fundo inline no JS, este CSS pode precisar ajustar a cor do texto para contraste */
-.selecao-status .status[style*="background-color: lightgreen"] { /* Disponível */
-    color: #155724; /* Texto verde escuro para fundo verde claro */
+.selecao-status .status[style*="background-color: lightgreen"] { 
+    color: #155724; 
     border-color: #c3e6cb;
 }
-.selecao-status .status[style*="background-color: lightcoral"] { /* Em Atendimento/Bloqueado */
-    color: #721c24; /* Texto vermelho escuro para fundo vermelho claro */
+.selecao-status .status[style*="background-color: lightcoral"] { 
+    color: #721c24; 
     border-color: #f5c6cb;
 }
-.selecao-status .status[style*="background-color: lightyellow"] { /* Obs. Atendimento */
-    color: #856404; /* Texto escuro para fundo amarelo claro */
+.selecao-status .status[style*="background-color: lightyellow"] { 
+    color: #856404; 
     border-color: #ffeeba;
 }
 
-
-/* Inputs e Textarea dentro do .selecao-status (quando aparece para cidade, observações) */
+/* Inputs e Textarea dentro do .selecao-status */
 .selecao-status input[type="text"],
 .selecao-status textarea {
     width: 100%;
@@ -423,132 +417,137 @@ button.entrar-button:hover {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-.selecao-status textarea {
-    resize: vertical; /* Permite apenas redimensionamento vertical */
-    min-height: 80px;
-}
-
-.selecao-status label {
+/* Ajustes nos labels e textarea (que são gerados pelo JS com styles inline grandes) */
+.selecao-status .cidade-input label { /* Classe da div que contém os labels e inputs de cidade/obs */
+    font-size: 1em !important; /* Tenta sobrescrever o inline style do JS */
     font-weight: 600;
     margin-top: 10px;
     margin-bottom: 4px;
-    font-size: 0.9em;
     color: #495057;
 }
-
-/* Checkbox para "Campo Grande" */
-.selecao-status input[type="checkbox"] {
-    margin-right: 5px;
-    vertical-align: middle;
-}
-.selecao-status input[type="checkbox"] + label { /* Label ao lado do checkbox */
+.selecao-status .cidade-input input[type="checkbox"] + label {
+    font-size: 0.9em !important; /* Tenta sobrescrever o inline style do JS */
     font-weight: normal;
-    font-size: 0.9em;
-    margin-top: 0;
-    vertical-align: middle;
+}
+.selecao-status .cidade-input textarea#observacao-texto {
+    width: 100% !important; /* Sobrescreve o style inline do JS */
+    height: 80px !important; /* Sobrescreve o style inline do JS */
+    box-sizing: border-box;
+    font-size: 15px; /* Fonte um pouco maior para o texto da textarea */
+    border: 1px solid #ced4da; /* Garante borda consistente */
+    border-radius: 4px; /* Garante borda consistente */
+}
+.selecao-status .cidade-input input[type="text"]#cidade-destino {
+    font-size: 15px; /* Fonte um pouco maior */
+    margin-bottom: 10px;
+    width: 100% !important; /* Garante que ocupe a largura */
+    box-sizing: border-box;
+}
+.selecao-status .cidade-input > div { 
+    margin-bottom: 8px;
 }
 
-/* Botões de Ação (Período Viagem, MANHÃ, TARDE, CONFIRMAR VIAGEM) */
-/* Estilo base para botões de ação dentro do pop-up */
-.selecao-status .action-button { /* Adicione esta classe aos botões no JS se não tiverem uma comum */
-    padding: 10px 15px;
-    font-size: 0.9em;
+
+/* --- ESTILOS PARA BOTÕES DE AÇÃO DENTRO DO POP-UP .selecao-status --- */
+.selecao-status .action-buttons-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    flex-wrap: wrap; 
+    margin-top: 20px; 
+    width: 100%;
+}
+
+.selecao-status .popup-action-button {
+    padding: 10px 12px; 
+    font-size: 0.85em; 
     font-weight: 600;
     border-radius: 4px;
-    border: 1px solid transparent;
+    border: 1px solid #ced4da; 
     cursor: pointer;
-    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s, box-shadow 0.2s;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin: 5px; /* Pequena margem para espaçamento em flex container */
+    margin: 5px; 
+    background-color: #f8f9fa; 
+    color: #212529; 
+    line-height: 1.4; 
 }
 
-/* Botão "Período Viagem" (assumindo ID ou classe específica) */
-.selecao-status #periodo-viagem { /* Se tiver ID 'periodo-viagem' */
-    background-color: #007bff; /* Azul primário */
+.selecao-status .popup-action-button:hover,
+.selecao-status .popup-action-button:focus {
+    border-color: #adb5bd;
+    background-color: #e9ecef;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); 
+}
+
+.selecao-status #periodo-viagem.popup-action-button {
+    background-color: #007bff; 
     color: white;
     border-color: #007bff;
 }
-.selecao-status #periodo-viagem:hover {
+.selecao-status #periodo-viagem.popup-action-button:hover {
     background-color: #0056b3;
     border-color: #0056b3;
 }
 
-/* Botões "MANHÃ" e "TARDE" (assumindo IDs) */
-.selecao-status #manha-button,
-.selecao-status #tarde-button {
-    background-color: #f8f9fa; /* Fundo claro padrão */
-    color: #212529;
-    border: 1px solid #ced4da;
-    flex-grow: 1; /* Para ocuparem espaço disponível se estiverem em um flex container */
+.selecao-status .period-toggle-buttons {
+    display: flex;
+    flex-direction: column; 
+    margin: 5px;
 }
-.selecao-status #manha-button:hover,
-.selecao-status #tarde-button:hover {
-    background-color: #e2e6ea;
-    border-color: #dae0e5;
-}
-/* Estilo para quando MANHÃ/TARDE estão selecionados (JS adicionaria uma classe ou mudaria style) */
-.selecao-status #manha-button.selected, /* Exemplo se JS adicionar classe 'selected' */
-.selecao-status #tarde-button.selected {
-    background-color: #cfe2ff; /* Azul claro para indicar seleção */
-    color: #004085;
-    border-color: #b8daff;
-}
-/* Seu JS atualmente muda o style inline: style="background-color: lightblue;" */
-/* Você pode manter isso ou mudar o JS para adicionar uma classe e usar o CSS acima */
 
+.selecao-status .period-button.popup-action-button { /* #manha-button, #tarde-button */
+    background-color: #FFFFFF; 
+    color: #007bff; 
+    border: 1px solid #007bff; 
+    min-width: 100px; 
+}
+.selecao-status .period-button.popup-action-button:not(:last-child) {
+    margin-bottom: 8px; 
+}
 
-/* Botão "CONFIRMAR VIAGEM" (assumindo ID) */
-.selecao-status #confirmar-viagem {
-    background-color: #28a745; /* Verde para confirmar */
+.selecao-status .period-button.popup-action-button:hover {
+    background-color: #e7f3ff; 
+}
+
+.selecao-status .period-button.popup-action-button.active-period-button { /* Classe adicionada pelo JS */
+    background-color: #0056b3; 
+    color: white;
+    border-color: #004085;
+}
+
+.selecao-status #confirmar-viagem.popup-action-button.btn-confirm { /* btn-confirm adicionado no JS */
+    background-color: #28a745; 
     color: white;
     border-color: #28a745;
+    padding-top: 6px; 
+    padding-bottom: 6px;
 }
-.selecao-status #confirmar-viagem:hover {
+.selecao-status #confirmar-viagem.popup-action-button.btn-confirm:hover {
     background-color: #1e7e34;
     border-color: #1e7e34;
 }
 
 /* Botão "Fechar" do pop-up de status (se usar a classe .entrar-button) */
 .selecao-status button.entrar-button {
-    margin-top: 20px; /* Mais espaço acima do botão fechar */
-    background-color: #6c757d; /* Cinza para "Fechar" */
+    margin-top: 20px; 
+    background-color: #6c757d; 
     color: white;
-    border-color: #6c757d;
+    border-color: #6c757d; /* Adicionado para consistência */
     padding: 10px 15px;
     font-size: 0.9em;
     font-weight: 600;
     text-transform: uppercase;
+    /* Herda border-radius e transition de .popup-action-button se também tiver essa classe,
+       ou defina aqui se for apenas .entrar-button */
+    border-radius: 4px;
+    transition: background-color 0.2s, border-color 0.2s;
 }
 .selecao-status button.entrar-button:hover {
     background-color: #5a6268;
-    border-color: #545b62;
-}
-
-/* Container para os botões de período e confirmar, se estiverem agrupados */
-/* O HTML gerado em adicionarVeiculo tem: <div style="display: flex; justify-content: space-between; align-items: center;"> */
-/* Você pode adicionar uma classe a essa div no JS, por exemplo 'action-buttons-row' */
-.selecao-status .action-buttons-row {
-    display: flex;
-    justify-content: space-around; /* Ou space-between */
-    align-items: center;
-    flex-wrap: wrap; /* Para quebrar em telas menores se necessário */
-    margin-top: 15px;
-    width: 100%;
-}
-.selecao-status .action-buttons-row > * { /* Aplica a botões e divs filhas */
-    margin: 5px; /* Margem entre os botões */
-}
-.selecao-status .action-buttons-row > div { /* Para a div que agrupa manha/tarde */
-    display: flex;
-    flex-direction: column; /* Manha em cima de Tarde */
-}
-.selecao-status .action-buttons-row > div > button { /* Botões Manhã/Tarde dentro da div */
-    width: 120px; /* Largura fixa para Manhã/Tarde, por exemplo */
-    margin-bottom: 5px;
-}
-.selecao-status .action-buttons-row > div > button:last-child {
-    margin-bottom: 0;
+    border-color: #545b62; /* Adicionado para consistência */
 }
 
 
@@ -565,14 +564,14 @@ button.entrar-button:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1005; /* Mais alto */
+    z-index: 1005; 
 }
 
 .loader {
     border: 6px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
     border-top: 6px solid #FFFFFF;
-    width: 40px; /* Um pouco menor */
+    width: 40px; 
     height: 40px;
     animation: spin 1s linear infinite;
 }
@@ -581,19 +580,19 @@ button.entrar-button:hover {
     font-size: 1.1em;
 }
 .progress-bar-container {
-    width: 70%; /* Largura da barra */
+    width: 70%; 
     max-width: 300px;
     background-color: rgba(255, 255, 255, 0.3);
     margin-top: 10px;
     border-radius: 5px;
-    height: 22px; /* Altura do container */
+    height: 22px; 
 }
 #progress-bar {
     width: 0%;
-    height: 100%; /* Preenche o container */
-    background-color: #28a745; /* Verde para progresso */
+    height: 100%; 
+    background-color: #28a745; 
     text-align: center;
-    line-height: 22px; /* Centraliza texto verticalmente */
+    line-height: 22px; 
     color: white;
     border-radius: 5px;
     transition: width 0.3s ease-in-out;
@@ -609,14 +608,14 @@ button.entrar-button:hover {
     display: none; 
     border: 1px solid #ced4da;
     padding: 15px;
-    width: auto; /* Largura automática baseada no conteúdo, com min/max */
+    width: auto; 
     min-width: 280px;
     max-width: 320px;
     position: fixed; 
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
-    z-index: 1003; /* Acima do .selecao-status */
+    z-index: 1003; 
     background-color: white; 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     border-radius: 6px; 
@@ -624,15 +623,15 @@ button.entrar-button:hover {
 
 .calendar-header {
     text-align: center;
-    margin-bottom: 10px; /* Reduzido */
+    margin-bottom: 10px; 
     font-weight: bold; 
     color: #003366;
-    font-size: 1em; /* Reduzido */
-    display: flex; /* Para alinhar botões e texto */
+    font-size: 1em; 
+    display: flex; 
     justify-content: space-between;
     align-items: center;
 }
-.calendar-header button { /* Botões de navegação do calendário */
+.calendar-header button { 
     background: none;
     border: none;
     color: #0056b3;
@@ -655,24 +654,24 @@ button.entrar-button:hover {
 #calendarWeekdays { 
     font-weight: bold;
     background-color: #f8f9fa;
-    margin-bottom: 3px; /* Reduzido */
+    margin-bottom: 3px; 
     color: #495057;
     border-radius: 3px;
-    font-size: 0.8em; /* Menor para nomes dos dias */
+    font-size: 0.8em; 
 }
 
 #calendarWeekdays .calendar-day-name { 
-    padding: 6px 3px; /* Padding ajustado */
+    padding: 6px 3px; 
     border: none; 
 }
 
 .calendar-day { 
-    padding: 8px 4px; /* Padding ajustado */
+    padding: 8px 4px; 
     border: 1px solid #dee2e6;
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
     border-radius: 3px;
-    font-size: 0.9em; /* Tamanho dos números dos dias */
+    font-size: 0.9em; 
 }
 
 .calendar-day:hover {
@@ -687,16 +686,16 @@ button.entrar-button:hover {
 
 #calendar-ok-button {
     display: block; 
-    width: 100%; /* Ocupar largura total do calendário */
-    box-sizing: border-box; /* Para o padding não estourar */
-    margin: 10px 0 0 0; /* Margem no topo, sem margem lateral auto */
-    padding: 8px 15px; /* Padding ajustado */
+    width: 100%; 
+    box-sizing: border-box; 
+    margin: 10px 0 0 0; 
+    padding: 8px 15px; 
     background-color: #0056b3; 
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9em; /* Ajustado */
+    font-size: 0.9em; 
     font-weight: 600;
     text-transform: uppercase;
     transition: background-color 0.3s;
@@ -714,28 +713,24 @@ button.entrar-button:hover {
 /* Media Queries para Responsividade */
 @media (max-width: 768px) {
     .tabela,
-    .veiculos-container { /* .veiculos-container parece não ser usado para a tabela principal */
-        /* grid-template-columns já é repeat(7, 1fr); */
-        /* overflow-x já é auto; */
+    .veiculos-container {
     }
 
     .celula {
         padding: 6px;
-        min-height: 100px; /* Altura mínima menor em mobile */
+        min-height: 100px; 
     }
     .header button {
         font-size: 13px;
         padding: 7px 10px;
     }
     .header h1 {
-        font-size: 18px; /* Reduzido */
+        font-size: 18px; 
     }
     .tabela {
-        /* AJUSTE CONFORME ALTURA DO HEADER EM MOBILE */
         padding-top: 55px; 
     }
     .linha.cabecalho {
-         /* AJUSTE CONFORME ALTURA DO HEADER EM MOBILE */
         top: 55px;
     }
     .tabela > .linha.cabecalho > .celula {
@@ -743,7 +738,7 @@ button.entrar-button:hover {
         padding: 5px 2px;
     }
     .veiculo {
-        padding-bottom: 18px; /* Ajustar para indicadores menores */
+        padding-bottom: 18px; 
     }
     .periodo-indicadores {
         font-size: 0.6em;
@@ -761,7 +756,7 @@ button.entrar-button:hover {
 @media (max-width: 480px) {
     .celula {
         padding: 4px;
-        font-size: 0.7em; /* Ainda menor */
+        font-size: 0.7em; 
         min-height: 90px;
     }
     .header h1 {
@@ -773,21 +768,18 @@ button.entrar-button:hover {
         margin-top: 3px;
     }
     .tabela {
-        /* AJUSTE CONFORME ALTURA DO HEADER EM MOBILE BEM PEQUENO */
         padding-top: 50px; 
-        gap: 0; /* Remove gap para economizar espaço */
+        gap: 0; 
     }
     .linha.cabecalho {
-        /* AJUSTE CONFORME ALTURA DO HEADER EM MOBILE BEM PEQUENO */
-        top: 48px; /* Exemplo */
+        top: 48px; 
     }
     .tabela > .linha.cabecalho > .celula {
         font-size: 0.65em;
         padding: 4px 1px;
-        border-left: none; /* Remove borda lateral para economizar espaço */
+        border-left: none; 
     }
      .tabela > .linha.cabecalho > .celula:first-child {
-        /* já é none */
     }
     .veiculo {
         padding-bottom: 16px; 
