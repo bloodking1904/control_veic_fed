@@ -163,23 +163,29 @@ body {
 
 
 .login-container button.entrar-button {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Azul corporativo principal */
     color: white;
-    border: none;
+    border: 1px solid #0056b3; /* Adicionada borda da mesma cor para consistência */
     border-radius: 4px;
     cursor: pointer;
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 10px 20px; /* Padding bom para um botão principal */
+    font-size: 1em;  /* Usar 'em' para consistência, 16px é geralmente 1em */
     font-weight: 600;
-    transition: background-color 0.2s ease-in-out;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     width: 100%;
-    margin-top: 10px; /* Espaço acima do botão */
+    margin-top: 15px; /* Um pouco mais de espaço acima */
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.75px; /* Espaçamento entre letras um pouco maior */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra sutil para dar profundidade */
 }
 
-button.entrar-button:hover {
-    background-color: #004085;
+.login-container button.entrar-button:hover,
+.login-container button.entrar-button:focus {
+    background-color: #004085; /* Azul mais escuro */
+    border-color: #00376e;   /* Borda um pouco mais escura que o hover */
+    color: white;
+    outline: none; /* Remove o outline padrão do navegador no foco */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.35); /* Destaque de foco similar ao Bootstrap */
 }
 
 
