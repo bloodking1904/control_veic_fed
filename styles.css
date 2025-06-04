@@ -417,21 +417,21 @@ button.entrar-button:hover {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Ajustes nos labels e textarea (que são gerados pelo JS com styles inline grandes) */
+/* Ajustes nos labels e textarea  */
 .selecao-status .cidade-input label { /* Classe da div que contém os labels e inputs de cidade/obs */
-    font-size: 1em !important; /* Tenta sobrescrever o inline style do JS */
+    font-size: 1em; 
     font-weight: 600;
     margin-top: 10px;
     margin-bottom: 4px;
     color: #495057;
 }
 .selecao-status .cidade-input input[type="checkbox"] + label {
-    font-size: 0.9em !important; /* Tenta sobrescrever o inline style do JS */
+    font-size: 0.9em; 
     font-weight: normal;
 }
 .selecao-status .cidade-input textarea#observacao-texto {
-    width: 100% !important; /* Sobrescreve o style inline do JS */
-    height: 80px !important; /* Sobrescreve o style inline do JS */
+    width: 100%; 
+    height: 80px;
     box-sizing: border-box;
     font-size: 15px; /* Fonte um pouco maior para o texto da textarea */
     border: 1px solid #ced4da; /* Garante borda consistente */
@@ -440,7 +440,7 @@ button.entrar-button:hover {
 .selecao-status .cidade-input input[type="text"]#cidade-destino {
     font-size: 15px; /* Fonte um pouco maior */
     margin-bottom: 10px;
-    width: 100% !important; /* Garante que ocupe a largura */
+    width: 100%; 
     box-sizing: border-box;
 }
 .selecao-status .cidade-input > div { 
