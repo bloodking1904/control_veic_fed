@@ -1,22 +1,16 @@
 /* Estilos Gerais */
 body {
-    font-family: 'Arial', sans-serif; /* Você pode considerar 'Montserrat' ou outra fonte do site FIEMS se quiser, mas precisaria importá-la */
+    font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    /* Removida a imagem de fundo para um look mais corporativo */
-    /* background-image: url('https://raw.githubusercontent.com/bloodking1904/testnoe/master/fundo_login.png'); */
-    background-color: #E9ECEF; /* Fundo cinza claro (inspirado em fundos Bootstrap) */
-    /* background-size: cover; */
-    /* background-position: center; */
-    /* background-attachment: fixed; */
-    /* background-repeat: no-repeat; */
+    background-color: #E9ECEF; /* Fundo cinza claro */
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    min-height: 100vh; /* Alterado para min-height para permitir rolagem */
+    min-height: 100vh;
     width: 100vw;
-    color: #212529; /* Cor de texto padrão (preto suave) */
+    color: #212529; /* Cor de texto padrão */
 }
 
 /* Estilos do Cabeçalho */
@@ -26,49 +20,94 @@ body {
     left: 0;
     width: 100%;
     text-align: center;
-    /*padding: 12px 0; /* Padding vertical ajustado */
-    background-color: #003366; /* Azul naval escuro (inspirado no bg-dark do FIEMS) */
-    color: white; /* Texto do cabeçalho em branco */
+    padding: 10px 0; /* Padding vertical - AJUSTE ESTE VALOR CONFORME GOSTO */
+    background-color: #003366; /* Azul naval escuro */
+    color: white;
     z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Sombra um pouco mais pronunciada */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .header h1 {
     margin: 0;
-    font-size: 22px; /* Pode ajustar o tamanho */
-    color: white; /* Garante que o h1 também seja branco */
-    font-weight: 600; /* Um pouco mais de peso na fonte */
-}
-
-/* ESTILOS DOS BOTÕES DO CABEÇALHO SERÃO TRATADOS NA PRÓXIMA ETAPA */
-.header button {
-    margin-top: 10px;
-    padding: 10px 20px;
+    font-size: 22px; /* AJUSTE ESTE VALOR CONFORME GOSTO */
     color: white;
-    border: none;
-    border-radius: 5px; /* Manteremos por enquanto, ajustaremos depois */
+    font-weight: 600;
+    line-height: 1.2; /* Para garantir que o texto não cause altura excessiva */
+}
+
+/* --- ESTILIZAÇÃO DOS BOTÕES DO CABEÇALHO --- */
+.header button {
+    margin-top: 5px; /* Margem entre o H1 e os botões */
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 8px 15px;
+    color: #003366;
+    background-color: #FFFFFF;
+    border: 1px solid #DEE2E6;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
-    transition: background 0.3s;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.header .sair-button {
-    background-color: #d9534f; /* Um vermelho para Sair/Setas, ajustaremos */
+.header button:hover,
+.header button:focus {
+    background-color: #E9ECEF;
+    color: #002244;
+    border-color: #CED4DA;
+    outline: none;
 }
 
-.header .limpar-cache-button { /* Este é o .resetar-status-button no HTML */
-    background-color: #f0ad4e; /* Laranja para Resetar, ajustaremos */
+/* Botões de navegação da semana (Setas esquerda/direita no cabeçalho) */
+.header #seta-esquerda,
+.header #seta-direita {
+    background-color: #FFFFFF;
+    color: #003366;
+    padding: 8px 12px; /* Um pouco menos de padding horizontal para setas */
 }
 
-.header .limpar-cache-button:hover,
-.header .sair-button:hover {
-    /* Efeitos de hover serão definidos com o novo estilo dos botões */
+.header #seta-esquerda:hover,
+.header #seta-direita:hover {
+    background-color: #004c99;
+    color: #FFFFFF;
+    border-color: #004085;
 }
 
-/* Classe .sair-button é usada pelas setas de navegação da semana no HTML */
-/* Vamos generalizar um pouco e depois especializar */
-.sair-button { /* Usado pelas setas de navegação da semana no HTML */
-    background-color: #5bc0de; /* Um azul mais claro para as setas, temporário */
+/* Botão Sair (Real) */
+.header button[onclick="logout()"] {
+    background-color: #dc3545; /* Vermelho */
+    color: white;
+    border-color: #dc3545;
+}
+
+.header button[onclick="logout()"]:hover,
+.header button[onclick="logout()"]:focus {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: white;
+}
+
+/* Botão Resetar Status (no HTML é .resetar-status-button) */
+.header .resetar-status-button {
+    background-color: #ffc107; /* Amarelo/Laranja */
+    color: #212529;
+    border-color: #ffc107;
+}
+
+.header .resetar-status-button:hover,
+.header .resetar-status-button:focus {
+    background-color: #e0a800;
+    border-color: #d39e00;
+    color: #212529;
+}
+
+/* Classe .sair-button original - se ainda for usada por algum elemento não coberto acima */
+/* Se as setas SÃO os únicos elementos com .sair-button e agora são estilizadas por ID, esta regra pode não ser necessária */
+.sair-button {
+    background-color: #5bc0de; /* Azul claro genérico */
     color: white;
     border: none;
     border-radius: 5px;
@@ -79,19 +118,19 @@ body {
 }
 
 
-/* Estilos do Container de Login (Mantido por enquanto, focado no index.html) */
+/* Estilos do Container de Login */
 .login-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 300px;
-    margin: 100px auto 0 auto; /* Adicionado margin-top para não ficar sob o header, se aplicável */
+    max-width: 350px; /* Um pouco maior */
+    margin: 120px auto 20px auto; /* Margem para o header e para o final */
     padding: 30px;
     background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Bordas mais suaves */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra mais definida */
     box-sizing: border-box;
     text-align: center;
 }
@@ -99,33 +138,48 @@ body {
 .login-container label {
     width: 100%;
     text-align: left;
-    margin-bottom: 10px;
+    margin-bottom: 8px; /* Ajuste */
+    font-weight: 600;
+    color: #495057;
 }
 
 .login-container input[type="text"],
 .login-container input[type="password"] {
-    width: calc(100% - 20px);
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: 100%; /* Ocupa toda a largura, o padding interno controla o texto */
+    padding: 10px 12px;
+    margin-bottom: 15px; /* Aumenta espaço abaixo */
+    margin-top: 5px;
+    border: 1px solid #ced4da; /* Borda padrão Bootstrap */
+    border-radius: 4px;
     box-sizing: border-box;
+    font-size: 16px;
+}
+.login-container input[type="text"]:focus,
+.login-container input[type="password"]:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
+
 .login-container button.entrar-button {
-    background-color: #0056b3; /* Azul principal para o botão entrar */
+    background-color: #0056b3;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
     padding: 10px 20px;
     font-size: 16px;
-    transition: background 0.3s;
+    font-weight: 600;
+    transition: background-color 0.2s ease-in-out;
     width: 100%;
+    margin-top: 10px; /* Espaço acima do botão */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 button.entrar-button:hover {
-    background-color: #004085; /* Azul mais escuro no hover */
+    background-color: #004085;
 }
 
 
@@ -133,269 +187,316 @@ button.entrar-button:hover {
 .tabela {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 1px; /* Reduzido o gap para um visual mais compacto */
+    gap: 1px;
     width: 100%;
     max-width: 100vw;
-    /* margin-top: 80px; */ /* Original */
-    padding-top: 75px; /* Ajustado para padding-top, VERIFIQUE E AJUSTE ESTE VALOR conforme a altura do seu header */
-    padding-left: 5px; /* Espaço lateral */
-    padding-right: 5px; /* Espaço lateral */
-    padding-bottom: 20px; /* Espaço no final */
+    /* A ALTURA REAL DO SEU .header DETERMINARÁ ESTE VALOR. Ex: se .header tiver 60px de altura, use padding-top: 60px ou um pouco mais. */
+    padding-top: 60px; /* AJUSTE CONFORME A ALTURA CALCULADA DO SEU .header */
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 20px;
     box-sizing: border-box;
     overflow-x: auto;
-    background-color: #DEE2E6; /* Cor de fundo para a área da "grade" da tabela */
+    background-color: #DEE2E6;
 }
 
-/* Estiliza as CÉLULAS DENTRO da linha de cabeçalho dos dias (SEGUNDA, TERÇA...) */
-/* A estrutura HTML é <div class="linha cabecalho"> <div class="celula">DIA</div> ... </div> */
+/* Linha que contém o cabeçalho dos dias (DOMINGO, SEGUNDA...) */
+.linha.cabecalho {
+    display: contents; /* Para que a grid da .tabela controle as .celula filhas diretamente */
+    position: sticky;
+    /* ESTE VALOR DE 'top' DEVE SER IGUAL À ALTURA DO SEU .header */
+    top: 60px; /* AJUSTE CONFORME A ALTURA CALCULADA DO SEU .header (ex: 60px) */
+    z-index: 501; /* Acima das células de dados, abaixo do .header principal */
+    /* O background de cada célula do cabeçalho é definido abaixo */
+}
+
+/* Células DENTRO da linha de cabeçalho dos dias */
 .tabela > .linha.cabecalho > .celula {
     background: #FFFFFF; 
-    color: #003366; /* Texto azul escuro */
-    font-size: 1.1em; /* Ajuste de tamanho */
+    color: #003366;
+    font-size: 0.85em; /* Um pouco menor para caber melhor */
     font-weight: bold;
-    padding: 8px 5px;
+    padding: 6px 4px; /* Padding ajustado */
     text-align: center;
-    border-bottom: 2px solid #003366; /* Borda inferior azul */
-    border-left: 1px solid #DEE2E6; /* Borda lateral para consistência com o gap */
-    /* position: sticky; top: 0; z-index: 500; -- movido da classe .cabecalho original para aqui se necessário manter dias fixos na rolagem da tabela */
+    border-bottom: 2px solid #003366;
+    border-left: 1px solid #DEE2E6; 
+    /* position: sticky e z-index não são necessários aqui, pois a linha pai (.linha.cabecalho) já é sticky */
 }
 .tabela > .linha.cabecalho > .celula:first-child {
     border-left: none;
 }
 
-/* Estilo para a linha que contém o cabeçalho dos dias, se precisar de sticky */
-.linha.cabecalho {
-    /* Esta classe é aplicada à div que contém as células dos dias da semana */
-    /* Se você quer que os dias da semana fiquem fixos no topo da tabela ao rolar a tabela (não a página inteira),
-       você aplicaria position:sticky aqui. O header principal já é fixo na página. */
-    position: sticky;
-    top: 65px; /* Altura do header principal da página. AJUSTE CONFORME NECESSÁRIO */
-    z-index: 501; /* Acima das células de dados, abaixo do header principal */
-    /* display: contents; */ /* Mantido do seu original, permite que a grid da .tabela controle os filhos diretos */
-}
-
-
-.celula { /* Células de status dos veículos */
-    background: #FFFFFF; /* Fundo branco para as células de dados */
-    padding: 10px;
+/* Células de status dos veículos */
+.celula {
+    background: #FFFFFF;
+    padding: 8px; /* Padding reduzido */
     text-align: center;
     cursor: pointer;
     transition: background 0.2s ease-in-out;
-    border-radius: 0px; /* Sem bordas arredondadas para um visual mais 'grid' */
+    border-radius: 0px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* Alinhado ao topo para melhor uso do espaço com padding-bottom no .veiculo */
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
-    /* border: 1px solid #DEE2E6; */ /* A borda já é criada pelo 'gap' e background da .tabela */
+    min-height: 120px; /* Altura mínima para consistência */
 }
 
 .celula:hover {
-    background: #E9ECEF; /* Cinza claro ao passar o mouse */
+    background: #E9ECEF;
 }
 
-.linha { /* Linhas de veículos */
-    display: contents; /* Permite que a grid da .tabela controle os filhos diretos (.celula) */
+/* Linhas de veículos (container para as células de um veículo) */
+.linha { 
+    display: contents;
 }
 
-/* Estilos para Veiculos (dentro da .celula) */
-.veiculos-container { /* Parece não estar sendo usado diretamente para a tabela principal */
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    width: 100%;
-    margin-top: 10px;
-}
-
-/* Estilos para Veiculos (dentro da .celula) */
+/* Contêiner DENTRO de cada .celula */
 .veiculo {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between; /* Alterado para distribuir espaço, ajuda no posicionamento inferior */
+    justify-content: space-between; /* Para empurrar .periodo-indicadores para baixo */
     width: 100%;
-    height: 100%; /* Faz com que .veiculo ocupe toda a altura da .celula */
-    position: relative; /* ESSENCIAL para o posicionamento absoluto dos filhos */
-    padding-bottom: 25px; /* Espaço reservado na parte inferior para os indicadores MANHÃ/TARDE */
-                           /* Ajuste este valor conforme o tamanho da fonte dos indicadores */
-    box-sizing: border-box; /* Garante que o padding não aumente o tamanho total */
+    height: 100%; 
+    position: relative; 
+    padding-bottom: 22px; /* Espaço para os indicadores MANHÃ/TARDE. AJUSTE CONFORME NECESSÁRIO */
+    box-sizing: border-box; 
 }
 
-/* Estilo para o contêiner dos indicadores de período (MANHÃ/TARDE) */
+/* Contêiner para os indicadores MANHÃ/TARDE */
 .periodo-indicadores {
-    position: absolute; /* Posição absoluta em relação ao .veiculo */
-    bottom: 5px;        /* Um pequeno espaço da borda inferior da célula */
-    left: 5px;          /* Um pequeno espaço da borda esquerda da célula */
-    right: 5px;         /* Um pequeno espaço da borda direita da célula */
+    position: absolute;
+    bottom: 3px; /* Distância da borda inferior do .veiculo */
+    left: 3px;   /* Distância da borda esquerda do .veiculo */
+    right: 3px;  /* Distância da borda direita do .veiculo */
     display: flex;
-    justify-content: space-between; /* Separa MANHÃ e TARDE */
-    font-size: 0.7em;   /* Tamanho da fonte para os indicadores */
-    color: #003366;     /* Cor do texto (ex: azul escuro) */
+    justify-content: space-between;
+    font-size: 0.65em; /* Fonte bem pequena */
+    color: #003366;
     font-weight: bold;
 }
 
-.periodo-indicadores > div { /* Estilo para cada indicador (MANHÃ ou TARDE) */
-    padding: 2px 4px;
-    border: 1px solid #003366; /* Borda da mesma cor do texto */
-    background-color: white; /* Fundo branco para legibilidade */
-    border-radius: 3px;
+.periodo-indicadores > div { /* Estilo para cada bloquinho MANHÃ ou TARDE */
+    padding: 1px 3px;
+    border: 1px solid #003366;
+    background-color: white;
+    border-radius: 2px;
 }
 
-/* BOTÃO ADICIONAR '+' DENTRO DA CÉLULA - será estilizado depois */
+/* Botão Adicionar '+' dentro da célula */
 .adicionar {
-    background: #28a745; /* Verde para adicionar (temporário) */
+    background: #007bff; /* Azul de Bootstrap para "adicionar" */
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 50%; /* Redondo */
     cursor: pointer;
-    font-size: 0.8em;
+    font-size: 0.9em; /* Tamanho da fonte do '+' */
+    font-weight: bold;
+    line-height: 1; /* Para centralizar o '+' verticalmente */
+    width: 20px;  /* Largura e altura iguais para ser um círculo */
+    height: 20px;
+    padding: 0; /* Remover padding para controle preciso do tamanho */
     margin-bottom: 5px;
-    padding: 2px 5px; /* Pequeno padding */
+    transition: background-color 0.2s;
+}
+.adicionar:hover {
+    background: #0056b3; /* Azul mais escuro */
 }
 
-.status { /* Caixa de texto do status (Disponível, Em Atendimento...) */
-    cursor: pointer;
-    padding: 8px; /* Ajustado o padding */
-    border-radius: 4px; /* Bordas levemente arredondadas */
-    border: 1px solid #ced4da; /* Borda cinza padrão */
-    margin: 5px 0;
+/* Caixa de texto do status (Disponível, Em Atendimento...) */
+.status { 
+    cursor: default; /* Não é clicável em si */
+    padding: 6px; 
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    margin: 4px 0;
     text-align: center;
-    width: 90%; /* Para não ocupar 100% e ter algum respiro */
+    width: 90%; 
     box-sizing: border-box;
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
     font-weight: bold;
+    font-size: 0.8em; /* Fonte um pouco menor */
 }
+
+/* Overlay para os pop-ups */
 .overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6);
-  display: none; /* Mantenha none, o JS vai mudar para 'block' ou 'flex' */
-  z-index: 999;
-  /* justify-content e align-items não são necessários se o filho for posicionado absolutamente */
+  background-color: rgba(0, 0, 0, 0.55); /* Um pouco menos transparente */
+  display: none; /* JS controla a exibição */
+  z-index: 1001; /* Abaixo dos pop-ups, mas acima do resto */
+  /* Não precisa de flex aqui se o pop-up é fixed e centralizado com transform */
 }
 
+/* Pop-up de seleção de status */
 .selecao-status {
-  position: fixed; /* MUDANÇA CRÍTICA: de 'relative' para 'fixed' */
+  position: fixed; 
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centraliza o elemento */
-  
+  transform: translate(-50%, -50%);
   background-color: white;
-  padding: 25px;
-  border-radius: 8px;
-  display: none; /* JS controla a exibição */
-  flex-direction: column; /* Mantido para o conteúdo interno do pop-up */
-  align-items: center;   /* Mantido para o conteúdo interno do pop-up */
-  z-index: 1000; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  max-width: 500px;
+  padding: 20px; /* Padding um pouco menor */
+  border-radius: 6px;
+  display: none; /* JS controla */
+  flex-direction: column;
+  align-items: stretch; /* Para os botões internos ocuparem a largura */
+  z-index: 1002; 
+  box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+  max-width: 450px; /* Largura máxima ajustada */
   width: 90%;
-  max-height: 80vh; /* Adicionado para evitar que seja muito alto e permitir rolagem interna */
-  overflow-y: auto; /* Permite rolagem interna se o conteúdo do pop-up for grande */
+  max-height: 90vh; /* Altura máxima */
+  overflow-y: auto; 
+}
+/* Botões dentro do .selecao-status (Disponível, Em Atendimento, etc) */
+.selecao-status .status { /* Reutilizando a classe .status mas com contexto */
+    width: 100%; /* Ocupa toda a largura do pop-up */
+    margin: 5px 0; /* Espaçamento vertical */
+    padding: 10px;
+    font-size: 1em; /* Tamanho de fonte normal para botões */
+    cursor: pointer; /* São clicáveis aqui */
+}
+.selecao-status .status:hover {
+    background-color: #f0f0f0; /* Efeito hover sutil */
+}
+/* Botão Fechar do .selecao-status (se for um button.entrar-button como no HTML) */
+.selecao-status button.entrar-button { /* Se o botão "Fechar" usa esta classe */
+    margin-top: 15px;
+    background-color: #6c757d; /* Cinza para "Fechar" */
+}
+.selecao-status button.entrar-button:hover {
+    background-color: #5a6268;
 }
 
-/* BOTÃO RESETAR STATUS - será estilizado na próxima etapa */
-.resetar-status-button {
-    background-color: #ffc107; /* Amarelo/Laranja para Resetar (temporário) */
-    color: #212529; /* Texto escuro para contraste com amarelo */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 10px 20px;
-    font-size: 16px;
-    transition: background 0.3s;
-}
 
-.resetar-status-button:hover {
-    background-color: #e0a800; 
-}
-
-.veiculo-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
+/* Loading spinner e overlay */
 .loading {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.75); /* Mais escuro para o loading */
+    background-color: rgba(0, 0, 0, 0.75);
     color: white;
-    display: flex;
+    display: none; /* JS controla */
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1001; /* Acima de tudo */
+    z-index: 1005; /* Mais alto */
 }
 
 .loader {
-    border: 8px solid rgba(255, 255, 255, 0.2); /* Borda do loader mais sutil */
+    border: 6px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    border-top: 8px solid #FFFFFF; /* Cor principal do loader */
-    width: 50px;
-    height: 50px;
+    border-top: 6px solid #FFFFFF;
+    width: 40px; /* Um pouco menor */
+    height: 40px;
     animation: spin 1s linear infinite;
 }
+#loading-message {
+    margin-top: 15px;
+    font-size: 1.1em;
+}
+.progress-bar-container {
+    width: 70%; /* Largura da barra */
+    max-width: 300px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin-top: 10px;
+    border-radius: 5px;
+    height: 22px; /* Altura do container */
+}
+#progress-bar {
+    width: 0%;
+    height: 100%; /* Preenche o container */
+    background-color: #28a745; /* Verde para progresso */
+    text-align: center;
+    line-height: 22px; /* Centraliza texto verticalmente */
+    color: white;
+    border-radius: 5px;
+    transition: width 0.3s ease-in-out;
+}
+#progress-status {
+    margin-top: 8px;
+    font-size: 0.9em;
+}
+
 
 /* --- Estilos para o Calendário Pop-up --- */
 .calendar {
     display: none; 
-    border: 1px solid #ced4da; /* Borda mais suave */
+    border: 1px solid #ced4da;
     padding: 15px;
-    width: 320px; 
+    width: auto; /* Largura automática baseada no conteúdo, com min/max */
+    min-width: 280px;
+    max-width: 320px;
     position: fixed; 
     top: 50%; 
     left: 50%; 
     transform: translate(-50%, -50%); 
-    z-index: 1005; /* Acima do pop-up de status se necessário, ou igual */
+    z-index: 1003; /* Acima do .selecao-status */
     background-color: white; 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    border-radius: 8px; 
+    border-radius: 6px; 
 }
 
 .calendar-header {
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px; /* Reduzido */
     font-weight: bold; 
-    color: #003366; /* Azul escuro para o header do calendário */
-    font-size: 1.1em;
+    color: #003366;
+    font-size: 1em; /* Reduzido */
+    display: flex; /* Para alinhar botões e texto */
+    justify-content: space-between;
+    align-items: center;
+}
+.calendar-header button { /* Botões de navegação do calendário */
+    background: none;
+    border: none;
+    color: #0056b3;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px 8px;
+}
+.calendar-header button:hover {
+    color: #003366;
 }
 
 .calendar-days { 
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
-    gap: 2px; /* Pequeno gap entre os dias */
+    gap: 2px;
 }
 
 #calendarWeekdays { 
     font-weight: bold;
-    background-color: #f8f9fa; /* Cinza bem claro para o fundo dos nomes dos dias */
-    margin-bottom: 5px;
-    color: #495057; /* Cor do texto para os nomes dos dias */
-    border-radius: 4px; /* Leve arredondamento */
+    background-color: #f8f9fa;
+    margin-bottom: 3px; /* Reduzido */
+    color: #495057;
+    border-radius: 3px;
+    font-size: 0.8em; /* Menor para nomes dos dias */
 }
 
 #calendarWeekdays .calendar-day-name { 
-    padding: 8px 5px; /* Padding ajustado */
+    padding: 6px 3px; /* Padding ajustado */
     border: none; 
 }
 
-.calendar-day { /* Números dos dias */
-    padding: 10px 5px; /* Padding ajustado */
-    border: 1px solid #dee2e6; /* Borda sutil */
+.calendar-day { 
+    padding: 8px 4px; /* Padding ajustado */
+    border: 1px solid #dee2e6;
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
-    border-radius: 4px;
+    border-radius: 3px;
+    font-size: 0.9em; /* Tamanho dos números dos dias */
 }
 
 .calendar-day:hover {
@@ -403,27 +504,29 @@ button.entrar-button:hover {
 }
 
 .calendar-day.selected {
-    background-color: #0056b3; /* Azul para dias selecionados */
+    background-color: #0056b3;
     color: white;
-    border-color: #004085; /* Borda do azul mais escura */
+    border-color: #004085;
 }
 
-/* Botão OK do calendário (se adicionado via JS, como na sugestão anterior) */
-#calendar-ok-button { /* Estilização exemplo para o botão OK do calendário */
-    display: block; /* Para ocupar a largura e centralizar o texto */
-    width: calc(100% - 20px); /* Largura com algum respiro */
-    margin: 15px auto 0 auto; /* Centralizado com margem no topo */
-    padding: 10px 15px;
-    background-color: #0056b3; /* Azul principal */
+#calendar-ok-button {
+    display: block; 
+    width: 100%; /* Ocupar largura total do calendário */
+    box-sizing: border-box; /* Para o padding não estourar */
+    margin: 10px 0 0 0; /* Margem no topo, sem margem lateral auto */
+    padding: 8px 15px; /* Padding ajustado */
+    background-color: #0056b3; 
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
+    font-size: 0.9em; /* Ajustado */
+    font-weight: 600;
+    text-transform: uppercase;
     transition: background-color 0.3s;
 }
 #calendar-ok-button:hover {
-    background-color: #004085; /* Azul mais escuro */
+    background-color: #004085;
 }
 
 
@@ -432,62 +535,110 @@ button.entrar-button:hover {
     100% { transform: rotate(360deg); }
 }
 
-
-/* Media Queries para Responsividade (Mantidas por enquanto) */
-/* Você pode querer ajustar os breakpoints ou estilos responsivos depois que o tema base estiver definido */
+/* Media Queries para Responsividade */
 @media (max-width: 768px) {
     .tabela,
-    .veiculos-container {
-        grid-template-columns: repeat(7, 1fr); 
-        overflow-x: auto; 
+    .veiculos-container { /* .veiculos-container parece não ser usado para a tabela principal */
+        /* grid-template-columns já é repeat(7, 1fr); */
+        /* overflow-x já é auto; */
     }
 
     .celula {
-        padding: 8px; /* Ajuste de padding */
+        padding: 6px;
+        min-height: 100px; /* Altura mínima menor em mobile */
     }
     .header button {
-        font-size: 15px; /* Ajuste de fonte */
-        padding: 8px 15px; /* Ajuste de padding */
-    }
-    body {
-        /* transform: scale(1.0); */ /* Removido scale, pode causar problemas de layout */
-        /* transform-origin: top left; */
+        font-size: 13px;
+        padding: 7px 10px;
     }
     .header h1 {
-        font-size: 20px; /* Ajuste de fonte */
-    }
-    
-}
-
-
-@media (max-width: 480px) {
-    /* .tabela, .veiculos-container já estão com 7 colunas e overflow-x: auto */
-
-    /* .linha.cabecalho, .linha:not(.cabecalho) já são display: contents, o grid da .tabela os controla */
-    
-    .celula {
-        padding: 5px; 
-        font-size: 0.8em; /* Reduzir um pouco a fonte em telas muito pequenas */
-    }
-    .header h1 {
-        font-size: 18px;
-    }
-    .header button {
-        font-size: 14px;
-        padding: 6px 10px;
+        font-size: 18px; /* Reduzido */
     }
     .tabela {
-        padding-top: 65px; /* Ajustar para a nova altura do header em mobile */
+        /* AJUSTE CONFORME ALTURA DO HEADER EM MOBILE */
+        padding-top: 55px; 
     }
     .linha.cabecalho {
-        top: 60px; /* Ajustar para a nova altura do header em mobile */
+         /* AJUSTE CONFORME ALTURA DO HEADER EM MOBILE */
+        top: 55px;
+    }
+    .tabela > .linha.cabecalho > .celula {
+        font-size: 0.75em;
+        padding: 5px 2px;
+    }
+    .veiculo {
+        padding-bottom: 18px; /* Ajustar para indicadores menores */
+    }
+    .periodo-indicadores {
+        font-size: 0.6em;
+        bottom: 2px; left: 2px; right: 2px;
+    }
+    .status {
+        font-size: 0.75em;
+        padding: 5px;
+    }
+    .adicionar {
+        width: 18px; height: 18px; font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    .celula {
+        padding: 4px;
+        font-size: 0.7em; /* Ainda menor */
+        min-height: 90px;
+    }
+    .header h1 {
+        font-size: 16px;
+    }
+    .header button {
+        font-size: 12px;
+        padding: 5px 8px;
+        margin-top: 3px;
+    }
+    .tabela {
+        /* AJUSTE CONFORME ALTURA DO HEADER EM MOBILE BEM PEQUENO */
+        padding-top: 50px; 
+        gap: 0; /* Remove gap para economizar espaço */
+    }
+    .linha.cabecalho {
+        /* AJUSTE CONFORME ALTURA DO HEADER EM MOBILE BEM PEQUENO */
+        top: 48px; /* Exemplo */
+    }
+    .tabela > .linha.cabecalho > .celula {
+        font-size: 0.65em;
+        padding: 4px 1px;
+        border-left: none; /* Remove borda lateral para economizar espaço */
+    }
+     .tabela > .linha.cabecalho > .celula:first-child {
+        /* já é none */
+    }
+    .veiculo {
+        padding-bottom: 16px; 
+    }
+    .periodo-indicadores {
+        font-size: 0.55em;
+    }
+    .status {
+        font-size: 0.7em;
+        padding: 4px;
+        width: 95%;
     }
     .selecao-status {
         width: 95%;
         padding: 15px;
+        max-height: 95vh;
     }
     .calendar {
         width: 95%;
         padding: 10px;
+        max-height: 95vh;
+    }
+    #calendarWeekdays {
+        font-size: 0.7em;
+    }
+    .calendar-day {
+        font-size: 0.8em;
+        padding: 6px 2px;
     }
 }
