@@ -1037,50 +1037,69 @@ function navegarSemana(direcao) {
 }
 
 
-// Função para finalizar o período de viagem
+// Função para finalizar o período de viagem (COM BARRA DE PROGRESSO FUNCIONAL)
 async function finalizarPeriodoViagem(nome, cliente, linha) {
-    // Não vamos mais ler de 'diasSelecionadosElements' diretamente para lógica principal.
-    // Usaremos 'selecoesDeViagemMultiSemana'.
-
     if (Object.keys(selecoesDeViagemMultiSemana).length === 0) {
         alert("Nenhum dia selecionado para o período de viagem.");
         return;
     }
 
-    // Salva os períodos (Manhã/Tarde) ANTES de limpar a variável global
-    const periodosAntes = { ...periodosSelecionados }; // periodosSelecionados (Manhã/Tarde) é uma variável global
-    // Não limpe periodosSelecionados aqui ainda, caso a validação falhe.
-
-    // *** NOVA VALIDAÇÃO ADICIONADA AQUI ***
+    const periodosAntes = { ...periodosSelecionados };
     if (!periodosAntes.manha && !periodosAntes.tarde) {
         alert("Por favor, selecione um período (Manhã, Tarde ou Ambos) antes de confirmar a viagem.");
-        return; // Impede a continuação se nenhum período foi selecionado
+        return; 
     }
-    // *** FIM DA NOVA VALIDAÇÃO ***
-
-    // Agora podemos limpar a variável global de períodos Manhã/Tarde, pois a validação passou
     periodosSelecionados = { manha: false, tarde: false };
     
-    // Obtenha a cidade selecionada usando a função getCidade
     const cidadeSelecionada = getCidade();
-
-    // Montar a informação sobre os períodos selecionados (Manhã/Tarde)
     let periodoSelecionadoStr = '';
     if (periodosAntes.manha && periodosAntes.tarde) {
         periodoSelecionadoStr = 'Manhã e Tarde';
     } else if (periodosAntes.manha) {
         periodoSelecionadoStr = 'Manhã';
-    } else if (periodosAntes.tarde) { // Já validamos que pelo menos um é true
+    } else if (periodosAntes.tarde) {
         periodoSelecionadoStr = 'Tarde';
     }
-    
     const observacaoTexto = document.getElementById('observacao-texto').value;
 
-    // Mostrar o loader ANTES do loop de atualizações
-    document.getElementById('loading').style.display = 'flex';
+    // --- PREPARAÇÃO DO LOADER E BARRA DE PROGRESSO ---
+    const loadingDiv = document.getElementById('loading');
+    const loadingMessage = document.getElementById('loading-message');
+    const progressBar = document.getElementById('progress-bar');
+    const progressStatus = document.getElementById('progress-status');
+
+    loadingMessage.textContent = "Atualizando status dos veículos...";
+    progressBar.style.width = '0%';
+    progressBar.style.backgroundColor = '#28a745'; // Cor verde padrão para progresso
+    progressBar.textContent = '0%';
+    progressStatus.textContent = 'Iniciando...';
+    loadingDiv.style.display = 'flex';
+    // --- FIM DA PREPARAÇÃO DO LOADER ---
+
+    let totalOperacoes = 0;
+    for (const semanaKey in selecoesDeViagemMultiSemana) {
+        if (selecoesDeViagemMultiSemana.hasOwnProperty(semanaKey)) {
+            totalOperacoes += selecoesDeViagemMultiSemana[semanaKey].length;
+        }
+    }
+
+    if (totalOperacoes === 0) { // Caso raro, mas para segurança
+        progressStatus.textContent = 'Nenhuma operação para realizar.';
+        progressBar.style.width = '100%';
+        progressBar.textContent = '100%';
+        setTimeout(() => {
+            loadingDiv.style.display = 'none';
+            // Limpa seleções e fecha pop-ups mesmo se nada for feito
+            selecoesDeViagemMultiSemana = {};
+            fecharCalendario();
+            fecharSelecaoStatus();
+        }, 1500);
+        return;
+    }
+
+    let operacoesConcluidas = 0;
 
     try {
-        // Itera sobre as semanas e dias armazenados em selecoesDeViagemMultiSemana
         for (const semanaKey in selecoesDeViagemMultiSemana) {
             if (selecoesDeViagemMultiSemana.hasOwnProperty(semanaKey)) {
                 const semanaIdx = parseInt(semanaKey.split('_')[1]);
@@ -1096,35 +1115,51 @@ async function finalizarPeriodoViagem(nome, cliente, linha) {
                             periodo: periodoSelecionadoStr 
                         }
                     };
+                    
+                    progressStatus.textContent = `Atualizando Semana ${semanaIdx + 1}, Dia ${diaIndex + 1}...`; // +1 para display amigável
                     console.log(`--> Preparando para atualizar: Veículo ${nome}, Semana ${semanaIdx}, Dia ${diaIndex}`);
                     await atualizarStatusFirestore(nome, semanaIdx, diaIndex, statusData);
+                    
+                    operacoesConcluidas++;
+                    const percentualCompleto = Math.round((operacoesConcluidas / totalOperacoes) * 100);
+                    progressBar.style.width = percentualCompleto + '%';
+                    progressBar.textContent = percentualCompleto + '%';
                 }
             }
         }
         console.log("Todas as atualizações multi-semana foram processadas.");
+        loadingMessage.textContent = "Status atualizado com sucesso!";
+        progressStatus.textContent = "Concluído!";
+        
+        // Recarregar os veículos para refletir as mudanças na tabela principal
+        await carregarVeiculos(); //
+
+
+        setTimeout(() => { // Pequeno delay para o usuário ver a mensagem de sucesso
+            loadingDiv.style.display = 'none';
+        }, 1500);
 
     } catch (error) {
         console.error("Erro durante a atualização do status no Firestore (multi-semana):", error);
-        alert("Ocorreu um erro ao atualizar os status. Verifique o console.");
+        loadingMessage.textContent = "Erro ao atualizar!";
+        progressStatus.textContent = `Erro: ${error.message.substring(0, 50)}...`; // Limita a mensagem de erro
+        progressBar.style.backgroundColor = 'red';
+        progressBar.textContent = 'Erro';
+        // Não esconder o loader imediatamente em caso de erro, para o usuário ver
+        // alert("Ocorreu um erro ao atualizar os status. Verifique o console."); // Opcional
     } finally {
-        // Ocultar o loader APÓS todas as atualizações ou em caso de erro dentro do try
-        document.getElementById('loading').style.display = 'none';
+        // A lógica de esconder o loader foi movida para dentro do try e para o catch
+        // para permitir um delay na mensagem de sucesso.
     }
 	
-    // Limpa a variável de armazenamento de seleções de viagem após a confirmação
     selecoesDeViagemMultiSemana = {}; 
     console.log("Seleções de viagem multi-semana limpas após finalizar.");
 
-    // Fecha o calendário após a confirmação
     fecharCalendario();
-
-    // Fecha a seleção de status
     fecharSelecaoStatus();
 
-    const diasSelecionadosElementsAindaNoDOM = document.querySelectorAll('#calendarDays .calendar-day.selected');
-    diasSelecionadosElementsAindaNoDOM.forEach(diaElement => {
-        diaElement.classList.remove('selected');
-    });
+    // A limpeza visual dos '.selected' no calendário já deve ocorrer ao reabrir,
+    // pois mostrarCalendario recria os elementos.
 }
 
 
