@@ -241,7 +241,7 @@ button.entrar-button:hover {
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
-    min-height: 120px; /* Altura mínima para consistência */
+    /*min-height: 120px; /* Altura mínima para consistência */
 }
 
 .celula:hover {
