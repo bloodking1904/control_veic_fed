@@ -82,84 +82,87 @@ function verificarAutenticacao() {
     }
 }
 
-// Função para carregar veículos
+// Função para carregar veículos 
 async function carregarVeiculos() {
-    console.log("Chamando carregarVeiculos()...");	
+    console.log("Chamando carregarVeiculos()...");
     const tabela = document.getElementById('tabela-veiculos');
-    tabela.innerHTML = ''; // Limpa a tabela antes de adicionar veículos
+    tabela.innerHTML = ''; 
 
-    // Criar o cabeçalho da tabela
-    const cabecalho = document.createElement('div');
-    cabecalho.classList.add('linha', 'cabecalho');
+    const cabecalhoDiv = document.createElement('div'); // Renomeado para evitar conflito com a variável 'cabecalho' dentro do loop
+    cabecalhoDiv.classList.add('linha', 'cabecalho');
 
-    // Definir os dias da semana começando de SEGUNDA
     const diasDaSemana = ['SEGUNDA', 'TERÇA', 'QUARTA', 'QUINTA', 'SEXTA', 'SÁBADO', 'DOMINGO'];
+    const dataAtualSistema = new Date(); // Pega a data atual do sistema UMA VEZ
 
-    // Obter a data atual
-    const dataAtual = new Date();
+    // Calcular o início da semana ATUAL REAL do sistema (segunda-feira)
+    // Esta lógica já existe no seu código e parece correta para obter a 'segundaAtual'
+    const diaDaSemanaAtualSistema = dataAtualSistema.getDay(); // 0=Dom, 1=Seg, ...
+    const offsetParaSegunda = diaDaSemanaAtualSistema === 0 ? -6 : 1 - diaDaSemanaAtualSistema;
+    const inicioSemanaAtualSistema = new Date(dataAtualSistema);
+    inicioSemanaAtualSistema.setDate(dataAtualSistema.getDate() + offsetParaSegunda);
+    inicioSemanaAtualSistema.setHours(0, 0, 0, 0); // Normaliza a hora para comparações
 
-    // Calcular o início da semana atual (semana1)
-    const diaDaSemanaAtual = dataAtual.getDay();
-    const offset = diaDaSemanaAtual === 0 ? -6 : 1 - diaDaSemanaAtual; // Se domingo, ajusta para -6 para pegar a segunda
-    const segundaAtual = new Date(dataAtual);
-    segundaAtual.setDate(dataAtual.getDate() + offset); // Ajusta para a segunda-feira da semana atual
-
-    // Criar um array para armazenar as semanas
+    // Calcular semanas (sua lógica existente)
     const semanas = []; 
+    const segundaAtualParaCalculo = new Date(dataAtualSistema); // Usa dataAtualSistema como base
+    segundaAtualParaCalculo.setDate(dataAtualSistema.getDate() + offsetParaSegunda); 
+    
+    const dataInicioSemana0 = new Date(segundaAtualParaCalculo);
+    dataInicioSemana0.setDate(segundaAtualParaCalculo.getDate() - 7 * 23); // Ajusta para a semana 0 (semana de referência)
 
-    // Calcular a data de início da semana anterior para semana 0
-    const dataInicioSemana0 = new Date(segundaAtual);
-    dataInicioSemana0.setDate(segundaAtual.getDate() - 7 * 23); // Ajusta para a semana anterior
-
-    // Calcular as semanas
-    for (let i = 0; i <= totalWeeks; i++) { // Começa de 0 até totalWeeks
-        const dataInicioSemana = new Date(dataInicioSemana0);
-        dataInicioSemana.setDate(dataInicioSemana0.getDate() + (i * 7)); // Ajusta para a semana correta
-        const dataFimSemana = new Date(dataInicioSemana);
-        dataFimSemana.setDate(dataInicioSemana.getDate() + 6); // Adiciona 6 dias para obter o domingo
-
-        // Armazenar as datas de início e fim da semana
-        semanas.push({
-            inicio: dataInicioSemana,
-            fim: dataFimSemana
-        });
-
-        // Adicionar logs para visualizar os dados
-        console.log(`Semana ${i}: Início - ${dataInicioSemana}, Fim - ${dataFimSemana}`);
+    for (let i = 0; i <= totalWeeks; i++) { // totalWeeks é global
+        const dataInicioSemanaLoop = new Date(dataInicioSemana0);
+        dataInicioSemanaLoop.setDate(dataInicioSemana0.getDate() + (i * 7));
+        dataInicioSemanaLoop.setHours(0,0,0,0); // Normaliza
+        const dataFimSemanaLoop = new Date(dataInicioSemanaLoop);
+        dataFimSemanaLoop.setDate(dataInicioSemanaLoop.getDate() + 6);
+        dataFimSemanaLoop.setHours(23,59,59,999); // Normaliza
+        semanas.push({ inicio: dataInicioSemanaLoop, fim: dataFimSemanaLoop });
     }
 
-    // Adicionar cabeçalho com as datas para a semana atual
-    const { inicio, fim } = semanas[currentWeekIndex]; // Pega a semana atual
-    diasDaSemana.forEach((dia, index) => {
-        const celula = document.createElement('div');
-        celula.classList.add('celula');
+    // Adicionar cabeçalho com as datas para a semana sendo exibida (currentWeekIndex)
+    const semanaExibida = semanas[currentWeekIndex]; // currentWeekIndex é global
+    
+    // Verifica se a semana exibida é a semana atual do sistema
+    const ehSemanaAtual = dataAtualSistema >= semanaExibida.inicio && dataAtualSistema <= semanaExibida.fim;
+    let indiceDiaAtualNaSemana = -1;
+    if (ehSemanaAtual) {
+        let diaSistema = dataAtualSistema.getDay(); // 0=Dom, 1=Seg,...
+        indiceDiaAtualNaSemana = (diaSistema === 0) ? 6 : diaSistema - 1; // Converte para 0=Seg, ..., 6=Dom
+    }
 
-        // Calcular a data para o dia correto da semana
-        const dataFormatada = new Date(inicio);
-        dataFormatada.setDate(inicio.getDate() + index); // Adiciona o índice para cada dia
-        const diaFormatado = (`0${dataFormatada.getDate()}`).slice(-2) + '/' + (`0${dataFormatada.getMonth() + 1}`).slice(-2) + '/' + dataFormatada.getFullYear(); // Formato DD/MM/AAAA
+    diasDaSemana.forEach((diaNome, index) => { // index é 0 para Segunda, 1 para Terça ... 6 para Domingo
+        const celulaCabecalho = document.createElement('div');
+        celulaCabecalho.classList.add('celula');
 
-        celula.innerHTML = `${dia}<br>${diaFormatado}`; // Adiciona o nome do dia e a data
-        cabecalho.appendChild(celula);
+        const dataFormatada = new Date(semanaExibida.inicio);
+        dataFormatada.setDate(semanaExibida.inicio.getDate() + index);
+        const diaFormatadoStr = (`0${dataFormatada.getDate()}`).slice(-2) + '/' + (`0${dataFormatada.getMonth() + 1}`).slice(-2) + '/' + dataFormatada.getFullYear();
+
+        celulaCabecalho.innerHTML = `${diaNome}<br>${diaFormatadoStr}`;
+        
+        // Adiciona classe de destaque se for a coluna do dia atual
+        if (ehSemanaAtual && index === indiceDiaAtualNaSemana) {
+            celulaCabecalho.classList.add('coluna-dia-atual');
+        }
+        cabecalhoDiv.appendChild(celulaCabecalho);
     });
+    tabela.appendChild(cabecalhoDiv);
 
-    tabela.appendChild(cabecalho); // Adiciona o cabeçalho à tabela
-
-    // Escutar as alterações nos veículos
-    await escutarVeiculos();
-
-    const veiculosSnapshot = await getDocs(collection(db, 'veiculos'));
-    console.log("Veículos obtidos do Firestore:", veiculosSnapshot.docs.length); // Log para depuração
-
+    // Carregar e exibir os veículos (sua lógica existente)
+    await escutarVeiculos(); //
+    const veiculosSnapshot = await getDocs(collection(db, 'veiculos')); //
+    
     veiculosSnapshot.docs.forEach(doc => {
         const veiculo = doc.id; 
         const dados = doc.data();
-        console.log("Veículo:", veiculo, "Dados:", dados); // Log para depuração
-        atualizarTabela(veiculo, dados); // Atualiza a tabela com os dados dos veículos
+        // Passar 'ehSemanaAtual' e 'indiceDiaAtualNaSemana' para atualizarTabela
+        atualizarTabela(veiculo, dados, ehSemanaAtual, indiceDiaAtualNaSemana); 
     });
 
-    return semanas; // Retorna o array de semanas
+    return semanas;
 }
+
 
 
 // Função para escutar as alterações nos veiculos
@@ -376,75 +379,74 @@ window.logout = function () {
     window.location.href = 'login.html';
 };
 
-// Função para atualizar a tabela
-function atualizarTabela(veiculo, dados) {
+// Modificar a função atualizarTabela para receber e usar os parâmetros de destaque
+function atualizarTabela(veiculo, dados, ehSemanaAtual, indiceDiaAtualNaSemana) {
     const tabela = document.getElementById('tabela-veiculos');
-    
-    // Verifica se a linha já existe
-    let linha = Array.from(tabela.children).find(l => l.dataset.linha === veiculo);
-    
+    let linha = Array.from(tabela.children).find(l => l.dataset.linha === veiculo && !l.classList.contains('cabecalho'));
+
     if (!linha) {
-        // Se a linha não existir, cria uma nova
         linha = document.createElement('div');
         linha.classList.add('linha');
         linha.dataset.linha = veiculo;
         tabela.appendChild(linha);
     } else {
-        // Se a linha já existir, limpa o conteúdo
         linha.innerHTML = '';
     }
 
-    // Acessa a semana atual
-    const semanaAtual = dados[`semana${currentWeekIndex}`];
-
-    if (!semanaAtual) {
-        console.warn(`Dados da semana ${currentWeekIndex} não encontrados para o veiculo ${veiculo}.`);
-        return; // Sai da função se semanaAtual não estiver definido
+    const semanaAtualDados = dados[`semana${currentWeekIndex}`]; //
+    if (!semanaAtualDados) {
+        console.warn(`Dados da semana ${currentWeekIndex} não encontrados para o veículo ${veiculo}.`);
+        for (let dia = 0; dia < 7; dia++) { // Adiciona células vazias se não houver dados
+            const celulaVazia = document.createElement('div');
+            celulaVazia.classList.add('celula');
+            if (ehSemanaAtual && dia === indiceDiaAtualNaSemana) {
+                celulaVazia.classList.add('coluna-dia-atual');
+            }
+            // Adicionar conteúdo mínimo ou deixar em branco estilizado
+            celulaVazia.innerHTML = `<div class="veiculo"><span style="font-weight: bold;">${veiculo}</span><div>N/D</div></div>`;
+            linha.appendChild(celulaVazia);
+        }
+        return;
     }
 
-    for (let dia = 0; dia < 7; dia++) {
+    for (let dia = 0; dia < 7; dia++) { // dia é 0 para Segunda, 1 para Terça ... 6 para Domingo
         const celula = document.createElement('div');
         celula.classList.add('celula');
-        celula.dataset.dia = dia;
+        celula.dataset.dia = dia; // Mantém o data-dia
 
-        const statusAtual = semanaAtual[dia] || { status: 'Disponível', data: null };
-
-        // Aqui adicionamos a lógica para mostrar o botão apenas se o usuário for admin
-        let botaoAdicionar = '';
-        if (loggedInUser === 'ADMIN') {
-            botaoAdicionar = `
-                <button class="adicionar" data-id-veiculo="${veiculo}" data-dia="${dia}" data-linha="${veiculo}"
-                    onclick="mostrarSelecaoStatus(this)">+</button>
-            `;
+        // Adiciona classe de destaque se for a coluna do dia atual
+        if (ehSemanaAtual && dia === indiceDiaAtualNaSemana) {
+            celula.classList.add('coluna-dia-atual');
         }
 
-	// Extraindo informações do status, incluindo o período
-	const periodo = statusAtual.data ? statusAtual.data.periodo : '';  // Obtém a informação do período
-
-	// Monta o conteúdo da célula
-	celula.innerHTML = `
-    	<div class="veiculo">
-        	<div> ${botaoAdicionar}
-            	<span style="font-weight: bold;">${veiculo}</span>
-            	<div class="status" style="color: ${statusAtual.status === 'Em Viagem' ? 'yellow' : (statusAtual.status === 'Disponível' ? 'green' : 'red')}; /* ... outros estilos do status ... */">
-                	${statusAtual.status}
-            	</div>
-            	${statusAtual.data ? ` 
-                	<div style="font-size: 0.8em; white-space: nowrap; margin-top: 3px;"><strong>Cidade:</strong> ${statusAtual.data.cidade || 'N/A'}</div>
-                	<div style="font-size: 0.8em; word-break: break-word;"><strong>Colaborador:</strong> ${statusAtual.data.cliente || 'N/A'}</div>
-            	` : ''}
-        	</div>
-
-        	<div class="periodo-indicadores">
-            	<div style="visibility: ${periodo.includes('Manhã') ? 'visible' : 'hidden'};">MANHÃ</div>
-            	<div style="visibility: ${periodo.includes('Tarde') ? 'visible' : 'hidden'};">TARDE</div>
-        	</div>
-    	</div>
-	`;
-
+        const statusDoDia = semanaAtualDados[dia] || { status: 'Disponível', data: null };
+        let botaoAdicionar = '';
+        if (loggedInUser === 'ADMIN') { // loggedInUser é global
+            botaoAdicionar = `<button class="adicionar" data-id-veiculo="${veiculo}" data-dia="${dia}" data-linha="${veiculo}" onclick="mostrarSelecaoStatus(this)">+</button>`;
+        }
+        const periodo = statusDoDia.data ? statusDoDia.data.periodo : '';
+        // ... (resto da sua lógica para montar o innerHTML da célula, usando statusDoDia)
+        celula.innerHTML = `
+            <div class="veiculo">
+                <div>
+                    ${botaoAdicionar}
+                    <span style="font-weight: bold;">${veiculo}</span>
+                    <div class="status" style="color: ${statusDoDia.status === 'Em Viagem' ? 'yellow' : (statusDoDia.status === 'Disponível' ? 'green' : 'red')}; /* ... */">
+                        ${statusDoDia.status}
+                    </div>
+                    ${statusDoDia.data ? ` 
+                        <div style="font-size: 0.8em; white-space: nowrap; margin-top: 3px;"><strong>Cidade:</strong> ${statusDoDia.data.cidade || 'N/A'}</div>
+                        <div style="font-size: 0.8em; word-break: break-word;"><strong>Colaborador:</strong> ${statusDoDia.data.cliente || 'N/A'}</div>
+                    ` : ''}
+                </div>
+                <div class="periodo-indicadores">
+                    <div style="visibility: ${periodo.includes('Manhã') ? 'visible' : 'hidden'};">MANHÃ</div>
+                    <div style="visibility: ${periodo.includes('Tarde') ? 'visible' : 'hidden'};">TARDE</div>
+                </div>
+            </div>
+        `;
         linha.appendChild(celula);
     }
-
 }
 
 
