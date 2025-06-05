@@ -771,6 +771,17 @@ body {
     background-color: #004085;
 }
 
+.coluna-dia-atual {
+    background-color: #FFFACD !important; /* Amarelo Limão Claro (LemonChiffon) - destaca bem */
+    /* box-shadow: inset 0 0 5px rgba(0,0,0,0.1); /* Opcional: leve sombra interna */
+}
+
+/* Para o cabeçalho da coluna do dia atual, um tom ligeiramente diferente ou só a cor do texto */
+.tabela > .linha.cabecalho > .celula.coluna-dia-atual {
+    background-color: #FFF0B3 !important; /* Um amarelo um pouco mais forte para o cabeçalho */
+    /* color: #A0522D !important; /* Cor de texto Sienna, por exemplo, para contraste com amarelo */
+}
+
 
 @keyframes spin {
     0% { transform: rotate(0deg); }
