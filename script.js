@@ -1162,7 +1162,7 @@ async function finalizarPeriodoViagem(nome, cliente, linha, semanaIdx) {
     }
     const observacaoTexto = document.getElementById('observacao-texto').value;
 
-    // --- PREPARAÇÃO DO LOADER ---
+    // --- LOADER ---
     const loadingDiv = document.getElementById('loading');
     const loadingMessage = document.getElementById('loading-message');
     const progressBar = document.getElementById('progress-bar');
@@ -1467,7 +1467,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
-
-
-
 
