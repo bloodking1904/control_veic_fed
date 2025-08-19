@@ -880,6 +880,9 @@ async function finalizarViagemPersonalizado(nome, linha, cidade) {
     fecharSelecaoStatus();
 }
 
+// Adiciona a função finalizar viagem ao objeto global window
+window.finalizarViagemPersonalizado = finalizarViagemPersonalizado;
+
 // Função auxiliar para obter o período selecionado
 function getPeriodoSelecionado() {
     const manha = document.getElementById('manha-button').classList.contains('active-period-button');
@@ -1504,4 +1507,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
+
 
