@@ -768,7 +768,7 @@ function mostrarFormularioPersonalizado(nome, dia, linha) {
                         onclick="togglePeriodo('tarde')">TARDE</button>
                 </div>
                 <button id="confirmar-viagem" class="popup-action-button btn-confirm" 
-                    onclick="finalizarViagemPersonalizado('${nome}', ${dia}, '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
+                    onclick="finalizarPeriodoViagem('${nome}', '${linha}', getCidade(), document.getElementById('nome-personalizado').value)">CONFIRMAR<br>VIAGEM</button>
             </div>
         </div>
     `;
@@ -776,7 +776,6 @@ function mostrarFormularioPersonalizado(nome, dia, linha) {
     document.getElementById('overlay').style.display = 'flex';
     document.getElementById('status-selecao').style.display = 'flex';
 
-    // Habilita o campo de texto se a caixa estiver desmarcada
     toggleCidadeInput(document.getElementById('cidade-padrao'));
 }
 
@@ -966,7 +965,7 @@ function adicionarVeiculo(nome, cliente, dia, linha) {
             </div>
 
             <button id="confirmar-viagem" class="popup-action-button btn-confirm" 
-                onclick="finalizarPeriodoViagem('${nome}', '${cliente}', '${linha}', ${currentWeekIndex})">CONFIRMAR<br>VIAGEM</button>
+                onclick="finalizarPeriodoViagem('${nome}', '${linha}', getCidade(), document.getElementById('nome-personalizado').value)">CONFIRMAR<br>VIAGEM</button>
         </div>
     </div>
 `;
@@ -1140,7 +1139,7 @@ function navegarSemana(direcao) {
 }
 
 
-async function finalizarPeriodoViagem(nome, cliente, linha, semanaIdx) {
+async function finalizarPeriodoViagem(nome, linha, cidade, cliente) {
     if (Object.keys(selecoesDeViagemMultiSemana).length === 0) {
         alert("Nenhum dia selecionado para o período de viagem.");
         return;
@@ -1151,15 +1150,8 @@ async function finalizarPeriodoViagem(nome, cliente, linha, semanaIdx) {
         return; 
     }
     periodosSelecionados = { manha: false, tarde: false };
-    const cidadeSelecionada = getCidade();
-    let periodoSelecionadoStr = '';
-    if (periodosAntes.manha && periodosAntes.tarde) {
-        periodoSelecionadoStr = 'Manhã e Tarde';
-    } else if (periodosAntes.manha) {
-        periodoSelecionadoStr = 'Manhã';
-    } else if (periodosAntes.tarde) {
-        periodoSelecionadoStr = 'Tarde';
-    }
+    const periodoSelecionadoStr = periodosAntes.manha && periodosAntes.tarde ? 'Manhã e Tarde' :
+        periodosAntes.manha ? 'Manhã' : 'Tarde';
     const observacaoTexto = document.getElementById('observacao-texto').value;
 
     // --- LOADER ---
@@ -1185,20 +1177,20 @@ async function finalizarPeriodoViagem(nome, cliente, linha, semanaIdx) {
     try {
         for (const semanaKey in selecoesDeViagemMultiSemana) {
             if (selecoesDeViagemMultiSemana.hasOwnProperty(semanaKey)) {
-                const semanaIdxLoop = parseInt(semanaKey.split('_')[1]);
+                const semanaIdx = parseInt(semanaKey.split('_')[1]);
                 const diasNestaSemana = selecoesDeViagemMultiSemana[semanaKey];
                 for (const diaIndex of diasNestaSemana) {
                     const statusData = {
                         status: 'Em Atendimento',
                         data: {
-                            cidade: cidadeSelecionada,
+                            cidade: cidade,
                             cliente: cliente,
                             observacao: observacaoTexto, 
                             periodo: periodoSelecionadoStr 
                         }
                     };
-                    progressStatus.textContent = `Atualizando Semana ${semanaIdxLoop + 1}, Dia ${diaIndex + 1}...`;
-                    await atualizarStatusFirestore(nome, semanaIdxLoop, diaIndex, statusData);
+                    progressStatus.textContent = `Atualizando Semana ${semanaIdx + 1}, Dia ${diaIndex + 1}...`;
+                    await atualizarStatusFirestore(nome, semanaIdx, diaIndex, statusData);
                     operacoesConcluidas++;
                     const percentualCompleto = Math.round((operacoesConcluidas / totalOperacoes) * 100);
                     progressBar.style.width = percentualCompleto + '%';
@@ -1467,4 +1459,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
-
+	
