@@ -716,8 +716,8 @@ window.mostrarSelecaoStatus = mostrarSelecaoStatus;
 // Função para mostrar a seleção de atendimento
 function mostrarSelecaoAtendimento(nome, dia, linha) {
     const statusSelecao = document.getElementById('status-selecao');
-
-    const atendimentoOptions = ` 
+    // Adiciona o botão "Personalizado" ao final da lista
+    const atendimentoOptions = `
         <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarSelecaoEducacao('${nome}', ${dia}, '${linha}')">Educação</div>
         <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Sonia Akamine', ${dia}, '${linha}')">Sonia Akamine</div>
         <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'Evelyn Fatec CG', ${dia}, '${linha}')">Evelyn Fatec CG</div>
@@ -729,8 +729,8 @@ function mostrarSelecaoAtendimento(nome, dia, linha) {
  	<div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'CAPITAL HUMANO', ${dia}, '${linha}')">CAPITAL HUMANO</div>
         <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'DICOM', ${dia}, '${linha}')">DICOM</div>
         <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="adicionarVeiculo('${nome}', 'CPL', ${dia}, '${linha}')">CPL</div>
+        <div class="status" style="background-color: lightcoral; color: black; font-weight: bold;" onclick="mostrarFormularioPersonalizado('${nome}', ${dia}, '${linha}')">Personalizado</div> 
     `;
-
     statusSelecao.innerHTML = atendimentoOptions;
     document.getElementById('overlay').style.display = 'flex';
     document.getElementById('status-selecao').style.display = 'flex';
@@ -738,6 +738,51 @@ function mostrarSelecaoAtendimento(nome, dia, linha) {
 
 // Adiciona a função ao objeto global window
 window.mostrarSelecaoAtendimento = mostrarSelecaoAtendimento;
+
+
+// Função para mostrar formulário personalizado
+function mostrarFormularioPersonalizado(nome, dia, linha) {
+    const statusSelecao = document.getElementById('status-selecao');
+    const formularioHtml = `
+        <div class="cidade-input">
+            <label>Digite a cidade destino:</label><br> 
+            <div>
+                <input type="checkbox" id="cidade-padrao" checked onchange="toggleCidadeInput(this)">
+                <label for="cidade-padrao">Campo Grande</label> 
+            </div>
+            <div>
+                <label for="cidade-destino">Outra cidade</label> 
+                <input type="text" id="cidade-destino" placeholder="Digite outra cidade" disabled>
+            </div><br>
+            <label for="nome-personalizado">Nome do Atendimento:</label><br> <!-- NOVO CAMPO -->
+            <input type="text" id="nome-personalizado" placeholder="Ex: Venda, Reunião, Entrega..." required><br><br>
+            <label>Observações:</label><br> 
+            <textarea id="observacao-texto" placeholder="Digite suas observações aqui..." maxlength="700" rows="3"></textarea><br><br>
+            <div class="action-buttons-container"> 
+                <button id="periodo-viagem" class="popup-action-button" 
+                    onclick="mostrarCalendario()">Período Viagem</button> 
+                <div class="period-toggle-buttons">
+                    <button id="manha-button" class="popup-action-button period-button" 
+                        onclick="togglePeriodo('manha')">MANHÃ</button>
+                    <button id="tarde-button" class="popup-action-button period-button" 
+                        onclick="togglePeriodo('tarde')">TARDE</button>
+                </div>
+                <button id="confirmar-viagem" class="popup-action-button btn-confirm" 
+                    onclick="finalizarViagemPersonalizado('${nome}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
+            </div>
+        </div>
+    `;
+    statusSelecao.innerHTML = formularioHtml;
+    document.getElementById('overlay').style.display = 'flex';
+    document.getElementById('status-selecao').style.display = 'flex';
+
+    // Habilita o campo de texto se a caixa estiver desmarcada
+    toggleCidadeInput(document.getElementById('cidade-padrao'));
+}
+
+// Adiciona a função ao objeto global window
+window.mostrarFormularioPersonalizado = mostrarFormularioPersonalizado;
+
 
 // Função para mostrar a seleção de SETOR Educação
 function mostrarSelecaoEducacao(nome, dia, linha) {
@@ -795,6 +840,59 @@ async function finalizarViagem(nome, cliente, dia, linha, cidade) {
 
 // Adiciona a função finalizar viagem ao objeto global window
 window.finalizarViagem = finalizarViagem;
+
+// Função para finalizar a viagem personalizada
+async function finalizarViagemPersonalizado(nome, linha, cidade) {
+    const nomePersonalizado = document.getElementById('nome-personalizado').value.trim();
+    if (!nomePersonalizado) {
+        alert("Por favor, insira um nome para o atendimento.");
+        return;
+    }
+
+    const observacao = document.getElementById('observacao-texto').value;
+    const periodo = getPeriodoSelecionado();
+
+    // Prepara os dados para o Firestore
+    const data = {
+        cliente: nomePersonalizado,
+        cidade: cidade,
+        observacao: observacao,
+        periodo: periodo
+    };
+
+    // Atualiza o status no Firestore
+    await adicionarStatus(nome, 'Em Atendimento', 'orange', dia, linha, data);
+
+    // Atualiza visualmente
+    const veiculoDiv = document.querySelector(`.linha[data-linha="${linha}"] .celula[data-dia="${dia}"] .veiculo`);
+    if (veiculoDiv) {
+        veiculoDiv.innerHTML = `
+            <button class="adicionar" data-id-veiculo="${nome}" data-dia="${dia}" data-linha="${linha}" 
+                onclick="mostrarSelecaoStatus(this)" style="font-size: 1.5em; padding: 10px; background-color: green; color: white; border: none; border-radius: 5px; width: 40px; height: 40px;">+</button>
+            <span style="font-weight: bold;">${nome}</span>
+            <div class="status" style="color: orange; border: 1px solid black; font-weight: bold;">Em Atendimento</div>
+            <div><strong>Colaborador:</strong> ${nomePersonalizado}</div>
+            <div><strong>Cidade:</strong> ${cidade}</div>
+            <div><strong>Período:</strong> ${periodo}</div>
+        `;
+    }
+
+    fecharSelecaoStatus();
+}
+
+// Função auxiliar para obter o período selecionado
+function getPeriodoSelecionado() {
+    const manha = document.getElementById('manha-button').classList.contains('active-period-button');
+    const tarde = document.getElementById('tarde-button').classList.contains('active-period-button');
+
+    if (manha && tarde) return 'Manhã e Tarde';
+    if (manha) return 'Manhã';
+    if (tarde) return 'Tarde';
+    return '';
+}
+
+// Adiciona a função ao objeto global window
+window.getPeriodoSelecionado = getPeriodoSelecionado;
 
 // Função para finalizar o atendimento
 function finalizarAtendimento(nome, cliente, dia, linha) {
@@ -1406,3 +1504,4 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
+
