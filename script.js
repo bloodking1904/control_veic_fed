@@ -768,7 +768,7 @@ function mostrarFormularioPersonalizado(nome, dia, linha) {
                         onclick="togglePeriodo('tarde')">TARDE</button>
                 </div>
                 <button id="confirmar-viagem" class="popup-action-button btn-confirm" 
-                    onclick="finalizarViagemPersonalizado('${nome}', '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
+                    onclick="finalizarViagemPersonalizado('${nome}', ${dia}, '${linha}', getCidade())">CONFIRMAR<br>VIAGEM</button>
             </div>
         </div>
     `;
@@ -842,7 +842,7 @@ async function finalizarViagem(nome, cliente, dia, linha, cidade) {
 window.finalizarViagem = finalizarViagem;
 
 // Função para finalizar a viagem personalizada
-async function finalizarViagemPersonalizado(nome, linha, cidade) {
+async function finalizarViagemPersonalizado(nome, dia, linha, cidade) {
     const nomePersonalizado = document.getElementById('nome-personalizado').value.trim();
     if (!nomePersonalizado) {
         alert("Por favor, insira um nome para o atendimento.");
@@ -1507,5 +1507,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     });
 });
+
 
 
